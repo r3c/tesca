@@ -26,13 +26,17 @@ SOURCE	= \
 	arithmetic/value/string.cpp \
 	arithmetic/value/void.cpp \
 	arithmetic/value.cpp \
+	expression/formula.cpp \
+	expression/lexer.cpp \
 	glay/parallel/mutex.cpp \
 	glay/parallel/signal.cpp \
 	glay/pipe/reader/binary.cpp \
+	glay/pipe/reader/type.cpp \
 	glay/pipe/stream/file.cpp \
 	glay/pipe/stream/seek.cpp \
 	glay/pipe/stream/memory.cpp \
 	glay/pipe/writer/binary.cpp \
+	glay/pipe/writer/type.cpp \
 	glay/pipe/reader.cpp \
 	glay/pipe/writer.cpp \
 	glay/system/endian.cpp \

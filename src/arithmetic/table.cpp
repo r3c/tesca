@@ -5,15 +5,19 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	Table::Table (Column** columns, Int32u size) :
-		columns (columns),
-		size (size)
+	Table::Table (Columns columns) :
+		columns (columns)
 	{
 	}
 
 	Table::~Table ()
 	{
 		this->reset ();
+	}
+
+	Int32u	Table::getWidth () const
+	{
+		return this->columns.size ();
 	}
 
 	Table::iterator	Table::begin () const
@@ -28,11 +32,11 @@ namespace	Tesca
 
 	void	Table::append (const Row& row)
 	{
-		Bucket	bucket (this->size);
+		Bucket	bucket (this->columns.size ());
 		Slot**	slots;
 
 		// Update columns and build bucket
-		for (Int32u i = this->size; i-- > 0; )
+		for (Int32u i = this->columns.size (); i-- > 0; )
 		{
 			Column&	column = *this->columns[i];
 
@@ -46,9 +50,9 @@ namespace	Tesca
 
 		if (iterator == this->groups.end ())
 		{
-			slots = new Slot*[this->size];
+			slots = new Slot*[this->columns.size ()];
 
-			for (Int32u i = this->size; i-- > 0; )
+			for (Int32u i = this->columns.size (); i-- > 0; )
 			{
 				const Column&	column = *this->columns[i];
 				const Value*	key = column.key ().clone ();
@@ -68,7 +72,7 @@ namespace	Tesca
 			slots = iterator->second;
 
 		// Append column values to group
-		for (Int32u i = this->size; i-- > 0; )
+		for (Int32u i = this->columns.size (); i-- > 0; )
 			slots[i]->append (this->columns[i]->value ());
 	}
 
@@ -82,5 +86,9 @@ namespace	Tesca
 
 		for (auto i = this->slots.begin (); i != this->slots.end (); ++i)
 			delete *i;
+
+		this->keys.clear ();
+		this->groups.clear ();
+		this->slots.clear ();
 	}
 }

@@ -16,26 +16,33 @@ namespace	Tesca
 	class	Table
 	{
 		public:
-			typedef std::map<Bucket, Slot**>::const_iterator	iterator;
+			typedef std::vector<Column*>		Columns;
+			typedef std::map<Bucket, Slot**>	Groups;
 
-			/**/		Table (const Table&);
-			/**/		Table (Column**, Glay::Int32u);
-			/**/		~Table ();
+			typedef Groups::const_iterator		iterator;
 
-			Table&		operator = (const Table&);
+			/**/			Table (const Table&);
+			/**/			Table (Columns);
+			/**/			~Table ();
 
-			iterator	begin () const;
-			iterator	end () const;
+			Table&			operator = (const Table&);
 
-			void		append (const Row&);
-			void		reset ();
+			Glay::Int32u	getWidth () const;
+
+			iterator		begin () const;
+			iterator		end () const;
+
+			void			append (const Row&);
+			void			reset ();
 
 		private:
-			Column**					columns;
-			std::map<Bucket, Slot**>	groups;
-			std::vector<const Value*>	keys;
-			Glay::Int32u				size;
-			std::vector<Slot*>			slots;
+			typedef std::vector<const Value*>	Keys;
+			typedef std::vector<Slot*>			Slots;
+
+			Columns	columns;
+			Groups	groups;
+			Keys	keys;
+			Slots	slots;
 	};
 }
 

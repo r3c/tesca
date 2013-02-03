@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <map>
+#include <vector>
 #include "arithmetic/column/average.hpp"
 #include "arithmetic/column/constant.hpp"
 #include "arithmetic/column/field.hpp"
@@ -9,6 +11,7 @@
 #include "arithmetic/value/number.hpp"
 #include "arithmetic/value/string.hpp"
 #include "arithmetic/value/void.hpp"
+#include "expression/formula.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -57,93 +60,106 @@ ostream&	operator << (ostream& stream, const Value& value)
 	return stream;
 }
 
-void	debug_print (const Table& table)
+void	debug_print (const Formula& formula, const Table& table)
 {
 	for (auto iterator = table.begin (); iterator != table.end (); ++iterator)
 	{
 		const Slot* const*	slots = iterator->second;
 
-		for (Int32u i = 0; i < 4; ++i)
+		for (Int32u i = 0; i < table.getWidth (); ++i)
 		{
 			const Slot&	slot = *slots[i];
 
 			if (i > 0)
 				std::cout << ", ";
 
-			std::cout << "[" << i << "] = " << slot.value ();
+			std::cout << "[" << (i < formula.getNames ().size () ? formula.getNames ()[i] : "N/A") << "] = " << slot.value ();
 		}
 
 		std::cout << std::endl;
 	}
+
+	std::cout << "---" << std::endl;
 }
 
 int	main (int argc, char* argv[])
 {
-	Column**		columns;
-	Row*			row;
-	const Value**	values;
+	vector<Column*>				columns;
+	Formula						formula;
+	Row*						row;
+	map<string, const Value*>	values;
 
-	columns = new Column*[4];
-	columns[0] = new FieldColumn (0);
-	columns[1] = new AverageColumn (new FieldColumn (1));
-	columns[2] = new SumColumn (new FieldColumn (1));
-	columns[3] = new ConstantColumn (NumberValue (42));
+	if (argc > 1)
+	{
+		if (!formula.parse (argv[1]))
+		{
+			std::cout << "error: " << formula.getError () << std::endl;
 
-	Table	table (columns, 4);
+			return 1;
+		}
 
-	values = new const Value*[2];
-	values[0] = new StringValue ("A");
-	values[1] = new NumberValue (1);
+		columns = formula.getColumns ();
+	}
+	else
+	{
+		columns = vector<Column*> (4);
+		columns[0] = new FieldColumn ("0");
+		columns[1] = new AverageColumn (new FieldColumn ("1"));
+		columns[2] = new SumColumn (new FieldColumn ("1"));
+		columns[3] = new ConstantColumn (NumberValue (42));
+	}
 
-	row = new Row (values);
+	Table	table (columns);
 
-	table.append (*row);
-
-	delete values[0];
-	delete values[1];
-	delete [] values;
-
-	debug_print (table);
-
-	values = new const Value*[2];
-	values[0] = new StringValue ("A");
-	values[1] = new StringValue ("2");
-
-	row = new Row (values);
-
-	table.append (*row);
-
-	delete values[0];
-	delete values[1];
-	delete [] values;
-
-	debug_print (table);
-
-	values = new const Value*[2];
-	values[0] = new NumberValue (8);
-	values[1] = new NumberValue (3);
+	values.clear ();
+	values["0"] = new StringValue ("A");
+	values["1"] = new NumberValue (1);
 
 	row = new Row (values);
 
 	table.append (*row);
 
-	delete values[0];
-	delete values[1];
-	delete [] values;
+	delete values["0"];
+	delete values["1"];
 
-	debug_print (table);
+	debug_print (formula, table);
 
-	values = new const Value*[2];
-	values[0] = new StringValue ("8");
-	values[1] = new NumberValue (4);
+	values.clear ();
+	values["0"] = new StringValue ("A");
+	values["1"] = new StringValue ("2");
 
 	row = new Row (values);
 
 	table.append (*row);
 
-	delete values[0];
-	delete values[1];
-	delete [] values;
+	delete values["0"];
+	delete values["1"];
 
-	debug_print (table);
+	debug_print (formula, table);
+
+	values.clear ();
+	values["0"] = new NumberValue (8);
+	values["1"] = new NumberValue (3);
+
+	row = new Row (values);
+
+	table.append (*row);
+
+	delete values["0"];
+	delete values["1"];
+
+	debug_print (formula, table);
+
+	values.clear ();
+	values["0"] = new StringValue ("8");
+	values["1"] = new NumberValue (4);
+
+	row = new Row (values);
+
+	table.append (*row);
+
+	delete values["0"];
+	delete values["1"];
+
+	debug_print (formula, table);
 }

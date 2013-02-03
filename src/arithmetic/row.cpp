@@ -3,23 +3,25 @@
 
 #include "value/void.hpp"
 
+using namespace std;
 using namespace Glay;
 
 namespace	Tesca
 {
 // FIXME
-Row::Row (const Value** values) :
+Row::Row (const map<string, const Value*>& values) :
 	values (values)
 {
 }
 // FIXME
 
-	Row::Row ()
+	const Value&	Row::operator [] (string key) const
 	{
-	}
+		map<string, const Value*>::const_iterator	i = this->values.find (key);
 
-	const Value&	Row::operator [] (Int32u index) const
-	{
-		return *this->values[index];
+		if (i != this->values.end ())
+			return *i->second;
+
+		return VoidValue::instance;
 	}
 }

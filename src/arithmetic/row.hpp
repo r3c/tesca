@@ -2,6 +2,8 @@
 #ifndef __TESCA_ROW_HPP
 #define __TESCA_ROW_HPP
 
+#include <map>
+#include <string>
 #include "../glay/glay.hpp"
 #include "value.hpp"
 
@@ -11,17 +13,16 @@ namespace	Tesca
 	{
 // FIXME
 public:
-	/**/			Row (const Value**);
+	/**/			Row (const std::map<std::string, const Value*>&);
 private:
-	const Value**	values;
+	const std::map<std::string, const Value*>&	values;
 // FIXME
 
 		public:
 			/**/			Row (const Row&);
-			/**/			Row ();
 
 			Row&			operator = (const Row&);
-			const Value&	operator [] (Glay::Int32u) const;
+			const Value&	operator [] (std::string) const;
 	};
 }
 
