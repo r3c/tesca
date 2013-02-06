@@ -12,10 +12,10 @@ namespace	Tesca
 		public:
 			enum class	ContentType
 			{
+				NONE,
 				BOOLEAN,
 				NUMBER,
-				STRING,
-				NONE
+				STRING
 			};
 
 			/**/				Value (const Value&);

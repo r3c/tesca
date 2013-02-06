@@ -13,14 +13,36 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 
-namespace	Tesca
+namespace
 {
-	Formula::Function	Formula::functions[]
+	typedef Tesca::Column*	(*Function) (const Tesca::Formula::Columns&);
+
+	struct	Prototype
 	{
-		{"avg",	&Tesca::Formula::readFunctionAverage},
-		{"sum",	&Tesca::Formula::readFunctionSum}
+		const char*	name;
+		Function	function;
+		Int32u		count;
 	};
 
+	Tesca::Column*	functionAverage (const Tesca::Formula::Columns& arguments)
+	{
+		return new Tesca::AverageColumn (arguments[0]);
+	}
+
+	Tesca::Column*	functionSum (const Tesca::Formula::Columns& arguments)
+	{
+		return new Tesca::SumColumn (arguments[0]);
+	}
+
+	static Prototype	prototypes[] =
+	{
+		{"avg",	&functionAverage,	1},
+		{"sum",	&functionSum,		1}
+	};
+}
+
+namespace	Tesca
+{
 	Formula::Formula ()
 	{
 	}
@@ -34,7 +56,7 @@ namespace	Tesca
 	{
 		stringstream	stream;
 
-		stream << error << " at character " << lexer.getIndex ();
+		stream << error << " at index " << lexer.getIndex ();
 
 		this->error = stream.str ();
 
@@ -115,30 +137,6 @@ namespace	Tesca
 		}
 	}
 
-	bool	Formula::readFunctionAverage (Lexer& lexer, Column** column)
-	{
-		Column*	target;
-
-		if (!this->readValue (lexer, &target))
-			return false;
-
-		*column = this->store (new AverageColumn (target));
-
-		return true;
-	}
-
-	bool	Formula::readFunctionSum (Lexer& lexer, Column** column)
-	{
-		Column*	target;
-
-		if (!this->readValue (lexer, &target))
-			return false;
-
-		*column = this->store (new SumColumn (target));
-
-		return true;
-	}
-
 	bool	Formula::readIdentifier (Lexer& lexer, string* output)
 	{
 		stringstream	buffer;
@@ -161,9 +159,11 @@ namespace	Tesca
 
 	bool	Formula::readValue (Lexer& lexer, Column** column)
 	{
+		Columns			arguments;
 		stringstream	buffer;
 		Float64			number;
-		Reader			reader;
+		Prototype*		prototype;
+		Column*			target;
 
 		// Parse function call
 		for (; !lexer.eof () &&
@@ -177,25 +177,47 @@ namespace	Tesca
 			if (!this->skip (lexer))
 				return this->fail (lexer, "unfinished function call");
 
-			reader = 0;
+			prototype = 0;
 
-			for (Int32u i = sizeof (Formula::functions) / sizeof (*Formula::functions); i-- > 0; )
+			for (Int32u i = sizeof (prototypes) / sizeof (*prototypes); i-- > 0; )
 			{
-				if (buffer.str () == Formula::functions[i].name)
+				if (buffer.str () == prototypes[i].name)
 				{
-					reader = Formula::functions[i].reader;
+					prototype = &prototypes[i];
 
 					break;
 				}
 			}
 
-			if (!reader)
+			if (!prototype)
 				return this->fail (lexer, "unknown function name");
 
-			return
-				this->readCharacter (lexer, '(') &&
-				(this->*reader) (lexer, column) &&
-				this->readCharacter (lexer, ')');
+			if (!this->readCharacter (lexer, '('))
+				return false;
+
+			while (true)
+			{
+				if (!this->skip (lexer))
+					this->fail (lexer, "unfinished function arguments");
+
+				if (lexer.getCurrent () == ')')
+					break;
+
+				if (!this->readValue (lexer, &target))
+					return false;
+
+				arguments.push_back (target);
+			}
+
+			if (!this->readCharacter (lexer, ')'))
+				return false;
+
+			if (arguments.size () != prototype->count)
+				return this->fail (lexer, "wrong number of arguments");
+
+			*column = this->store ((*prototype->function) (arguments));
+
+			return true;
 		}
 
 		// Parse constant number
@@ -258,7 +280,7 @@ namespace	Tesca
 			return true;
 		}
 
-		return this->fail (lexer, "invalid value");
+		return this->fail (lexer, "invalid character");
 	}
 
 	void	Formula::reset ()

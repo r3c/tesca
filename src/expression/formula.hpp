@@ -4,8 +4,8 @@
 
 #include <string>
 #include <vector>
-#include "../glay/glay.hpp"
 #include "../arithmetic/column.hpp"
+#include "../glay/glay.hpp"
 #include "lexer.hpp"
 
 namespace	Tesca
@@ -28,25 +28,13 @@ namespace	Tesca
 			void				reset ();
 
 		private:
-			typedef bool	(Formula::*Reader) (Lexer&, Column**);
-
-			struct	Function
-			{
-				const char*	name;
-				Reader		reader;
-			};
-
 			bool	fail (const Lexer&, const std::string&);
 			bool	readCharacter (Lexer&, const char);
 			bool	readExpression (Lexer&, Column**);
-			bool	readFunctionAverage (Lexer&, Column**);
-			bool	readFunctionSum (Lexer&, Column**);
 			bool	readIdentifier (Lexer&, std::string*);
 			bool	readValue (Lexer&, Column**);
 			bool	skip (Lexer&);
 			Column*	store (Column*);
-
-			static Function	functions[];
 
 			Columns		allocs;
 			Columns		columns;

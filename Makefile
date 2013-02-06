@@ -1,5 +1,5 @@
-# Wave
-# Makefile receipes file
+# Tesca: Text Stream Calculator
+# Makefile receipe file
 
 include Makefile.conf
 include Makefile.res
