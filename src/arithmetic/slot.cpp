@@ -6,8 +6,4 @@ namespace	Tesca
 	Slot::Slot ()
 	{
 	}
-
-	Slot::~Slot ()
-	{
-	}
 }

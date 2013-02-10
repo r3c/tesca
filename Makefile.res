@@ -7,26 +7,23 @@ SRC		= src
 
 SOURCE	= \
 	arithmetic/bucket.cpp \
-	arithmetic/column/aggregate.cpp \
-	arithmetic/column/average.cpp \
-	arithmetic/column/constant.cpp \
-	arithmetic/column/field.cpp \
-	arithmetic/column/map.cpp \
-	arithmetic/column/sum.cpp \
 	arithmetic/column/value.cpp \
 	arithmetic/column.cpp \
+	arithmetic/reader/binary.cpp \
+	arithmetic/reader/constant.cpp \
+	arithmetic/reader/field.cpp \
+	arithmetic/reader/unary.cpp \
+	arithmetic/reader.cpp \
 	arithmetic/row.cpp \
 	arithmetic/slot/average.cpp \
 	arithmetic/slot/last.cpp \
 	arithmetic/slot/sum.cpp \
 	arithmetic/slot.cpp \
 	arithmetic/table.cpp \
-	arithmetic/value/boolean.cpp \
-	arithmetic/value/number.cpp \
-	arithmetic/value/string.cpp \
-	arithmetic/value/void.cpp \
-	arithmetic/value.cpp \
+	arithmetic/variant.cpp \
+	expression/aggregator.cpp \
 	expression/formula.cpp \
+	expression/function.cpp \
 	expression/lexer.cpp \
 	glay/parallel/mutex.cpp \
 	glay/parallel/signal.cpp \

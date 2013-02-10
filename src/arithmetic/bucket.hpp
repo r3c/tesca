@@ -3,7 +3,7 @@
 #define __TESCA_BUCKET_HPP
 
 #include "../glay/glay.hpp"
-#include "value.hpp"
+#include "variant.hpp"
 
 namespace	Tesca
 {
@@ -15,14 +15,14 @@ namespace	Tesca
 			/**/			~Bucket ();
 
 			Bucket&			operator = (const Bucket&);
-			const Value&	operator [] (Glay::Int32u) const;
+			const Variant&	operator [] (Glay::Int32u) const;
 
 			Glay::Int16s	compare (const Bucket&) const;
 			Glay::Int32u	length () const;
-			void			set (Glay::Int32u, const Value*);
+			void			set (Glay::Int32u, const Variant&);
 
 		private:
-			const Value**	buffer;
+			Variant*		buffer;
 			Glay::Int32u	size;
 	};
 

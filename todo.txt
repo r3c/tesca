@@ -1,0 +1,3 @@
+X Value => Variant
+X Split column & aggregator
+- Shared string pointer for variants

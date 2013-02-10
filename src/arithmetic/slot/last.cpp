@@ -1,37 +1,24 @@
 
 #include "last.hpp"
 
-#include "../value/void.hpp"
+using namespace Glay;
 
 namespace	Tesca
 {
-	LastSlot::LastSlot () :
-		last (0)
+	Variant	LastSlot::current () const
 	{
+		return this->last;
 	}
 
-	LastSlot::~LastSlot ()
+	bool	LastSlot::push (const Variant& value)
 	{
-		if (this->last != 0)
-			delete this->last;
+		this->last = value;
+
+		return true;
 	}
 
-	void	LastSlot::append (const Value& value)
+	void	LastSlot::reset ()
 	{
-		if (this->last == 0 || *this->last != value)
-		{
-			if (this->last != 0)
-				delete this->last;
-
-			this->last = value.clone ();
-		}
-	}
-
-	const Value&	LastSlot::value () const
-	{
-		if (this->last != 0)
-			return *this->last;
-
-		return VoidValue::instance;
+		this->last = Variant::empty;
 	}
 }

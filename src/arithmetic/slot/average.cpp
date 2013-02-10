@@ -1,40 +1,41 @@
 
 #include "average.hpp"
 
-#include "../value/void.hpp"
-
 using namespace Glay;
 
 namespace	Tesca
 {
 	AverageSlot::AverageSlot () :
-		average (0),
 		count (0),
 		sum (0)
 	{
 	}
 
-	void	AverageSlot::append (const Value& value)
+	Variant	AverageSlot::current () const
+	{
+		if (this->count > 0)
+			return Variant (this->sum / this->count);
+
+		return Variant::empty;
+	}
+
+	bool	AverageSlot::push (const Variant& value)
 	{
 		Float64	number;
 
-		if (value.toNumber (&number))
-		{
-			this->sum += number;
+		if (!value.toNumber (&number))
+			return false;
 
-			++this->count;
-		}
+		this->sum += number;
+
+		++this->count;
+
+		return true;
 	}
 
-	const Value&	AverageSlot::value () const
+	void	AverageSlot::reset ()
 	{
-		if (this->count > 0)
-		{
-			this->average = NumberValue (this->sum / this->count);
-
-			return this->average;
-		}
-
-		return VoidValue::instance;
+		this->count = 0;
+		this->sum = 0;
 	}
 }

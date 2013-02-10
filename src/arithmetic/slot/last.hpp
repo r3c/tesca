@@ -2,6 +2,7 @@
 #ifndef __TESCA_SLOT_LAST_HPP
 #define __TESCA_SLOT_LAST_HPP
 
+#include "../../glay/glay.hpp"
 #include "../slot.hpp"
 
 namespace	Tesca
@@ -9,14 +10,12 @@ namespace	Tesca
 	class	LastSlot : public Slot
 	{
 		public:
-			/**/					LastSlot ();
-			/**/					~LastSlot ();
-
-			virtual void			append (const Value&);
-			virtual const Value&	value () const;
+			virtual Variant	current () const;
+			virtual bool	push (const Variant&);
+			virtual void	reset ();
 
 		private:
-			const Value*	last;
+			Variant	last;
 	};
 }
 

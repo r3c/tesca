@@ -3,7 +3,6 @@
 #define __TESCA_SLOT_SUM_HPP
 
 #include "../../glay/glay.hpp"
-#include "../value/number.hpp"
 #include "../slot.hpp"
 
 namespace	Tesca
@@ -11,14 +10,14 @@ namespace	Tesca
 	class	SumSlot : public Slot
 	{
 		public:
-			/**/					SumSlot ();
+			/**/			SumSlot ();
 
-			virtual void			append (const Value&);
-			virtual const Value&	value () const;
+			virtual Variant	current () const;
+			virtual bool	push (const Variant&);
+			virtual void	reset ();
 
 		private:
-			mutable NumberValue	result;
-			Glay::Float64		sum;
+			Glay::Float64	sum;
 	};
 }
 

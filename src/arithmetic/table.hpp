@@ -9,7 +9,7 @@
 #include "column.hpp"
 #include "row.hpp"
 #include "slot.hpp"
-#include "value.hpp"
+#include "variant.hpp"
 
 namespace	Tesca
 {
@@ -27,22 +27,22 @@ namespace	Tesca
 
 			Table&			operator = (const Table&);
 
+			const Columns&	getColumns () const;
 			Glay::Int32u	getWidth () const;
 
 			iterator		begin () const;
 			iterator		end () const;
 
-			void			append (const Row&);
-			void			reset ();
+			void			clear ();
+			void			push (const Row&);
 
 		private:
-			typedef std::vector<const Value*>	Keys;
-			typedef std::vector<Slot*>			Slots;
+			typedef std::vector<Slot*>	Slots;
 
-			Columns	columns;
-			Groups	groups;
-			Keys	keys;
-			Slots	slots;
+			Columns			columns;
+			Glay::Int32u	keys;
+			Groups			groups;
+			Slots			slots;
 	};
 }
 

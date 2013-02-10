@@ -6,23 +6,29 @@ using namespace Glay;
 namespace	Tesca
 {
 	SumSlot::SumSlot () :
-		result (0),
 		sum (0)
 	{
 	}
 
-	void	SumSlot::append (const Value& value)
+	Variant	SumSlot::current () const
+	{
+		return Variant (this->sum);
+	}
+
+	bool	SumSlot::push (const Variant& value)
 	{
 		Float64	number;
 
-		if (value.toNumber (&number))
-			this->sum += number;
+		if (!value.toNumber (&number))
+			return false;
+
+		this->sum += number;
+
+		return true;
 	}
 
-	const Value&	SumSlot::value () const
+	void	SumSlot::reset ()
 	{
-		this->result = NumberValue (this->sum);
-
-		return this->result;
+		this->sum = 0;
 	}
 }

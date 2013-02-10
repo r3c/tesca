@@ -1,8 +1,6 @@
 
 #include "bucket.hpp"
 
-#include "value/void.hpp"
-
 using namespace Glay;
 
 namespace	Tesca
@@ -10,17 +8,20 @@ namespace	Tesca
 	Bucket::Bucket (const Bucket& other) :
 		size (other.size)
 	{
-		this->buffer = new const Value*[this->size];
+		Variant*	buffer;
 
-		memcpy (this->buffer, other.buffer, this->size * sizeof (*this->buffer));
+		buffer = new Variant[other.size];
+
+		for (Int32u i = other.size; i-- > 0; )
+			buffer[i] = other.buffer[i];
+
+		this->buffer = buffer;
 	}
 
 	Bucket::Bucket (Int32u size) :
 		size (size)
 	{
-		this->buffer = new const Value*[size];
-
-		memset (this->buffer, 0, size * sizeof (*this->buffer));
+		this->buffer = new Variant[size];
 	}
 
 	Bucket::~Bucket ()
@@ -28,12 +29,9 @@ namespace	Tesca
 		delete [] this->buffer;
 	}
 
-	const Value&	Bucket::operator [] (Int32u index) const
+	const Variant&	Bucket::operator [] (Int32u index) const
 	{
-		if (this->buffer[index] != 0)
-			return *this->buffer[index];
-
-		return VoidValue::instance;
+		return this->buffer[index];
 	}
 
 	Int16s	Bucket::compare (const Bucket& other) const
@@ -45,8 +43,8 @@ namespace	Tesca
 
 		for (Int32u index = 0; index < this->length (); ++index)
 		{
-			const Value&	lhs = (*this)[index];
-			const Value&	rhs = other[index];
+			const Variant&	lhs = (*this)[index];
+			const Variant&	rhs = other[index];
 
 			if (lhs < rhs)
 				return -1;
@@ -62,7 +60,7 @@ namespace	Tesca
 		return this->size;
 	}
 
-	void	Bucket::set (Int32u index, const Value* value)
+	void	Bucket::set (Int32u index, const Variant& value)
 	{
 		this->buffer[index] = value;
 	}

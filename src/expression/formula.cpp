@@ -2,44 +2,13 @@
 #include "formula.hpp"
 
 #include <sstream>
-#include "../arithmetic/column/average.hpp"
-#include "../arithmetic/column/constant.hpp"
-#include "../arithmetic/column/field.hpp"
-#include "../arithmetic/column/sum.hpp"
-#include "../arithmetic/value/number.hpp"
-#include "../arithmetic/value/string.hpp"
+#include "../arithmetic/column/value.hpp"
+#include "../arithmetic/reader/constant.hpp"
+#include "../arithmetic/reader/field.hpp"
 
 using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
-
-namespace
-{
-	typedef Tesca::Column*	(*Function) (const Tesca::Formula::Columns&);
-
-	struct	Prototype
-	{
-		const char*	name;
-		Function	function;
-		Int32u		count;
-	};
-
-	Tesca::Column*	functionAverage (const Tesca::Formula::Columns& arguments)
-	{
-		return new Tesca::AverageColumn (arguments[0]);
-	}
-
-	Tesca::Column*	functionSum (const Tesca::Formula::Columns& arguments)
-	{
-		return new Tesca::SumColumn (arguments[0]);
-	}
-
-	static Prototype	prototypes[] =
-	{
-		{"avg",	&functionAverage,	1},
-		{"sum",	&functionSum,		1}
-	};
-}
 
 namespace	Tesca
 {
@@ -73,35 +42,92 @@ namespace	Tesca
 		return this->error;
 	}
 
-	const Formula::Names	Formula::getNames () const
-	{
-		return this->names;
-	}
-
 	bool	Formula::parse (const char* input)
 	{
-		Column*	column;
-		Lexer	lexer (input);
-		string	name;
+		const Aggregator*	aggregator;
+		Column*				column;
+		string				identifier;
+		Lexer				lexer (input);
+		Reader*				reader;
 
 		while (this->skip (lexer))
 		{
-			if (!this->readIdentifier (lexer, &name))
+			// Read column identifier
+			if (!this->readIdentifier (lexer, &identifier))
 				return false;
 
 			this->skip (lexer);
 
+			// Read column aggregator
+			if (lexer.getCurrent () == ':')
+			{
+				if (!lexer.next ())
+					return this->fail (lexer, "missing aggregator name");
+
+				if (!this->readAggregator (lexer, &aggregator))
+					return false;
+
+				this->skip (lexer);
+			}
+			else
+				aggregator = 0;
+
+			// Skip expression assignment
 			if (!this->readCharacter (lexer, '='))
 				return false;
 
 			this->skip (lexer);
 
-			if (!this->readExpression (lexer, &column))
+			// Parse column expression
+			if (!this->readExpression (lexer, &reader))
 				return false;
 
+			// Create and push column
+			if (aggregator != 0)
+				column = (*aggregator->builder) (identifier, reader);
+			else
+				column = new ValueColumn (identifier, reader);
+
 			this->columns.push_back (column);
-			this->names.push_back (name);
+
+			// Skip column separator
+			if (!this->skip (lexer))
+				break;
+
+			if (!this->readCharacter (lexer, ','))
+				return false;
 		}
+
+		return true;
+	}
+
+	bool	Formula::readAggregator (Lexer& lexer, const Aggregator** output)
+	{
+		const Aggregator*	aggregator;
+		stringstream		buffer;
+
+		for (; !lexer.eof () &&
+			   ((lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
+				(lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
+				(lexer.getCurrent () == '_')); lexer.next ())
+			buffer.put (lexer.getCurrent ());
+
+		aggregator = 0;
+
+		for (Int32u i = 0; Aggregator::aggregators[i].name; ++i)
+		{
+			if (buffer.str () == Aggregator::aggregators[i].name)
+			{
+				aggregator = &Aggregator::aggregators[i];
+
+				break;
+			}
+		}
+
+		if (!aggregator)
+			return this->fail (lexer, "unknown aggregator name");
+
+		*output = aggregator;
 
 		return true;
 	}
@@ -116,11 +142,11 @@ namespace	Tesca
 		return true;
 	}
 
-	bool	Formula::readExpression (Lexer& lexer, Column** column)
+	bool	Formula::readExpression (Lexer& lexer, Reader** output)
 	{
 		while (true)
 		{
-			if (!this->readValue (lexer, column))
+			if (!this->readValue (lexer, output))
 				return false;
 
 			if (!this->skip (lexer))
@@ -140,13 +166,12 @@ namespace	Tesca
 	bool	Formula::readIdentifier (Lexer& lexer, string* output)
 	{
 		stringstream	buffer;
-		bool			read;
 
-		for (read = true; read &&
+		for (; !lexer.eof () &&
 		     ((lexer.getCurrent () >= '0' && lexer.getCurrent () <= '9') ||
 		      (lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
 		      (lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
-		      (lexer.getCurrent () == '_')); read = lexer.next ())
+		      (lexer.getCurrent () == '_')); lexer.next ())
 			buffer.put (lexer.getCurrent ());
 
 		if (buffer.tellp () <= 0)
@@ -157,13 +182,14 @@ namespace	Tesca
 		return true;
 	}
 
-	bool	Formula::readValue (Lexer& lexer, Column** column)
+	bool	Formula::readValue (Lexer& lexer, Reader** output)
 	{
-		Columns			arguments;
+		Readers			arguments;
 		stringstream	buffer;
+		const Function*	function;
+		string			identifier;
 		Float64			number;
-		Prototype*		prototype;
-		Column*			target;
+		Reader*			reader;
 
 		// Parse function call
 		for (; !lexer.eof () &&
@@ -177,19 +203,19 @@ namespace	Tesca
 			if (!this->skip (lexer))
 				return this->fail (lexer, "unfinished function call");
 
-			prototype = 0;
+			function = 0;
 
-			for (Int32u i = sizeof (prototypes) / sizeof (*prototypes); i-- > 0; )
+			for (Int32u i = 0; Function::functions[i].name; ++i)
 			{
-				if (buffer.str () == prototypes[i].name)
+				if (buffer.str () == Function::functions[i].name)
 				{
-					prototype = &prototypes[i];
+					function = &Function::functions[i];
 
 					break;
 				}
 			}
 
-			if (!prototype)
+			if (!function)
 				return this->fail (lexer, "unknown function name");
 
 			if (!this->readCharacter (lexer, '('))
@@ -203,19 +229,21 @@ namespace	Tesca
 				if (lexer.getCurrent () == ')')
 					break;
 
-				if (!this->readValue (lexer, &target))
+				if (!this->readValue (lexer, &reader))
 					return false;
 
-				arguments.push_back (target);
+				arguments.push_back (reader);
 			}
 
 			if (!this->readCharacter (lexer, ')'))
 				return false;
 
-			if (arguments.size () != prototype->count)
+			if (arguments.size () != function->count)
 				return this->fail (lexer, "wrong number of arguments");
 
-			*column = this->store ((*prototype->function) (arguments));
+			*output = (*function->builder) (arguments);
+
+			this->readers.push_back (*output);
 
 			return true;
 		}
@@ -233,7 +261,9 @@ namespace	Tesca
 			if (buffer.fail ())
 				return this->fail (lexer, "invalid number");
 
-			*column = this->store (new ConstantColumn (NumberValue (number)));
+			*output = new ConstantReader (Variant (number));
+
+			this->readers.push_back (*output);
 
 			return true;
 		}
@@ -257,7 +287,9 @@ namespace	Tesca
 
 			lexer.next ();
 
-			*column = this->store (new ConstantColumn (StringValue (buffer.str ())));
+			*output = new ConstantReader (Variant (buffer.str ()));
+
+			this->readers.push_back (*output);
 
 			return true;
 		}
@@ -266,16 +298,14 @@ namespace	Tesca
 		if (lexer.getCurrent () == '$')
 		{
 			if (!lexer.next ())
-				return this->fail (lexer, "unfinished field reference");
+				return this->fail (lexer, "unfinished field identifier");
 
-			for (; !lexer.eof () &&
-			       ((lexer.getCurrent () >= '0' && lexer.getCurrent () <= '9') ||
-				    (lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
-			        (lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
-			        (lexer.getCurrent () == '_')); lexer.next ())
-				buffer.put (lexer.getCurrent ());
+			if (!this->readIdentifier (lexer, &identifier))
+				return false;
 
-			*column = this->store (new FieldColumn (buffer.str ()));
+			*output = new FieldReader (identifier);
+
+			this->readers.push_back (*output);
 
 			return true;
 		}
@@ -285,11 +315,18 @@ namespace	Tesca
 
 	void	Formula::reset ()
 	{
-		for (auto i = this->allocs.begin (); i != this->allocs.end (); ++i)
-			delete *i;
+		for_each (this->columns.begin (), this->columns.end (), [] (Column* column)
+		{
+			delete column;
+		});
 
-		this->allocs.clear ();
+		for_each (this->readers.begin (), this->readers.end (), [] (Reader* reader)
+		{
+			delete reader;
+		});
+
 		this->columns.clear ();
+		this->readers.clear ();
 	}
 
 	bool	Formula::skip (Lexer& lexer)
@@ -301,12 +338,5 @@ namespace	Tesca
 		}
 
 		return true;
-	}
-
-	Column*	Formula::store (Column* column)
-	{
-		this->allocs.push_back (column);
-
-		return column;
 	}
 }

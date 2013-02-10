@@ -2,65 +2,23 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include "arithmetic/column/average.hpp"
-#include "arithmetic/column/constant.hpp"
-#include "arithmetic/column/field.hpp"
-#include "arithmetic/column/sum.hpp"
+#include "arithmetic/column/group.hpp"
+#include "arithmetic/column/value.hpp"
+#include "arithmetic/reader/binary.hpp"
+#include "arithmetic/reader/constant.hpp"
+#include "arithmetic/reader/field.hpp"
 #include "arithmetic/row.hpp"
 #include "arithmetic/table.hpp"
-#include "arithmetic/value/number.hpp"
-#include "arithmetic/value/string.hpp"
-#include "arithmetic/value/void.hpp"
+#include "arithmetic/slot/average.hpp"
+#include "arithmetic/slot/last.hpp"
+#include "arithmetic/slot/sum.hpp"
 #include "expression/formula.hpp"
 
 using namespace std;
 using namespace Glay;
 using namespace Tesca;
 
-ostream&	operator << (ostream& stream, const Value& value)
-{
-	bool	asBoolean;
-	Float64	asNumber;
-	string	asString;
-
-	switch (value.getType ())
-	{
-		case Tesca::Value::ContentType::BOOLEAN:
-			value.toBoolean (&asBoolean);
-
-			stream << (asBoolean ? "true" : "false");
-
-			break;
-
-		case Tesca::Value::ContentType::NUMBER:
-			value.toNumber (&asNumber);
-
-			stream << asNumber;
-
-			break;
-
-		case Tesca::Value::ContentType::STRING:
-			value.toString (&asString);
-
-			stream << "\"" << asString << "\"";
-
-			break;
-
-		case Tesca::Value::ContentType::NONE:
-			stream << "void";
-
-			break;
-
-		default:
-			stream << "?";
-
-			break;
-	}
-
-	return stream;
-}
-
-void	debug_print (const Formula& formula, const Table& table)
+void	debug_print (const Table& table)
 {
 	for (auto iterator = table.begin (); iterator != table.end (); ++iterator)
 	{
@@ -73,7 +31,7 @@ void	debug_print (const Formula& formula, const Table& table)
 			if (i > 0)
 				std::cout << ", ";
 
-			std::cout << "[" << (i < formula.getNames ().size () ? formula.getNames ()[i] : "N/A") << "] = " << slot.value ();
+			std::cout << "[" << table.getColumns ()[i]->getIdentifier () << "] = " << slot.current ();
 		}
 
 		std::cout << std::endl;
@@ -87,7 +45,7 @@ int	main (int argc, char* argv[])
 	vector<Column*>				columns;
 	Formula						formula;
 	Row*						row;
-	map<string, const Value*>	values;
+	map<string, const Variant*>	values;
 
 	if (argc > 1)
 	{
@@ -102,64 +60,64 @@ int	main (int argc, char* argv[])
 	}
 	else
 	{
-		columns = vector<Column*> (4);
-		columns[0] = new FieldColumn ("0");
-		columns[1] = new AverageColumn (new FieldColumn ("1"));
-		columns[2] = new SumColumn (new FieldColumn ("1"));
-		columns[3] = new ConstantColumn (NumberValue (42));
+		columns = vector<Column*> ();
+		columns.push_back (new ValueColumn ("a", new FieldReader ("0")));
+		columns.push_back (new GroupColumn<AverageSlot> ("b", new FieldReader ("1")));
+		columns.push_back (new GroupColumn<SumSlot> ("c", new FieldReader ("1")));
+		columns.push_back (new ValueColumn ("d", new ConstantReader (Variant (42))));
 	}
 
 	Table	table (columns);
 
 	values.clear ();
-	values["0"] = new StringValue ("A");
-	values["1"] = new NumberValue (1);
+	values["0"] = new Variant ("A");
+	values["1"] = new Variant (1);
 
 	row = new Row (values);
 
-	table.append (*row);
+	table.push (*row);
 
 	delete values["0"];
 	delete values["1"];
 
-	debug_print (formula, table);
+	debug_print (table);
 
 	values.clear ();
-	values["0"] = new StringValue ("A");
-	values["1"] = new StringValue ("2");
+	values["0"] = new Variant ("A");
+	values["1"] = new Variant ("2");
 
 	row = new Row (values);
 
-	table.append (*row);
+	table.push (*row);
 
 	delete values["0"];
 	delete values["1"];
 
-	debug_print (formula, table);
+	debug_print (table);
 
 	values.clear ();
-	values["0"] = new NumberValue (8);
-	values["1"] = new NumberValue (3);
+	values["0"] = new Variant (8);
+	values["1"] = new Variant (3);
 
 	row = new Row (values);
 
-	table.append (*row);
+	table.push (*row);
 
 	delete values["0"];
 	delete values["1"];
 
-	debug_print (formula, table);
+	debug_print (table);
 
 	values.clear ();
-	values["0"] = new StringValue ("8");
-	values["1"] = new NumberValue (4);
+	values["0"] = new Variant ("8");
+	values["1"] = new Variant (4);
 
 	row = new Row (values);
 
-	table.append (*row);
+	table.push (*row);
 
 	delete values["0"];
 	delete values["1"];
 
-	debug_print (formula, table);
+	debug_print (table);
 }

@@ -2,25 +2,31 @@
 #ifndef __TESCA_COLUMN_HPP
 #define __TESCA_COLUMN_HPP
 
+#include <string>
+#include "reader.hpp"
 #include "row.hpp"
 #include "slot.hpp"
-#include "value.hpp"
+#include "variant.hpp"
 
 namespace	Tesca
 {
-	class Column
+	class	Column
 	{
 		public:
-			/**/					Column (const Column&);
-			/**/					Column ();
-			virtual					~Column ();
+			/**/	Column (const Column&);
+			/**/	Column (const std::string&, const Reader*);
 
-			Column&					operator = (const Column&);
+			Column&	operator = (const Column&);
 
-			virtual Slot*			create () const = 0;
-			virtual const Value&	key () const = 0;
-			virtual void			update (const Row&) = 0;
-			virtual const Value&	value () const = 0;
+			const std::string&	getIdentifier () const;
+
+			virtual Slot*		create () const = 0;
+			virtual bool		key () const = 0;
+			Variant				read (const Row&) const;
+
+		private:
+			std::string		identifier;
+			const Reader*	reader;
 	};
 }
 
