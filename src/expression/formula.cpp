@@ -61,7 +61,7 @@ namespace	Tesca
 			// Read column aggregator
 			if (lexer.getCurrent () == ':')
 			{
-				if (!lexer.next ())
+				if (!lexer.next () || !this->skip (lexer))
 					return this->fail (lexer, "missing aggregator name");
 
 				if (!this->readAggregator (lexer, &aggregator))
@@ -221,22 +221,37 @@ namespace	Tesca
 			if (!this->readCharacter (lexer, '('))
 				return false;
 
-			while (true)
+			if (!this->skip (lexer))
+				this->fail (lexer, "missing function arguments");
+
+			if (lexer.getCurrent () == ')')
+				lexer.next ();
+			else
 			{
-				if (!this->skip (lexer))
-					this->fail (lexer, "unfinished function arguments");
+				while (true)
+				{
+					if (!this->readValue (lexer, &reader))
+						return false;
 
-				if (lexer.getCurrent () == ')')
-					break;
+					arguments.push_back (reader);
 
-				if (!this->readValue (lexer, &reader))
-					return false;
+					if (!this->skip (lexer))
+						this->fail (lexer, "missing arguments separator or end of arguments");
 
-				arguments.push_back (reader);
+					if (lexer.getCurrent () == ')')
+					{
+						lexer.next ();
+
+						break;
+					}
+
+					if (!this->readCharacter (lexer, ','))
+						return false;
+
+					if (!this->skip (lexer))
+						this->fail (lexer, "missing function argument");
+				}
 			}
-
-			if (!this->readCharacter (lexer, ')'))
-				return false;
 
 			if (arguments.size () != function->count)
 				return this->fail (lexer, "wrong number of arguments");
@@ -315,15 +330,11 @@ namespace	Tesca
 
 	void	Formula::reset ()
 	{
-		for_each (this->columns.begin (), this->columns.end (), [] (Column* column)
-		{
-			delete column;
-		});
+		for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
+			delete *i;
 
-		for_each (this->readers.begin (), this->readers.end (), [] (Reader* reader)
-		{
-			delete reader;
-		});
+		for (auto i = this->readers.begin (); i != this->readers.end (); ++i)
+			delete *i;
 
 		this->columns.clear ();
 		this->readers.clear ();
