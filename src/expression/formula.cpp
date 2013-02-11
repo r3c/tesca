@@ -5,6 +5,7 @@
 #include "../arithmetic/column/value.hpp"
 #include "../arithmetic/reader/constant.hpp"
 #include "../arithmetic/reader/field.hpp"
+#include "../arithmetic/reader/void.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -46,12 +47,23 @@ namespace	Tesca
 	{
 		const Aggregator*	aggregator;
 		Column*				column;
+		bool				first;
 		string				identifier;
 		Lexer				lexer (input);
-		Reader*				reader;
+		const Reader*		reader;
+
+		first = true;
 
 		while (this->skip (lexer))
 		{
+			// Skip columns separator
+			if (first)
+				first = false;
+			else if (!this->readCharacter (lexer, ','))
+				return false;
+			else if (!this->skip (lexer))
+				return this->fail (lexer, "expected column declaration");
+
 			// Read column identifier
 			if (!this->readIdentifier (lexer, &identifier))
 				return false;
@@ -62,7 +74,7 @@ namespace	Tesca
 			if (lexer.getCurrent () == ':')
 			{
 				if (!lexer.next () || !this->skip (lexer))
-					return this->fail (lexer, "missing aggregator name");
+					return this->fail (lexer, "expected column aggregator");
 
 				if (!this->readAggregator (lexer, &aggregator))
 					return false;
@@ -72,15 +84,19 @@ namespace	Tesca
 			else
 				aggregator = 0;
 
-			// Skip expression assignment
-			if (!this->readCharacter (lexer, '='))
-				return false;
+			// Read column expression
+			if (lexer.getCurrent () == '=')
+			{
+				if (!lexer.next () || !this->skip (lexer))
+					return this->fail (lexer, "expected column expression");
 
-			this->skip (lexer);
+				if (!this->readExpression (lexer, &reader))
+					return false;
 
-			// Parse column expression
-			if (!this->readExpression (lexer, &reader))
-				return false;
+				this->skip (lexer);
+			}
+			else
+				reader = &VoidReader::instance;
 
 			// Create and push column
 			if (aggregator != 0)
@@ -89,13 +105,6 @@ namespace	Tesca
 				column = new ValueColumn (identifier, reader);
 
 			this->columns.push_back (column);
-
-			// Skip column separator
-			if (!this->skip (lexer))
-				break;
-
-			if (!this->readCharacter (lexer, ','))
-				return false;
 		}
 
 		return true;
@@ -142,7 +151,7 @@ namespace	Tesca
 		return true;
 	}
 
-	bool	Formula::readExpression (Lexer& lexer, Reader** output)
+	bool	Formula::readExpression (Lexer& lexer, const Reader** output)
 	{
 		while (true)
 		{
@@ -182,14 +191,14 @@ namespace	Tesca
 		return true;
 	}
 
-	bool	Formula::readValue (Lexer& lexer, Reader** output)
+	bool	Formula::readValue (Lexer& lexer, const Reader** output)
 	{
 		Readers			arguments;
 		stringstream	buffer;
 		const Function*	function;
 		string			identifier;
 		Float64			number;
-		Reader*			reader;
+		const Reader*	reader;
 
 		// Parse function call
 		for (; !lexer.eof () &&
@@ -222,7 +231,7 @@ namespace	Tesca
 				return false;
 
 			if (!this->skip (lexer))
-				this->fail (lexer, "missing function arguments");
+				this->fail (lexer, "expected function arguments");
 
 			if (lexer.getCurrent () == ')')
 				lexer.next ();
@@ -236,7 +245,7 @@ namespace	Tesca
 					arguments.push_back (reader);
 
 					if (!this->skip (lexer))
-						this->fail (lexer, "missing arguments separator or end of arguments");
+						this->fail (lexer, "expected arguments separator or end of arguments");
 
 					if (lexer.getCurrent () == ')')
 					{
@@ -249,7 +258,7 @@ namespace	Tesca
 						return false;
 
 					if (!this->skip (lexer))
-						this->fail (lexer, "missing function argument");
+						this->fail (lexer, "expected function argument");
 				}
 			}
 

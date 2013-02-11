@@ -13,6 +13,7 @@ SOURCE	= \
 	arithmetic/reader/constant.cpp \
 	arithmetic/reader/field.cpp \
 	arithmetic/reader/unary.cpp \
+	arithmetic/reader/void.cpp \
 	arithmetic/reader.cpp \
 	arithmetic/row.cpp \
 	arithmetic/slot/average.cpp \

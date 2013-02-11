@@ -48,8 +48,9 @@ namespace	Tesca
 				const char*		string;
 			};
 
-			Type	type;
-			Value	value;
+			Glay::Int32u*	share;
+			Type			type;
+			Value			value;
 	};
 
 	bool			operator == (const Variant&, const Variant&);

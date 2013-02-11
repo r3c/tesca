@@ -6,7 +6,7 @@
 
 namespace	Tesca
 {
-	class ValueColumn : public Column
+	class	ValueColumn : public Column
 	{
 		public:
 			/**/	ValueColumn (const std::string&, const Reader*);

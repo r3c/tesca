@@ -6,20 +6,27 @@ using namespace Glay;
 
 namespace	Tesca
 {
-// FIXME
-Row::Row (const map<string, const Variant*>& values) :
-	values (values)
-{
-}
-// FIXME
+	Row::Row ()
+	{
+	}
 
 	const Variant&	Row::operator [] (string key) const
 	{
-		map<string, const Variant*>::const_iterator	i = this->values.find (key);
+		auto	i = this->fields.find (key);
 
-		if (i != this->values.end ())
-			return *i->second;
+		if (i != this->fields.end ())
+			return i->second;
 
 		return Variant::empty;
+	}
+
+	void	Row::clear ()
+	{
+		this->fields.clear ();
+	}
+
+	void	Row::push (const string& identifier, const Variant& value)
+	{
+		this->fields[identifier] = value;
 	}
 }

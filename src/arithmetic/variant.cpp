@@ -46,6 +46,7 @@ namespace	Tesca
 
 		memcpy (buffer, string.c_str (), size * sizeof (*buffer));
 
+		this->share = new Int32u (1);
 		this->value.string = buffer;
 	}
 
@@ -60,6 +61,7 @@ namespace	Tesca
 
 		memcpy (buffer, string, size * sizeof (*buffer));
 
+		this->share = new Int32u (1);
 		this->value.string = buffer;
 	}
 
@@ -75,9 +77,6 @@ namespace	Tesca
 
 	Variant&	Variant::operator = (const Variant& other)
 	{
-		char*	buffer;
-		size_t	size;
-
 		if (this != &other)
 		{
 			this->clear ();
@@ -95,12 +94,10 @@ namespace	Tesca
 					break;
 
 				case Variant::STRING:
-					size = strlen (other.value.string) + 1;
-					buffer = new char[size];
+					this->share = other.share;
+					this->value.string = other.value.string;
 
-					memcpy (buffer, other.value.string, size * sizeof (*buffer));
-
-					this->value.string = buffer;
+					++*this->share;
 
 					break;
 
@@ -119,7 +116,11 @@ namespace	Tesca
 		switch (this->type)
 		{
 			case Variant::STRING:
-				delete [] this->value.string;
+				if (--*this->share < 1)
+				{
+					delete this->share;
+					delete [] this->value.string;
+				}
 
 				break;
 

@@ -42,10 +42,9 @@ void	debug_print (const Table& table)
 
 int	main (int argc, char* argv[])
 {
-	vector<Column*>				columns;
-	Formula						formula;
-	Row*						row;
-	map<string, const Variant*>	values;
+	vector<const Column*>	columns;
+	Formula					formula;
+	Row						row;
 
 	if (argc > 1)
 	{
@@ -60,7 +59,7 @@ int	main (int argc, char* argv[])
 	}
 	else
 	{
-		columns = vector<Column*> ();
+		columns = vector<const Column*> ();
 		columns.push_back (new ValueColumn ("a", new FieldReader ("0")));
 		columns.push_back (new GroupColumn<AverageSlot> ("b", new FieldReader ("1")));
 		columns.push_back (new GroupColumn<SumSlot> ("c", new FieldReader ("1")));
@@ -69,55 +68,35 @@ int	main (int argc, char* argv[])
 
 	Table	table (columns);
 
-	values.clear ();
-	values["0"] = new Variant ("A");
-	values["1"] = new Variant (1);
+	row.clear ();
+	row.push ("0", Variant ("A"));
+	row.push ("1", Variant (1));
 
-	row = new Row (values);
-
-	table.push (*row);
-
-	delete values["0"];
-	delete values["1"];
+	table.push (row);
 
 	debug_print (table);
 
-	values.clear ();
-	values["0"] = new Variant ("A");
-	values["1"] = new Variant ("2");
+	row.clear ();
+	row.push ("0", Variant ("A"));
+	row.push ("1", Variant ("2"));
 
-	row = new Row (values);
-
-	table.push (*row);
-
-	delete values["0"];
-	delete values["1"];
+	table.push (row);
 
 	debug_print (table);
 
-	values.clear ();
-	values["0"] = new Variant (8);
-	values["1"] = new Variant (3);
+	row.clear ();
+	row.push ("0", Variant (8));
+	row.push ("1", Variant (3));
 
-	row = new Row (values);
-
-	table.push (*row);
-
-	delete values["0"];
-	delete values["1"];
+	table.push (row);
 
 	debug_print (table);
 
-	values.clear ();
-	values["0"] = new Variant ("8");
-	values["1"] = new Variant (4);
+	row.clear ();
+	row.push ("0", Variant ("8"));
+	row.push ("1", Variant (4));
 
-	row = new Row (values);
-
-	table.push (*row);
-
-	delete values["0"];
-	delete values["1"];
+	table.push (row);
 
 	debug_print (table);
 }

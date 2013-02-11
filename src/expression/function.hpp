@@ -10,7 +10,7 @@ namespace	Tesca
 {
 	struct	Function
 	{
-		typedef Reader*	(*Builder) (const std::vector<Reader*>&);
+		typedef Reader*	(*Builder) (const std::vector<const Reader*>&);
 
 		static const Function	functions[];
 

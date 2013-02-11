@@ -11,18 +11,20 @@ namespace	Tesca
 {
 	class	Row
 	{
-// FIXME
-public:
-	/**/			Row (const std::map<std::string, const Variant*>&);
-private:
-	const std::map<std::string, const Variant*>&	values;
-// FIXME
-
 		public:
+			/**/			Row ();
 			/**/			Row (const Row&);
 
 			Row&			operator = (const Row&);
 			const Variant&	operator [] (std::string) const;
+
+			void			clear ();
+			void			push (const std::string&, const Variant&);
+
+		private:
+			typedef std::map<std::string, Variant>	Fields;
+
+			Fields	fields;
 	};
 }
 

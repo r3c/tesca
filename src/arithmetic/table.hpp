@@ -16,7 +16,7 @@ namespace	Tesca
 	class	Table
 	{
 		public:
-			typedef std::vector<Column*>		Columns;
+			typedef std::vector<const Column*>	Columns;
 			typedef std::map<Bucket, Slot**>	Groups;
 
 			typedef Groups::const_iterator		iterator;

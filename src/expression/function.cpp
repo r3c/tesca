@@ -15,7 +15,7 @@ namespace	Tesca
 {
 	const Function	Function::functions[] =
 	{
-		{"add",		2,	[] (const vector<Reader*>& arguments) -> Reader*
+		{"add",		2,	[] (const vector<const Reader*>& arguments) -> Reader*
 		{
 			return new BinaryReader (arguments[0], arguments[1], [] (const Variant& lhs, const Variant& rhs)
 			{
@@ -28,7 +28,7 @@ namespace	Tesca
 				return Variant::empty;
 			});
 		}},
-		{"lcase",	1,	[] (const vector<Reader*>& arguments) -> Reader*
+		{"lcase",	1,	[] (const vector<const Reader*>& arguments) -> Reader*
 		{
 			return new UnaryReader (arguments[0], [] (const Variant& source)
 			{
@@ -42,7 +42,7 @@ namespace	Tesca
 				return Variant (buffer);
 			});
 		}},
-		{"ucase",	1,	[] (const vector<Reader*>& arguments) -> Reader*
+		{"ucase",	1,	[] (const vector<const Reader*>& arguments) -> Reader*
 		{
 			return new UnaryReader (arguments[0], [] (const Variant& source)
 			{
