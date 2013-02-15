@@ -3,14 +3,14 @@
 #define __TESCA_EXPRESSION_FUNCTION_HPP
 
 #include <vector>
-#include "../arithmetic/reader.hpp"
+#include "../arithmetic/accessor.hpp"
 #include "../glay/glay.hpp"
 
 namespace	Tesca
 {
 	struct	Function
 	{
-		typedef Reader*	(*Builder) (const std::vector<const Reader*>&);
+		typedef Accessor*	(*Builder) (const std::vector<const Accessor*>&);
 
 		static const Function	functions[];
 

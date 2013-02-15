@@ -3,14 +3,14 @@
 #define __TESCA_EXPRESSION_AGGREGATOR_HPP
 
 #include <string>
+#include "../arithmetic/accessor.hpp"
 #include "../arithmetic/column.hpp"
-#include "../arithmetic/reader.hpp"
 
 namespace	Tesca
 {
 	struct	Aggregator
 	{
-		typedef Column*	(*Builder) (const std::string&, const Reader*);
+		typedef Column*	(*Builder) (const std::string&, const Accessor*);
 
 		static const Aggregator	aggregators[];
 

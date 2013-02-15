@@ -6,8 +6,8 @@ using namespace std;
 namespace	Tesca
 {
 	template<typename T>
-	GroupColumn<T>::GroupColumn (const string& identifier, const Reader* reader) :
-		Column (identifier, reader)
+	GroupColumn<T>::GroupColumn (const string& identifier, const Accessor* accessor) :
+		Column (identifier, accessor)
 	{
 	}
 

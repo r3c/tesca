@@ -1,18 +1,17 @@
 
 #include <iostream>
-#include <map>
 #include <vector>
+#include "arithmetic/accessor/binary.hpp"
+#include "arithmetic/accessor/constant.hpp"
+#include "arithmetic/accessor/field.hpp"
 #include "arithmetic/column/group.hpp"
 #include "arithmetic/column/value.hpp"
-#include "arithmetic/reader/binary.hpp"
-#include "arithmetic/reader/constant.hpp"
-#include "arithmetic/reader/field.hpp"
-#include "arithmetic/row.hpp"
-#include "arithmetic/table.hpp"
 #include "arithmetic/slot/average.hpp"
 #include "arithmetic/slot/last.hpp"
 #include "arithmetic/slot/sum.hpp"
+#include "arithmetic/table.hpp"
 #include "expression/formula.hpp"
+#include "stream/reader/map.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -44,7 +43,6 @@ int	main (int argc, char* argv[])
 {
 	vector<const Column*>	columns;
 	Formula					formula;
-	Row						row;
 
 	if (argc > 1)
 	{
@@ -60,43 +58,32 @@ int	main (int argc, char* argv[])
 	else
 	{
 		columns = vector<const Column*> ();
-		columns.push_back (new ValueColumn ("a", new FieldReader ("0")));
-		columns.push_back (new GroupColumn<AverageSlot> ("b", new FieldReader ("1")));
-		columns.push_back (new GroupColumn<SumSlot> ("c", new FieldReader ("1")));
-		columns.push_back (new ValueColumn ("d", new ConstantReader (Variant (42))));
+		columns.push_back (new ValueColumn ("a", new FieldAccessor ("0")));
+		columns.push_back (new GroupColumn<AverageSlot> ("b", new FieldAccessor ("1")));
+		columns.push_back (new GroupColumn<SumSlot> ("c", new FieldAccessor ("1")));
+		columns.push_back (new ValueColumn ("d", new ConstantAccessor (Variant (42))));
 	}
 
-	Table	table (columns);
+	MapReader	reader;
+	Table		table (columns);
 
-	row.clear ();
-	row.push ("0", Variant ("A"));
-	row.push ("1", Variant (1));
+	reader.push ();
+	reader.set ("0", Variant ("A"));
+	reader.set ("1", Variant (1));
+	reader.push ();
+	reader.set ("0", Variant ("A"));
+	reader.set ("1", Variant ("2"));
+	reader.push ();
+	reader.set ("0", Variant (8));
+	reader.set ("1", Variant (3));
+	reader.push ();
+	reader.set ("0", Variant ("8"));
+	reader.set ("1", Variant (4));
 
-	table.push (row);
+	while (reader.next ())
+	{
+		table.push (reader.current ());
 
-	debug_print (table);
-
-	row.clear ();
-	row.push ("0", Variant ("A"));
-	row.push ("1", Variant ("2"));
-
-	table.push (row);
-
-	debug_print (table);
-
-	row.clear ();
-	row.push ("0", Variant (8));
-	row.push ("1", Variant (3));
-
-	table.push (row);
-
-	debug_print (table);
-
-	row.clear ();
-	row.push ("0", Variant ("8"));
-	row.push ("1", Variant (4));
-
-	table.push (row);
-
-	debug_print (table);
+		debug_print (table);
+	}
 }

@@ -7,8 +7,8 @@ using namespace std;
 
 namespace	Tesca
 {
-	ValueColumn::ValueColumn (const string& identifier, const Reader* reader) :
-		Column (identifier, reader)
+	ValueColumn::ValueColumn (const string& identifier, const Accessor* accessor) :
+		Column (identifier, accessor)
 	{
 	}
 

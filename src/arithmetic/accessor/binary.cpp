@@ -3,14 +3,14 @@
 
 namespace	Tesca
 {
-	BinaryReader::BinaryReader (const Reader* lhs, const Reader* rhs, const Evaluator* evaluator) :
+	BinaryAccessor::BinaryAccessor (const Accessor* lhs, const Accessor* rhs, const Evaluator* evaluator) :
 		evaluator (evaluator),
 		lhs (lhs),
 		rhs (rhs)
 	{
 	}
 
-	Variant	BinaryReader::read (const Row& row) const
+	Variant	BinaryAccessor::read (const Row& row) const
 	{
 		return (*this->evaluator) (this->lhs->read (row), this->rhs->read (row));
 	}

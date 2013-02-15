@@ -12,8 +12,8 @@ namespace	Tesca
 	class	Row
 	{
 		public:
-			/**/			Row ();
 			/**/			Row (const Row&);
+			/**/			Row ();
 
 			Row&			operator = (const Row&);
 			const Variant&	operator [] (std::string) const;

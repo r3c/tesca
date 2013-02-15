@@ -16,8 +16,8 @@ namespace	Tesca
 	class	Formula
 	{
 		public:
-			typedef std::vector<const Column*>	Columns;
-			typedef std::vector<const Reader*>	Readers;
+			typedef std::vector<const Accessor*>	Accessors;
+			typedef std::vector<const Column*>		Columns;
 
 			/**/				Formula (const Formula&);
 			/**/				Formula ();
@@ -35,14 +35,14 @@ namespace	Tesca
 			bool	fail (const Lexer&, const std::string&);
 			bool	readAggregator (Lexer&, const Aggregator**);
 			bool	readCharacter (Lexer&, const char);
-			bool	readExpression (Lexer&, const Reader**);
+			bool	readExpression (Lexer&, const Accessor**);
 			bool	readIdentifier (Lexer&, std::string*);
-			bool	readValue (Lexer&, const Reader**);
+			bool	readValue (Lexer&, const Accessor**);
 			bool	skip (Lexer&);
 
+			Accessors	accessors;
 			Columns		columns;
 			std::string	error;
-			Readers		readers;
 
 	};
 }

@@ -2,10 +2,10 @@
 #include "formula.hpp"
 
 #include <sstream>
+#include "../arithmetic/accessor/constant.hpp"
+#include "../arithmetic/accessor/field.hpp"
+#include "../arithmetic/accessor/void.hpp"
 #include "../arithmetic/column/value.hpp"
-#include "../arithmetic/reader/constant.hpp"
-#include "../arithmetic/reader/field.hpp"
-#include "../arithmetic/reader/void.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -45,12 +45,12 @@ namespace	Tesca
 
 	bool	Formula::parse (const char* input)
 	{
+		const Accessor*		accessor;
 		const Aggregator*	aggregator;
 		Column*				column;
 		bool				first;
 		string				identifier;
 		Lexer				lexer (input);
-		const Reader*		reader;
 
 		first = true;
 
@@ -90,19 +90,19 @@ namespace	Tesca
 				if (!lexer.next () || !this->skip (lexer))
 					return this->fail (lexer, "expected column expression");
 
-				if (!this->readExpression (lexer, &reader))
+				if (!this->readExpression (lexer, &accessor))
 					return false;
 
 				this->skip (lexer);
 			}
 			else
-				reader = &VoidReader::instance;
+				accessor = &VoidAccessor::instance;
 
 			// Create and push column
 			if (aggregator != 0)
-				column = (*aggregator->builder) (identifier, reader);
+				column = (*aggregator->builder) (identifier, accessor);
 			else
-				column = new ValueColumn (identifier, reader);
+				column = new ValueColumn (identifier, accessor);
 
 			this->columns.push_back (column);
 		}
@@ -151,7 +151,7 @@ namespace	Tesca
 		return true;
 	}
 
-	bool	Formula::readExpression (Lexer& lexer, const Reader** output)
+	bool	Formula::readExpression (Lexer& lexer, const Accessor** output)
 	{
 		while (true)
 		{
@@ -191,14 +191,14 @@ namespace	Tesca
 		return true;
 	}
 
-	bool	Formula::readValue (Lexer& lexer, const Reader** output)
+	bool	Formula::readValue (Lexer& lexer, const Accessor** output)
 	{
-		Readers			arguments;
+		const Accessor*	accessor;
+		Accessors		arguments;
 		stringstream	buffer;
 		const Function*	function;
 		string			identifier;
 		Float64			number;
-		const Reader*	reader;
 
 		// Parse function call
 		for (; !lexer.eof () &&
@@ -239,10 +239,10 @@ namespace	Tesca
 			{
 				while (true)
 				{
-					if (!this->readValue (lexer, &reader))
+					if (!this->readValue (lexer, &accessor))
 						return false;
 
-					arguments.push_back (reader);
+					arguments.push_back (accessor);
 
 					if (!this->skip (lexer))
 						this->fail (lexer, "expected arguments separator or end of arguments");
@@ -267,7 +267,7 @@ namespace	Tesca
 
 			*output = (*function->builder) (arguments);
 
-			this->readers.push_back (*output);
+			this->accessors.push_back (*output);
 
 			return true;
 		}
@@ -285,9 +285,9 @@ namespace	Tesca
 			if (buffer.fail ())
 				return this->fail (lexer, "invalid number");
 
-			*output = new ConstantReader (Variant (number));
+			*output = new ConstantAccessor (Variant (number));
 
-			this->readers.push_back (*output);
+			this->accessors.push_back (*output);
 
 			return true;
 		}
@@ -311,9 +311,9 @@ namespace	Tesca
 
 			lexer.next ();
 
-			*output = new ConstantReader (Variant (buffer.str ()));
+			*output = new ConstantAccessor (Variant (buffer.str ()));
 
-			this->readers.push_back (*output);
+			this->accessors.push_back (*output);
 
 			return true;
 		}
@@ -327,9 +327,9 @@ namespace	Tesca
 			if (!this->readIdentifier (lexer, &identifier))
 				return false;
 
-			*output = new FieldReader (identifier);
+			*output = new FieldAccessor (identifier);
 
-			this->readers.push_back (*output);
+			this->accessors.push_back (*output);
 
 			return true;
 		}
@@ -339,14 +339,14 @@ namespace	Tesca
 
 	void	Formula::reset ()
 	{
+		for (auto i = this->accessors.begin (); i != this->accessors.end (); ++i)
+			delete *i;
+
 		for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
 			delete *i;
 
-		for (auto i = this->readers.begin (); i != this->readers.end (); ++i)
-			delete *i;
-
+		this->accessors.clear ();
 		this->columns.clear ();
-		this->readers.clear ();
 	}
 
 	bool	Formula::skip (Lexer& lexer)

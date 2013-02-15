@@ -2,7 +2,7 @@
 #ifndef __TESCA_SLOT_HPP
 #define __TESCA_SLOT_HPP
 
-#include "variant.hpp"
+#include "../stream/variant.hpp"
 
 namespace	Tesca
 {

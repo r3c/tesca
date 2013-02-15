@@ -3,10 +3,10 @@
 
 #include <algorithm>
 #include <string> 
-#include "../arithmetic/reader/binary.hpp"
-#include "../arithmetic/reader/constant.hpp"
-#include "../arithmetic/reader/field.hpp"
-#include "../arithmetic/reader/unary.hpp"
+#include "../arithmetic/accessor/binary.hpp"
+#include "../arithmetic/accessor/constant.hpp"
+#include "../arithmetic/accessor/field.hpp"
+#include "../arithmetic/accessor/unary.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -15,9 +15,9 @@ namespace	Tesca
 {
 	const Function	Function::functions[] =
 	{
-		{"add",		2,	[] (const vector<const Reader*>& arguments) -> Reader*
+		{"add",		2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new BinaryReader (arguments[0], arguments[1], [] (const Variant& lhs, const Variant& rhs)
+			return new BinaryAccessor (arguments[0], arguments[1], [] (const Variant& lhs, const Variant& rhs)
 			{
 				Float64	a;
 				Float64	b;
@@ -28,9 +28,9 @@ namespace	Tesca
 				return Variant::empty;
 			});
 		}},
-		{"lcase",	1,	[] (const vector<const Reader*>& arguments) -> Reader*
+		{"lcase",	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new UnaryReader (arguments[0], [] (const Variant& source)
+			return new UnaryAccessor (arguments[0], [] (const Variant& source)
 			{
 				string	buffer;
 
@@ -42,9 +42,9 @@ namespace	Tesca
 				return Variant (buffer);
 			});
 		}},
-		{"ucase",	1,	[] (const vector<const Reader*>& arguments) -> Reader*
+		{"ucase",	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new UnaryReader (arguments[0], [] (const Variant& source)
+			return new UnaryAccessor (arguments[0], [] (const Variant& source)
 			{
 				string	buffer;
 

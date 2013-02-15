@@ -3,7 +3,7 @@
 #define __TESCA_BUCKET_HPP
 
 #include "../glay/glay.hpp"
-#include "variant.hpp"
+#include "../stream/variant.hpp"
 
 namespace	Tesca
 {

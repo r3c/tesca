@@ -5,11 +5,11 @@
 #include <map>
 #include <vector>
 #include "../glay/glay.hpp"
+#include "../stream/row.hpp"
+#include "../stream/variant.hpp"
 #include "bucket.hpp"
 #include "column.hpp"
-#include "row.hpp"
 #include "slot.hpp"
-#include "variant.hpp"
 
 namespace	Tesca
 {

@@ -5,9 +5,9 @@ using namespace std;
 
 namespace	Tesca
 {
-	Column::Column (const string& identifier, const Reader* reader) :
-		identifier (identifier),
-		reader (reader)
+	Column::Column (const string& identifier, const Accessor* accessor) :
+		accessor (accessor),
+		identifier (identifier)
 	{
 	}
 
@@ -18,6 +18,6 @@ namespace	Tesca
 
 	Variant	Column::read (const Row& row) const
 	{
-		return this->reader->read (row);
+		return this->accessor->read (row);
 	}
 }

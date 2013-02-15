@@ -6,22 +6,20 @@ OBJ		= obj
 SRC		= src
 
 SOURCE	= \
+	arithmetic/accessor/binary.cpp \
+	arithmetic/accessor/constant.cpp \
+	arithmetic/accessor/field.cpp \
+	arithmetic/accessor/unary.cpp \
+	arithmetic/accessor/void.cpp \
+	arithmetic/accessor.cpp \
 	arithmetic/bucket.cpp \
 	arithmetic/column/value.cpp \
 	arithmetic/column.cpp \
-	arithmetic/reader/binary.cpp \
-	arithmetic/reader/constant.cpp \
-	arithmetic/reader/field.cpp \
-	arithmetic/reader/unary.cpp \
-	arithmetic/reader/void.cpp \
-	arithmetic/reader.cpp \
-	arithmetic/row.cpp \
 	arithmetic/slot/average.cpp \
 	arithmetic/slot/last.cpp \
 	arithmetic/slot/sum.cpp \
 	arithmetic/slot.cpp \
 	arithmetic/table.cpp \
-	arithmetic/variant.cpp \
 	expression/aggregator.cpp \
 	expression/formula.cpp \
 	expression/function.cpp \
@@ -39,4 +37,8 @@ SOURCE	= \
 	glay/pipe/writer.cpp \
 	glay/system/endian.cpp \
 	glay/system/stopwatch.cpp \
+	stream/reader/map.cpp \
+	stream/reader.cpp \
+	stream/row.cpp \
+	stream/variant.cpp \
 	main.cpp

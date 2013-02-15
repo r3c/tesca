@@ -3,4 +3,7 @@
 
 namespace	Tesca
 {
+	Reader::Reader ()
+	{
+	}
 }

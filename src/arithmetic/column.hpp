@@ -3,10 +3,10 @@
 #define __TESCA_COLUMN_HPP
 
 #include <string>
-#include "reader.hpp"
-#include "row.hpp"
+#include "../stream/row.hpp"
+#include "../stream/variant.hpp"
+#include "accessor.hpp"
 #include "slot.hpp"
-#include "variant.hpp"
 
 namespace	Tesca
 {
@@ -14,7 +14,7 @@ namespace	Tesca
 	{
 		public:
 			/**/	Column (const Column&);
-			/**/	Column (const std::string&, const Reader*);
+			/**/	Column (const std::string&, const Accessor*);
 
 			Column&	operator = (const Column&);
 
@@ -25,8 +25,8 @@ namespace	Tesca
 			Variant				read (const Row&) const;
 
 		private:
+			const Accessor*	accessor;
 			std::string		identifier;
-			const Reader*	reader;
 	};
 }
 
