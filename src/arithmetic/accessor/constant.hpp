@@ -9,7 +9,7 @@ namespace	Tesca
 	class	ConstantAccessor : public Accessor
 	{
 		public:
-			/**/	ConstantAccessor (const Variant&);
+			ConstantAccessor (const Variant&);
 
 		protected:
 			virtual Variant	read (const Row&) const;

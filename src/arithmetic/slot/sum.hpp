@@ -10,7 +10,7 @@ namespace	Tesca
 	class	SumSlot : public Slot
 	{
 		public:
-			/**/			SumSlot ();
+			SumSlot ();
 
 			virtual Variant	current () const;
 			virtual bool	push (const Variant&);

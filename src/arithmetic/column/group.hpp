@@ -10,7 +10,7 @@ namespace	Tesca
 	class GroupColumn : public Column
 	{
 		public:
-			/**/	GroupColumn (const std::string&, const Accessor*);
+			GroupColumn (const std::string&, const Accessor*);
 
 			virtual Slot*	create () const;
 			virtual bool	key () const;

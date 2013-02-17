@@ -9,16 +9,14 @@ namespace	Tesca
 	class	BinaryAccessor : public Accessor
 	{
 		public:
-			typedef	Variant	(Evaluator) (const Variant&, const Variant&);
+			BinaryAccessor (const Accessor*, const Accessor*);
 
-			/**/	BinaryAccessor (const Accessor*, const Accessor*, const Evaluator*);
-
+			virtual Variant	evaluate (const Variant&, const Variant&) const = 0;
 			virtual Variant	read (const Row&) const;
 
 		private:
-			const Evaluator*	evaluator;
-			const Accessor*		lhs;
-			const Accessor*		rhs;
+			const Accessor*	lhs;
+			const Accessor*	rhs;
 	};
 }
 

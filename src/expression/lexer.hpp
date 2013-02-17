@@ -9,13 +9,13 @@ namespace	Tesca
 	class	Lexer
 	{
 		public:
-			/**/	Lexer (const char*);
+			Lexer (const char*);
 
 			char			getCurrent () const;
 			Glay::Int32u	getIndex () const;
 
-			bool			eof () const;
-			bool			next ();
+			bool	eof () const;
+			bool	next ();
 
 		private:
 			char						current;

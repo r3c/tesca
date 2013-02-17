@@ -3,10 +3,12 @@
 
 #include <algorithm>
 #include <string> 
-#include "../arithmetic/accessor/binary.hpp"
+#include "../arithmetic/accessor/binary/callback.hpp"
+#include "../arithmetic/accessor/binary/number.hpp"
 #include "../arithmetic/accessor/constant.hpp"
 #include "../arithmetic/accessor/field.hpp"
-#include "../arithmetic/accessor/unary.hpp"
+#include "../arithmetic/accessor/unary/callback.hpp"
+#include "../arithmetic/accessor/unary/string.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -17,43 +19,55 @@ namespace	Tesca
 	{
 		{"add",		2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new BinaryAccessor (arguments[0], arguments[1], [] (const Variant& lhs, const Variant& rhs)
+			return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
 			{
-				Float64	a;
-				Float64	b;
-
-				if (lhs.toNumber (&a) && rhs.toNumber (&b))
-					return Variant (a + b);
-
-				return Variant::empty;
+				return Variant (a + b);
+			});
+		}},
+		{"div",		2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+		{
+			return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
+			{
+				return b != 0 ? Variant (a / b) : Variant::empty;
 			});
 		}},
 		{"lcase",	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new UnaryAccessor (arguments[0], [] (const Variant& source)
+			return new StringUnaryAccessor (arguments[0], [] (string& argument)
 			{
-				string	buffer;
+				transform (argument.begin (), argument.end (), argument.begin (), ::tolower);
 
-				if (!source.toString (&buffer))
-					return Variant::empty;
-
-				transform (buffer.begin (), buffer.end (), buffer.begin (), ::tolower);
-
-				return Variant (buffer);
+				return Variant (argument);
+			});
+		}},
+		{"mod",		2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+		{
+			return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
+			{
+				return b != 0 ? Variant (fmod (a, b)) : Variant::empty;
+			});
+		}},
+		{"mul",		2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+		{
+			return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
+			{
+				return Variant (a * b);
+			});
+		}},
+		{"sub",		2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+		{
+			return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
+			{
+				return Variant (a - b);
 			});
 		}},
 		{"ucase",	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new UnaryAccessor (arguments[0], [] (const Variant& source)
+			return new StringUnaryAccessor (arguments[0], [] (string& argument)
 			{
-				string	buffer;
+				transform (argument.begin (), argument.end (), argument.begin (), ::toupper);
 
-				if (!source.toString (&buffer))
-					return Variant::empty;
-
-				transform (buffer.begin (), buffer.end (), buffer.begin (), ::toupper);
-
-				return Variant (buffer);
+				return Variant (argument);
 			});
 		}},
 		{0, 0, 0}

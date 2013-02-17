@@ -41,44 +41,36 @@ void	debug_print (const Table& table)
 
 int	main (int argc, char* argv[])
 {
-	vector<const Column*>	columns;
-	Formula					formula;
+	const char*	expression;
+	Formula		formula;
 
-	if (argc > 1)
-	{
-		if (!formula.parse (argv[1]))
-		{
-			std::cout << "error: " << formula.getError () << std::endl;
-
-			return 1;
-		}
-
-		columns = formula.getColumns ();
-	}
+	if (argc < 2)
+		expression = "a = $aaa, b:sum = $bbb, c:avg = $bbb";
 	else
+		expression = argv[1];
+
+	if (!formula.parse (expression))
 	{
-		columns = vector<const Column*> ();
-		columns.push_back (new ValueColumn ("a", new FieldAccessor ("0")));
-		columns.push_back (new GroupColumn<AverageSlot> ("b", new FieldAccessor ("1")));
-		columns.push_back (new GroupColumn<SumSlot> ("c", new FieldAccessor ("1")));
-		columns.push_back (new ValueColumn ("d", new ConstantAccessor (Variant (42))));
+		std::cout << "error: " << formula.getError () << std::endl;
+
+		return 1;
 	}
 
-	MapReader	reader;
-	Table		table (columns);
+	MapReader	reader (&formula.getFields ());
+	Table		table (&formula.getColumns ());
 
 	reader.push ();
-	reader.set ("0", Variant ("A"));
-	reader.set ("1", Variant (1));
+	reader.assign ("aaa", Variant ("A"));
+	reader.assign ("bbb", Variant (1));
 	reader.push ();
-	reader.set ("0", Variant ("A"));
-	reader.set ("1", Variant ("2"));
+	reader.assign ("aaa", Variant ("A"));
+	reader.assign ("bbb", Variant ("2"));
 	reader.push ();
-	reader.set ("0", Variant (8));
-	reader.set ("1", Variant (3));
+	reader.assign ("aaa", Variant (8));
+	reader.assign ("bbb", Variant (3));
 	reader.push ();
-	reader.set ("0", Variant ("8"));
-	reader.set ("1", Variant (4));
+	reader.assign ("aaa", Variant ("8"));
+	reader.assign ("bbb", Variant (4));
 
 	while (reader.next ())
 	{

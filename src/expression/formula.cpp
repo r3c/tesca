@@ -33,7 +33,7 @@ namespace	Tesca
 		return false;
 	}
 
-	const Formula::Columns	Formula::getColumns () const
+	const Formula::Columns&	Formula::getColumns () const
 	{
 		return this->columns;
 	}
@@ -41,6 +41,11 @@ namespace	Tesca
 	const string&	Formula::getError () const
 	{
 		return this->error;
+	}
+
+	const Formula::Fields&	Formula::getFields () const
+	{
+		return this->fields;
 	}
 
 	bool	Formula::parse (const char* input)
@@ -193,12 +198,14 @@ namespace	Tesca
 
 	bool	Formula::readValue (Lexer& lexer, const Accessor** output)
 	{
-		const Accessor*	accessor;
-		Accessors		arguments;
-		stringstream	buffer;
-		const Function*	function;
-		string			identifier;
-		Float64			number;
+		const Accessor*			accessor;
+		Accessors				arguments;
+		stringstream			buffer;
+		Fields::const_iterator	field;
+		const Function*			function;
+		string					identifier;
+		Int32u					key;
+		Float64					number;
 
 		// Parse function call
 		for (; !lexer.eof () &&
@@ -327,7 +334,18 @@ namespace	Tesca
 			if (!this->readIdentifier (lexer, &identifier))
 				return false;
 
-			*output = new FieldAccessor (identifier);
+			field = this->fields.find (identifier);
+
+			if (field == this->fields.end ())
+			{
+				key = this->fields.size ();
+
+				this->fields[identifier] = key;
+			}
+			else
+				key = field->second;
+
+			*output = new FieldAccessor (key);
 
 			this->accessors.push_back (*output);
 
@@ -347,6 +365,7 @@ namespace	Tesca
 
 		this->accessors.clear ();
 		this->columns.clear ();
+		this->fields.clear ();
 	}
 
 	bool	Formula::skip (Lexer& lexer)

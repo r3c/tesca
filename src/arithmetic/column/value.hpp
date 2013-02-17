@@ -9,7 +9,7 @@ namespace	Tesca
 	class	ValueColumn : public Column
 	{
 		public:
-			/**/	ValueColumn (const std::string&, const Accessor*);
+			ValueColumn (const std::string&, const Accessor*);
 
 			virtual Slot*	create () const;
 			virtual bool	key () const;

@@ -6,9 +6,13 @@ OBJ		= obj
 SRC		= src
 
 SOURCE	= \
+	arithmetic/accessor/binary/callback.cpp \
+	arithmetic/accessor/binary/number.cpp \
 	arithmetic/accessor/binary.cpp \
 	arithmetic/accessor/constant.cpp \
 	arithmetic/accessor/field.cpp \
+	arithmetic/accessor/unary/callback.cpp \
+	arithmetic/accessor/unary/string.cpp \
 	arithmetic/accessor/unary.cpp \
 	arithmetic/accessor/void.cpp \
 	arithmetic/accessor.cpp \
@@ -39,6 +43,7 @@ SOURCE	= \
 	glay/system/stopwatch.cpp \
 	stream/reader/map.cpp \
 	stream/reader.cpp \
+	stream/row/array.cpp \
 	stream/row.cpp \
 	stream/variant.cpp \
 	main.cpp

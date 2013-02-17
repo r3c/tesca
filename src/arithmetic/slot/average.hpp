@@ -10,7 +10,7 @@ namespace	Tesca
 	class	AverageSlot : public Slot
 	{
 		public:
-			/**/			AverageSlot ();
+			AverageSlot ();
 
 			virtual Variant	current () const;
 			virtual bool	push (const Variant&);

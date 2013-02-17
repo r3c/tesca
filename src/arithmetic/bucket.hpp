@@ -10,9 +10,9 @@ namespace	Tesca
 	class	Bucket
 	{
 		public:
-			/**/			Bucket (const Bucket&);
-			/**/			Bucket (Glay::Int32u);
-			/**/			~Bucket ();
+			Bucket (const Bucket&);
+			Bucket (Glay::Int32u);
+			~Bucket ();
 
 			Bucket&			operator = (const Bucket&);
 			const Variant&	operator [] (Glay::Int32u) const;

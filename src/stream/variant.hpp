@@ -21,24 +21,24 @@ namespace	Tesca
 				STRING
 			};
 
-			/**/		Variant (const Variant&);
-			/**/		Variant (bool);
-			/**/		Variant (Glay::Float64);
-			/**/		Variant (Glay::Int32s);
-			/**/		Variant (const std::string&);
-			/**/		Variant (const char*);
-			/**/		Variant ();
-			/**/		~Variant ();
+			Variant (const Variant&);
+			Variant (bool);
+			Variant (Glay::Float64);
+			Variant (Glay::Int32s);
+			Variant (const std::string&);
+			Variant (const char*);
+			Variant ();
+			~Variant ();
 
 			Variant&	operator = (const Variant&);
 
-			Type		getType () const;
+			Type	getType () const;
 
-			void		clear ();
+			void	clear ();
 
-			bool		toBoolean (bool*) const;
-			bool		toNumber (Glay::Float64*) const;
-			bool		toString (std::string*) const;
+			bool	toBoolean (bool*) const;
+			bool	toNumber (Glay::Float64*) const;
+			bool	toString (std::string*) const;
 
 		private:
 			union	Value

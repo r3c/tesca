@@ -5,11 +5,11 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	Table::Table (Columns columns) :
+	Table::Table (const Columns* columns) :
 		columns (columns),
 		keys (0)
 	{
-		for (auto i = columns.begin (); i != columns.end (); ++i)
+		for (auto i = columns->begin (); i != columns->end (); ++i)
 		{
 			if ((*i)->key ())
 				++this->keys;
@@ -23,12 +23,12 @@ namespace	Tesca
 
 	const Table::Columns&	Table::getColumns () const
 	{
-		return this->columns;
+		return *this->columns;
 	}
 
 	Int32u	Table::getWidth () const
 	{
-		return this->columns.size ();
+		return this->columns->size ();
 	}
 
 	Table::iterator	Table::begin () const
@@ -60,13 +60,13 @@ namespace	Tesca
 		Int32u	key;
 		Slot*	slot;
 		Slot**	slots;
-		Variant	values[this->columns.size ()];
+		Variant	values[this->columns->size ()];
 
 		// Update columns and build bucket
 		index = 0;
 		key = 0;
 
-		for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
+		for (auto i = this->columns->begin (); i != this->columns->end (); ++i)
 		{
 			values[index] = (*i)->read (row);
 
@@ -82,9 +82,9 @@ namespace	Tesca
 		if (found == this->groups.end ())
 		{
 			index = 0;
-			slots = new Slot*[this->columns.size ()];
+			slots = new Slot*[this->columns->size ()];
 
-			for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
+			for (auto i = this->columns->begin (); i != this->columns->end (); ++i)
 			{
 				slot = (*i)->create ();
 
@@ -99,7 +99,7 @@ namespace	Tesca
 			slots = found->second;
 
 		// Append column values to group
-		for (Int32u i = this->columns.size (); i-- > 0; )
+		for (Int32u i = this->columns->size (); i-- > 0; )
 			slots[i]->push (values[i]);
 	}
 }

@@ -3,6 +3,7 @@
 #define __TESCA_EXPRESSION_FORMULA_HPP
 
 #include <algorithm>
+#include <map>
 #include <string>
 #include <vector>
 #include "../arithmetic/column.hpp"
@@ -16,20 +17,22 @@ namespace	Tesca
 	class	Formula
 	{
 		public:
-			typedef std::vector<const Accessor*>	Accessors;
-			typedef std::vector<const Column*>		Columns;
+			typedef std::vector<const Accessor*>		Accessors;
+			typedef std::vector<const Column*>			Columns;
+			typedef std::map<std::string, Glay::Int32u>	Fields;
 
-			/**/				Formula (const Formula&);
-			/**/				Formula ();
-			/**/				~Formula ();
+			Formula (const Formula&);
+			Formula ();
+			~Formula ();
 
-			Formula&			operator = (const Formula&);
+			Formula&	operator = (const Formula&);
 
-			const Columns		getColumns () const;
+			const Columns&		getColumns () const;
 			const std::string&	getError () const;
+			const Fields&		getFields () const;
 
-			bool				parse (const char*);
-			void				reset ();
+			bool	parse (const char*);
+			void	reset ();
 
 		private:
 			bool	fail (const Lexer&, const std::string&);
@@ -43,6 +46,7 @@ namespace	Tesca
 			Accessors	accessors;
 			Columns		columns;
 			std::string	error;
+			Fields		fields;
 
 	};
 }

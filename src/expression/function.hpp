@@ -2,6 +2,7 @@
 #ifndef __TESCA_EXPRESSION_FUNCTION_HPP
 #define __TESCA_EXPRESSION_FUNCTION_HPP
 
+#include <cmath>
 #include <vector>
 #include "../arithmetic/accessor.hpp"
 #include "../glay/glay.hpp"

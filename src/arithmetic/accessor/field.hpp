@@ -3,6 +3,7 @@
 #define __TESCA_ACCESSOR_FIELD_HPP
 
 #include <string>
+#include "../../glay/glay.hpp"
 #include "../accessor.hpp"
 
 namespace	Tesca
@@ -10,13 +11,13 @@ namespace	Tesca
 	class	FieldAccessor : public Accessor
 	{
 		public:
-			/**/	FieldAccessor (const std::string&);
+			FieldAccessor (Glay::Int32u);
 
 		protected:
 			virtual Variant	read (const Row&) const;
 
 		private:
-			std::string	identifier;
+			Glay::Int32u	key;
 	};
 }
 

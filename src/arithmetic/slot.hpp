@@ -9,10 +9,10 @@ namespace	Tesca
 	class	Slot
 	{
 		public:
-			/**/			Slot (const Slot&);
-			/**/			Slot ();
+			Slot (const Slot&);
+			Slot ();
 
-			Slot&			operator = (const Slot&);
+			Slot&	operator = (const Slot&);
 
 			virtual Variant	current () const = 0;
 			virtual bool	push (const Variant&) = 0;

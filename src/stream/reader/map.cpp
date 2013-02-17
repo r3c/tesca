@@ -1,10 +1,35 @@
 
 #include "map.hpp"
 
+using namespace std;
+using namespace Glay;
+
 namespace	Tesca
 {
-	MapReader::MapReader ()
+	MapReader::MapReader (const Fields* fields) :
+		fields (fields),
+		row (fields->size ())
 	{
+	}
+
+	MapReader::~MapReader ()
+	{
+		for (auto i = this->lines.begin (); i != this->lines.end (); ++i)
+			delete [] *i;
+	}
+
+	bool	MapReader::assign (const string& identifier, const Variant& value)
+	{
+		auto		field = this->fields->find (identifier);
+		Variant*	line;
+
+		if (field == this->fields->end () || this->lines.empty ())
+			return false;
+
+		line = this->lines.back ();
+		line[field->second] = value;
+
+		return true;
 	}
 
 	const Row&	MapReader::current () const
@@ -14,15 +39,19 @@ namespace	Tesca
 
 	bool	MapReader::next ()
 	{
+		Variant*	values;
+
 		this->row.clear ();
 
 		if (this->lines.empty ())
 			return false;
 
-		const Fields&	fields = this->lines.front ();
+		values = this->lines.front ();
 
-		for (auto i = fields.begin (); i != fields.end (); ++i)
-			this->row.push (i->first, i->second);
+		for (auto i = this->fields->size (); i-- > 0; )
+			this->row[i] = values[i];
+
+		delete [] values;
 
 		this->lines.pop_front ();
 
@@ -31,16 +60,6 @@ namespace	Tesca
 
 	void	MapReader::push ()
 	{
-		this->lines.push_back (Fields ());
-	}
-
-	bool	MapReader::set (const std::string& key, const Variant& value)
-	{
-		if (this->lines.empty ())
-			return false;
-
-		this->lines.back ().push_back (std::make_pair (key, value));
-
-		return true;
+		this->lines.push_back (new Variant[this->fields->size ()]);
 	}
 }

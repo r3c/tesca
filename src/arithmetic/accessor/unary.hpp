@@ -9,15 +9,13 @@ namespace	Tesca
 	class	UnaryAccessor : public Accessor
 	{
 		public:
-			typedef	Variant	(Evaluator) (const Variant&);
+			UnaryAccessor (const Accessor*);
 
-			/**/	UnaryAccessor (const Accessor*, const Evaluator*);
-
+			virtual Variant	evaluate (const Variant&) const = 0;
 			virtual Variant	read (const Row&) const;
 
 		private:
-			const Evaluator*	evaluator;
-			const Accessor*		source;
+			const Accessor*	source;
 	};
 }
 
