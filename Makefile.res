@@ -11,6 +11,10 @@ SOURCE	= \
 	arithmetic/accessor/binary.cpp \
 	arithmetic/accessor/constant.cpp \
 	arithmetic/accessor/field.cpp \
+	arithmetic/accessor/if.cpp \
+	arithmetic/accessor/logical/and.cpp \
+	arithmetic/accessor/logical/or.cpp \
+	arithmetic/accessor/logical.cpp \
 	arithmetic/accessor/unary/callback.cpp \
 	arithmetic/accessor/unary/string.cpp \
 	arithmetic/accessor/unary.cpp \
@@ -42,6 +46,7 @@ SOURCE	= \
 	glay/system/endian.cpp \
 	glay/system/stopwatch.cpp \
 	stream/reader/map.cpp \
+	stream/reader/regex.cpp \
 	stream/reader.cpp \
 	stream/row/array.cpp \
 	stream/row.cpp \

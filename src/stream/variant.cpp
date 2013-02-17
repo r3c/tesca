@@ -72,14 +72,14 @@ namespace	Tesca
 
 	Variant::~Variant ()
 	{
-		this->clear ();
+		this->reset ();
 	}
 
 	Variant&	Variant::operator = (const Variant& other)
 	{
 		if (this != &other)
 		{
-			this->clear ();
+			this->reset ();
 
 			switch (other.type)
 			{
@@ -111,7 +111,67 @@ namespace	Tesca
 		return *this;
 	}
 
-	void	Variant::clear ()
+	Variant::Type	Variant::getType () const
+	{
+		return this->type;
+	}
+
+	Int32s	Variant::compare (const Variant& other) const
+	{
+		bool	boolean1;
+		bool	boolean2;
+		Float64	number1;
+		Float64	number2;
+		string	string1;
+		string	string2;
+
+		switch (this->type)
+		{
+			case Variant::BOOLEAN:
+				if (this->toBoolean (&boolean1) && other.toBoolean (&boolean2))
+				{
+					if (boolean1 < boolean2)
+						return -1;
+					else if (boolean1 > boolean2)
+						return 1;
+					else
+						return 0;
+				}
+
+				break;
+
+			case Variant::NUMBER:
+				if (this->toNumber (&number1) && other.toNumber (&number2))
+				{
+					if (number1 < number2)
+						return -1;
+					else if (number1 > number2)
+						return 1;
+					else
+						return 0;
+				}
+
+				break;
+
+			case Variant::STRING:
+				if (this->toString (&string1) && other.toString (&string2))
+					return string1.compare (string2);
+
+				break;
+
+			default:
+				break;
+		}
+
+		if (this->type < other.type)
+			return -1;
+		else if (this->type > other.type)
+			return 1;
+		else
+			return 0;
+	}
+
+	void	Variant::reset ()
 	{
 		switch (this->type)
 		{
@@ -129,11 +189,6 @@ namespace	Tesca
 		}
 
 		this->type = Variant::NONE;
-	}
-
-	Variant::Type	Variant::getType () const
-	{
-		return this->type;
 	}
 
 	bool	Variant::toBoolean (bool* output) const
@@ -223,115 +278,31 @@ namespace	Tesca
 
 	bool	operator == (const Variant& lhs, const Variant& rhs)
 	{
-		bool	boolean1;
-		bool	boolean2;
-		Float64	number1;
-		Float64	number2;
-		string	string1;
-		string	string2;
-
-		switch (lhs.getType ())
-		{
-			case Variant::BOOLEAN:
-				return lhs.toBoolean (&boolean1) && rhs.toBoolean (&boolean2) && boolean1 == boolean2;
-
-			case Variant::NUMBER:
-				return lhs.toNumber (&number1) && rhs.toNumber (&number2) && number1 == number2;
-
-			case Variant::STRING:
-				return lhs.toString (&string1) && rhs.toString (&string2) && string1 == string2;
-
-			case Variant::NONE:
-				return rhs.getType () == Variant::NONE;
-		}
-
-		return lhs.getType () == rhs.getType ();
+		return lhs.compare (rhs) == 0;
 	}
 
 	bool	operator != (const Variant& lhs, const Variant& rhs)
 	{
-		return !operator == (lhs, rhs);
+		return lhs.compare (rhs) != 0;
+	}
+
+	bool	operator <= (const Variant& lhs, const Variant& rhs)
+	{
+		return lhs.compare (rhs) <= 0;
 	}
 
 	bool	operator < (const Variant& lhs, const Variant& rhs)
 	{
-		bool	boolean1;
-		bool	boolean2;
-		Float64	number1;
-		Float64	number2;
-		string	string1;
-		string	string2;
-
-		switch (lhs.getType ())
-		{
-			case Variant::BOOLEAN:
-				if (lhs.toBoolean (&boolean1) && rhs.toBoolean (&boolean2))
-					return boolean1 < boolean2;
-
-				break;
-
-			case Variant::NUMBER:
-				if (lhs.toNumber (&number1) && rhs.toNumber (&number2))
-					return number1 < number2;
-
-				break;
-
-			case Variant::STRING:
-				if (lhs.toString (&string1) && rhs.toString (&string2))
-					return string1 < string2;
-
-				break;
-
-			default:
-				break;
-		}
-
-		return lhs.getType () < rhs.getType ();
+		return lhs.compare (rhs) < 0;
 	}
 
-	ostream&	operator << (ostream& stream, const Variant& value)
+	bool	operator >= (const Variant& lhs, const Variant& rhs)
 	{
-		bool	asBoolean;
-		Float64	asNumber;
-		string	asString;
-
-		switch (value.getType ())
-		{
-			case Tesca::Variant::BOOLEAN:
-				if (value.toBoolean (&asBoolean))
-					stream << (asBoolean ? "true" : "false");
-				else
-					stream << "!";
-
-				break;
-
-			case Tesca::Variant::NUMBER:
-				if (value.toNumber (&asNumber))
-					stream << asNumber;
-				else
-					stream << "!";
-
-				break;
-
-			case Tesca::Variant::STRING:
-				if (value.toString (&asString))
-					stream << asString;
-				else
-					stream << "!";
-
-				break;
-
-			case Tesca::Variant::NONE:
-				stream << "void";
-
-				break;
-
-			default:
-				stream << "?";
-
-				break;
-		}
-
-		return stream;
+		return lhs.compare (rhs) >= 0;
+	}
+	
+	bool	operator > (const Variant& lhs, const Variant& rhs)
+	{
+		return lhs.compare (rhs) > 0;
 	}
 }

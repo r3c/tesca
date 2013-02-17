@@ -269,8 +269,18 @@ namespace	Tesca
 				}
 			}
 
-			if (arguments.size () != function->count)
+			if (arguments.size () < function->min || (function->max > 0 && arguments.size () > function->max))
+			{
 				return this->fail (lexer, "wrong number of arguments");
+/*
+				if (function->max == 0)
+					return this->fail (lexer, string ("function requires at least ") + function->min + " argument(s)");
+				else if (function->max == function->min)
+					return this->fail (lexer, string ("function requires between ") + function->min + " and " + function->max + " argument(s)");
+				else
+					return this->fail (lexer, string ("function requires ") + function->min + " argument(s)");
+*/
+			}
 
 			*output = (*function->builder) (arguments);
 

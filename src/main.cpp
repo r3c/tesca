@@ -17,6 +17,52 @@ using namespace std;
 using namespace Glay;
 using namespace Tesca;
 
+ostream&	operator << (ostream& stream, const Variant& value)
+{
+	bool	asBoolean;
+	Float64	asNumber;
+	string	asString;
+
+	switch (value.getType ())
+	{
+		case Tesca::Variant::BOOLEAN:
+			if (value.toBoolean (&asBoolean))
+				stream << (asBoolean ? "true" : "false");
+			else
+				stream << "!";
+
+			break;
+
+		case Tesca::Variant::NUMBER:
+			if (value.toNumber (&asNumber))
+				stream << asNumber;
+			else
+				stream << "!";
+
+			break;
+
+		case Tesca::Variant::STRING:
+			if (value.toString (&asString))
+				stream << asString;
+			else
+				stream << "!";
+
+			break;
+
+		case Tesca::Variant::NONE:
+			stream << "void";
+
+			break;
+
+		default:
+			stream << "?";
+
+			break;
+	}
+
+	return stream;
+}
+
 void	debug_print (const Table& table)
 {
 	for (auto iterator = table.begin (); iterator != table.end (); ++iterator)

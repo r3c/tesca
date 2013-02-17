@@ -16,7 +16,8 @@ namespace	Tesca
 		static const Function	functions[];
 
 		const char*		name;
-		Glay::Int32u	count;
+		Glay::Int32u	min;
+		Glay::Int32u	max;
 		Builder			builder;
 	};
 }

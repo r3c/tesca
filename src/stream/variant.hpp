@@ -2,7 +2,6 @@
 #ifndef __TESCA_VARIANT_HPP
 #define __TESCA_VARIANT_HPP
 
-#include <ostream>
 #include <string>
 #include "../glay/glay.hpp"
 
@@ -34,7 +33,8 @@ namespace	Tesca
 
 			Type	getType () const;
 
-			void	clear ();
+			Glay::Int32s	compare (const Variant&) const;
+			void			reset ();
 
 			bool	toBoolean (bool*) const;
 			bool	toNumber (Glay::Float64*) const;
@@ -53,10 +53,12 @@ namespace	Tesca
 			Value			value;
 	};
 
-	bool			operator == (const Variant&, const Variant&);
-	bool			operator != (const Variant&, const Variant&);
-	bool			operator < (const Variant&, const Variant&);
-	std::ostream&	operator << (std::ostream&, const Variant&);
+	bool	operator == (const Variant&, const Variant&);
+	bool	operator != (const Variant&, const Variant&);
+	bool	operator <= (const Variant&, const Variant&);
+	bool	operator < (const Variant&, const Variant&);
+	bool	operator >= (const Variant&, const Variant&);
+	bool	operator > (const Variant&, const Variant&);
 }
 
 #endif
