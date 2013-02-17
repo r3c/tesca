@@ -9,10 +9,22 @@ using namespace Glay;
 namespace	Tesca
 {
 	RegexReader::RegexReader (const Fields* fields, const string& pattern) :
-		fields (fields),
 		regex (pattern),
 		row (fields->size ())
 	{
+		stringstream	buffer;
+		Int32u			group;
+
+		for (auto i = fields->begin (); i != fields->end (); ++i)
+		{
+			buffer.str (i->first);
+			buffer >> group;
+
+			if (!buffer.fail ())
+				this->matches[group] = i->second;
+
+			buffer.clear ();
+		}
 	}
 
 	const Row&	RegexReader::current () const
@@ -22,10 +34,8 @@ namespace	Tesca
 
 	bool	RegexReader::next ()
 	{
-		stringstream			buffer;
-		Fields::const_iterator	field;
-		string					identifier;
-		Int32u					index;
+		Int32u					group;
+		Matches::const_iterator	item;
 		string					line; // FIXME: read line from somewhere
 		smatch					match;
 
@@ -33,20 +43,16 @@ namespace	Tesca
 
 		if (regex_match (line, match, this->regex))
 		{
-			index = 0;
+			group = 0;
 
 			for (auto i = match.begin (); i != match.end (); ++i)
 			{
-				buffer << index;
-				buffer >> identifier;
-				buffer.clear ();
+				item = this->matches.find (group);
 
-				field = this->fields->find (identifier);
+				if (item != this->matches.end ())
+					this->row[item->second] = Variant (*i);
 
-				if (field != this->fields->end ())
-					this->row[field->second] = Variant (*i);
-
-				++index;
+				++group;
 			}
 		}
 

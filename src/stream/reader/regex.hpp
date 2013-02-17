@@ -24,9 +24,11 @@ namespace	Tesca
 			virtual bool		next ();
 
 		private:
-			const Fields*	fields;
-			std::regex		regex;
-			ArrayRow		row;
+			typedef std::map<Glay::Int32u, Glay::Int32u>	Matches;
+
+			Matches		matches;
+			std::regex	regex;
+			ArrayRow	row;
 
 
 	};
