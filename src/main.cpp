@@ -11,6 +11,7 @@
 #include "arithmetic/slot/sum.hpp"
 #include "arithmetic/table.hpp"
 #include "expression/formula.hpp"
+#include "stream/reader/line/csv.hpp"
 #include "stream/reader/map.hpp"
 
 using namespace std;
@@ -74,54 +75,74 @@ void	debug_print (const Table& table)
 			const Slot&	slot = *slots[i];
 
 			if (i > 0)
-				std::cout << ", ";
+				cout << ", ";
 
-			std::cout << "[" << table.getColumns ()[i]->getIdentifier () << "] = " << slot.current ();
+			cout << "[" << table.getColumns ()[i]->getIdentifier () << "] = " << slot.current ();
 		}
 
-		std::cout << std::endl;
+		cout << endl;
 	}
 
-	std::cout << "---" << std::endl;
+	cout << "---" << endl;
 }
 
 int	main (int argc, char* argv[])
 {
 	const char*	expression;
 	Formula		formula;
+	Reader*		reader;
 
-	if (argc < 2)
-		expression = "a = $aaa, b:sum = $bbb, c:avg = $bbb";
-	else
-		expression = argv[1];
-
-	if (!formula.parse (expression))
+	if (argc > 2)
 	{
-		std::cout << "error: " << formula.getError () << std::endl;
+		if (!formula.parse (argv[1]))
+		{
+			cout << "error: " << formula.getError () << endl;
 
-		return 1;
+			return 1;
+		}
+
+		reader = new CSVLineReader (new Pipe::FileIStream (argv[2]), &formula.getFields (), false);
+	}
+	else
+	{
+		if (argc > 1)
+			expression = argv[1];
+		else
+			expression = "a = $aaa, b:sum = $bbb, c:avg = $bbb";
+
+		if (!formula.parse (expression))
+		{
+			cout << "error: " << formula.getError () << endl;
+
+			return 1;
+		}
+
+		MapReader*	m = new MapReader (&formula.getFields ());
+
+		m->push ();
+		m->assign ("aaa", Variant ("A"));
+		m->assign ("bbb", Variant (1));
+		m->push ();
+		m->assign ("aaa", Variant ("A"));
+		m->assign ("bbb", Variant ("2"));
+		m->push ();
+		m->assign ("aaa", Variant (8));
+		m->assign ("bbb", Variant (3));
+		m->push ();
+		m->assign ("aaa", Variant ("8"));
+		m->assign ("bbb", Variant (4));
+
+		reader = m;
 	}
 
-	MapReader	reader (&formula.getFields ());
-	Table		table (&formula.getColumns ());
+	Table	table (&formula.getColumns ());
 
-	reader.push ();
-	reader.assign ("aaa", Variant ("A"));
-	reader.assign ("bbb", Variant (1));
-	reader.push ();
-	reader.assign ("aaa", Variant ("A"));
-	reader.assign ("bbb", Variant ("2"));
-	reader.push ();
-	reader.assign ("aaa", Variant (8));
-	reader.assign ("bbb", Variant (3));
-	reader.push ();
-	reader.assign ("aaa", Variant ("8"));
-	reader.assign ("bbb", Variant (4));
-
-	while (reader.next ())
+	while (reader->next ())
 	{
-		table.push (reader.current ());
+		table.push (reader->current ());
 
 		debug_print (table);
 	}
+
+	delete reader;
 }

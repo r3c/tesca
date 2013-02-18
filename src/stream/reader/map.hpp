@@ -15,8 +15,8 @@ namespace	Tesca
 		public:
 			typedef std::map<std::string, Glay::Int32u>	Fields;
 
-			/**/	MapReader (const MapReader&);
-			/**/	MapReader (const Fields*);
+					MapReader (const MapReader&);
+					MapReader (const Fields*);
 			virtual	~MapReader ();
 
 			MapReader&	operator = (const MapReader&);
