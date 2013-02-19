@@ -12,6 +12,7 @@
 #include "arithmetic/table.hpp"
 #include "expression/formula.hpp"
 #include "stream/reader/line/csv.hpp"
+#include "stream/reader/line/regex.hpp"
 #include "stream/reader/map.hpp"
 
 using namespace std;
@@ -92,7 +93,7 @@ int	main (int argc, char* argv[])
 	Formula		formula;
 	Reader*		reader;
 
-	if (argc > 2)
+	if (argc > 3)
 	{
 		if (!formula.parse (argv[1]))
 		{
@@ -101,7 +102,18 @@ int	main (int argc, char* argv[])
 			return 1;
 		}
 
-		reader = new CSVLineReader (new Pipe::FileIStream (argv[2]), &formula.getFields (), false);
+		reader = new RegexLineReader (new Pipe::FileIStream (argv[2]), &formula.getFields (), argv[3]);
+	}
+	else if (argc > 2)
+	{
+		if (!formula.parse (argv[1]))
+		{
+			cout << "error: " << formula.getError () << endl;
+
+			return 1;
+		}
+
+		reader = new CSVLineReader (new Pipe::FileIStream (argv[2]), &formula.getFields (), false, ',');
 	}
 	else
 	{
@@ -138,11 +150,9 @@ int	main (int argc, char* argv[])
 	Table	table (&formula.getColumns ());
 
 	while (reader->next ())
-	{
 		table.push (reader->current ());
 
-		debug_print (table);
-	}
+	debug_print (table);
 
 	delete reader;
 }

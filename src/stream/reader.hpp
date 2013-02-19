@@ -9,8 +9,9 @@ namespace	Tesca
 	class	Reader
 	{
 		public:
-			Reader (const Reader&);
-			Reader ();
+					Reader (const Reader&);
+					Reader ();
+			virtual	~Reader ();
 
 			Reader&	operator = (const Reader&);
 

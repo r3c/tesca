@@ -10,8 +10,9 @@ namespace	Tesca
 	class	Row
 	{
 		public:
-			Row (const Row&);
-			Row ();
+					Row (const Row&);
+					Row ();
+			virtual	~Row ();
 
 			Row&					operator = (const Row&);
 			virtual const Variant&	operator [] (Glay::Int32u) const = 0;

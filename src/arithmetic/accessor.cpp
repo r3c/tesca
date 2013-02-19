@@ -3,4 +3,7 @@
 
 namespace	Tesca
 {
+	Accessor::~Accessor ()
+	{
+	}
 }

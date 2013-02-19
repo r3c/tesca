@@ -13,8 +13,9 @@ namespace	Tesca
 	class	Column
 	{
 		public:
-			Column (const Column&);
-			Column (const std::string&, const Accessor*);
+					Column (const Column&);
+					Column (const std::string&, const Accessor*);
+			virtual	~Column ();
 
 			Column&	operator = (const Column&);
 

@@ -10,6 +10,8 @@ namespace	Tesca
 	class	Accessor
 	{
 		public:
+			virtual	~Accessor ();
+
 			virtual Variant	read (const Row&) const = 0;
 	};
 }

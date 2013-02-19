@@ -11,6 +11,10 @@ namespace	Tesca
 	{
 	}
 
+	Column::~Column ()
+	{
+	}
+
 	const string&	Column::getIdentifier () const
 	{
 		return this->identifier;

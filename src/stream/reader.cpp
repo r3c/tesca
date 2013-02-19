@@ -6,4 +6,8 @@ namespace	Tesca
 	Reader::Reader ()
 	{
 	}
+
+	Reader::~Reader ()
+	{
+	}
 }

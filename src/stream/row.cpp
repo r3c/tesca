@@ -6,4 +6,8 @@ namespace	Tesca
 	Row::Row ()
 	{
 	}
+
+	Row::~Row ()
+	{
+	}
 }
