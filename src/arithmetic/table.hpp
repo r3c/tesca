@@ -43,6 +43,7 @@ namespace	Tesca
 			Glay::Int32u	keys;
 			Groups			groups;
 			Slots			slots;
+			Variant*		values;
 	};
 }
 

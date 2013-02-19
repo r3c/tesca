@@ -125,7 +125,7 @@ namespace	Tesca
 		string	string1;
 		string	string2;
 
-		switch (this->type)
+		switch (other.type)
 		{
 			case Variant::BOOLEAN:
 				if (this->toBoolean (&boolean1) && other.toBoolean (&boolean2))

@@ -131,6 +131,7 @@ int	main (int argc, char* argv[])
 
 		MapReader*	m = new MapReader (&formula.getFields ());
 
+for (int i = 0; i < 100000; ++i){
 		m->push ();
 		m->assign ("aaa", Variant ("A"));
 		m->assign ("bbb", Variant (1));
@@ -143,7 +144,7 @@ int	main (int argc, char* argv[])
 		m->push ();
 		m->assign ("aaa", Variant ("8"));
 		m->assign ("bbb", Variant (4));
-
+}
 		reader = m;
 	}
 

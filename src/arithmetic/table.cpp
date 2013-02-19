@@ -7,7 +7,8 @@ namespace	Tesca
 {
 	Table::Table (const Columns* columns) :
 		columns (columns),
-		keys (0)
+		keys (0),
+		values (new Variant[columns->size ()])
 	{
 		for (auto i = columns->begin (); i != columns->end (); ++i)
 		{
@@ -19,6 +20,8 @@ namespace	Tesca
 	Table::~Table ()
 	{
 		this->clear ();
+
+		delete [] this->values;
 	}
 
 	const Table::Columns&	Table::getColumns () const
@@ -60,7 +63,6 @@ namespace	Tesca
 		Int32u	key;
 		Slot*	slot;
 		Slot**	slots;
-		Variant	values[this->columns->size ()];
 
 		// Update columns and build bucket
 		index = 0;
@@ -68,10 +70,10 @@ namespace	Tesca
 
 		for (auto i = this->columns->begin (); i != this->columns->end (); ++i)
 		{
-			values[index] = (*i)->read (row);
+			this->values[index] = (*i)->read (row);
 
 			if ((*i)->key ())
-				bucket.set (key++, values[index]);
+				bucket.set (key++, this->values[index]);
 
 			++index;
 		}
@@ -100,6 +102,6 @@ namespace	Tesca
 
 		// Append column values to group
 		for (Int32u i = this->columns->size (); i-- > 0; )
-			slots[i]->push (values[i]);
+			slots[i]->push (this->values[i]);
 	}
 }

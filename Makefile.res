@@ -37,8 +37,9 @@ SOURCE	= \
 	glay/pipe/reader/binary.cpp \
 	glay/pipe/reader/type.cpp \
 	glay/pipe/stream/file.cpp \
-	glay/pipe/stream/seek.cpp \
 	glay/pipe/stream/memory.cpp \
+	glay/pipe/stream/seek.cpp \
+	glay/pipe/stream/standard.cpp \
 	glay/pipe/writer/binary.cpp \
 	glay/pipe/writer/type.cpp \
 	glay/pipe/reader.cpp \
