@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_READER_LINE_HPP
-#define __TESCA_READER_LINE_HPP
+#ifndef __TESCA_STREAM_READER_LINE_HPP
+#define __TESCA_STREAM_READER_LINE_HPP
 
 #include <sstream>
 #include <string>

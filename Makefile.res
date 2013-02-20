@@ -46,6 +46,8 @@ SOURCE	= \
 	glay/pipe/writer.cpp \
 	glay/system/endian.cpp \
 	glay/system/stopwatch.cpp \
+	stream/format.cpp \
+	stream/parser.cpp \
 	stream/reader/line/csv.cpp \
 	stream/reader/line/regex.cpp \
 	stream/reader/line.cpp \

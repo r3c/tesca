@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_READER_LINE_REGEX_HPP
-#define __TESCA_READER_LINE_REGEX_HPP
+#ifndef __TESCA_STREAM_READER_LINE_REGEX_HPP
+#define __TESCA_STREAM_READER_LINE_REGEX_HPP
 
 #include <map>
 #include <regex>
@@ -12,8 +12,6 @@ namespace	Tesca
 	class	RegexLineReader : public LineReader
 	{
 		public:
-			typedef std::map<std::string, Glay::Int32u>	Fields;
-
 			RegexLineReader (const RegexLineReader&);
 			RegexLineReader (Glay::Pipe::IStream*, const Fields*, const std::string&);
 

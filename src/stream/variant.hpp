@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_VARIANT_HPP
-#define __TESCA_VARIANT_HPP
+#ifndef __TESCA_STREAM_VARIANT_HPP
+#define __TESCA_STREAM_VARIANT_HPP
 
 #include <string>
 #include "../glay/glay.hpp"

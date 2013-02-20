@@ -1,19 +1,9 @@
 
 #include <iostream>
 #include <vector>
-#include "arithmetic/accessor/binary.hpp"
-#include "arithmetic/accessor/constant.hpp"
-#include "arithmetic/accessor/field.hpp"
-#include "arithmetic/column/group.hpp"
-#include "arithmetic/column/value.hpp"
-#include "arithmetic/slot/average.hpp"
-#include "arithmetic/slot/last.hpp"
-#include "arithmetic/slot/sum.hpp"
 #include "arithmetic/table.hpp"
 #include "expression/formula.hpp"
-#include "stream/reader/line/csv.hpp"
-#include "stream/reader/line/regex.hpp"
-#include "stream/reader/map.hpp"
+#include "stream/format.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -83,77 +73,74 @@ void	debug_print (const Table& table)
 
 		cout << endl;
 	}
-
-	cout << "---" << endl;
 }
 
 int	main (int argc, char* argv[])
 {
-	const char*	expression;
-	Formula		formula;
-	Reader*		reader;
+	Format			format;
+	Formula			formula;
+	Reader*			reader;
+	Pipe::IStream*	stream;
 
-	if (argc > 3)
+	if (argc < 3)
 	{
-		if (!formula.parse (argv[1]))
-		{
-			cout << "error: " << formula.getError () << endl;
+		cout << "usage: " << argv[0] << " <formula> <format> [<file> [<file>...]]" << endl;
 
-			return 1;
-		}
-
-		reader = new RegexLineReader (new Pipe::FileIStream (argv[2]), &formula.getFields (), argv[3]);
+		return 0;
 	}
-	else if (argc > 2)
+
+	if (!formula.parse (argv[1]))
 	{
-		if (!formula.parse (argv[1]))
-		{
-			cout << "error: " << formula.getError () << endl;
+		cerr << "error: " << formula.getError () << endl;
 
-			return 1;
-		}
-
-		reader = new CSVLineReader (new Pipe::FileIStream (argv[2]), &formula.getFields (), false, ',');
-	}
-	else
-	{
-		if (argc > 1)
-			expression = argv[1];
-		else
-			expression = "a = $aaa, b:sum = $bbb, c:avg = $bbb";
-
-		if (!formula.parse (expression))
-		{
-			cout << "error: " << formula.getError () << endl;
-
-			return 1;
-		}
-
-		MapReader*	m = new MapReader (&formula.getFields ());
-
-for (int i = 0; i < 100000; ++i){
-		m->push ();
-		m->assign ("aaa", Variant ("A"));
-		m->assign ("bbb", Variant (1));
-		m->push ();
-		m->assign ("aaa", Variant ("A"));
-		m->assign ("bbb", Variant ("2"));
-		m->push ();
-		m->assign ("aaa", Variant (8));
-		m->assign ("bbb", Variant (3));
-		m->push ();
-		m->assign ("aaa", Variant ("8"));
-		m->assign ("bbb", Variant (4));
-}
-		reader = m;
+		return 1;
 	}
 
 	Table	table (&formula.getColumns ());
 
-	while (reader->next ())
-		table.push (reader->current ());
+	if (argc > 3)
+	{
+		for (int i = 3; i < argc; ++i)
+		{
+			stream = new Pipe::FileIStream (argv[i]);
+
+			if (*stream)
+			{
+				reader = format.create (stream, &formula.getFields (), argv[2]);
+
+				if (reader)
+				{
+					while (reader->next ())
+						table.push (reader->current ());
+
+					delete reader;
+				}
+				else
+					cerr << "error: cannot use format \"" << argv[2] << "\"" << endl;
+
+				delete stream;
+			}
+			else
+				cerr << "error: cannot open file \"" << argv[i] << "\" for reading" << endl;
+		}
+	}
+	else
+	{
+		stream = new Pipe::StandardIStream (&cin);
+		reader = format.create (stream, &formula.getFields (), argv[2]);
+
+		if (reader)
+		{
+			while (reader->next ())
+				table.push (reader->current ());
+
+			delete reader;
+		}
+		else
+			cerr << "error: cannot use format \"" << argv[2] << "\"" << endl;
+
+		delete stream;
+	}
 
 	debug_print (table);
-
-	delete reader;
 }

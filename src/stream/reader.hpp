@@ -1,7 +1,9 @@
 
-#ifndef __TESCA_READER_HPP
-#define __TESCA_READER_HPP
+#ifndef __TESCA_STREAM_READER_HPP
+#define __TESCA_STREAM_READER_HPP
 
+#include <map>
+#include "../glay/glay.hpp"
 #include "row.hpp"
 
 namespace	Tesca
@@ -9,6 +11,8 @@ namespace	Tesca
 	class	Reader
 	{
 		public:
+			typedef std::map<std::string, Glay::Int32u>	Fields;
+
 					Reader (const Reader&);
 					Reader ();
 			virtual	~Reader ();

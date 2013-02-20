@@ -3,6 +3,7 @@
 #define __TESCA_EXPRESSION_FUNCTION_HPP
 
 #include <cmath>
+#include <functional>
 #include <vector>
 #include "../arithmetic/accessor.hpp"
 #include "../glay/glay.hpp"
@@ -11,7 +12,7 @@ namespace	Tesca
 {
 	struct	Function
 	{
-		typedef Accessor*	(*Builder) (const std::vector<const Accessor*>&);
+		typedef std::function<Accessor* (const std::vector<const Accessor*>&)>	Builder;
 
 		static const Function	functions[];
 

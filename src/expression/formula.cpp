@@ -105,7 +105,7 @@ namespace	Tesca
 
 			// Create and push column
 			if (aggregator != 0)
-				column = (*aggregator->builder) (identifier, accessor);
+				column = aggregator->builder (identifier, accessor);
 			else
 				column = new ValueColumn (identifier, accessor);
 
@@ -282,7 +282,7 @@ namespace	Tesca
 */
 			}
 
-			*output = (*function->builder) (arguments);
+			*output = function->builder (arguments);
 
 			this->accessors.push_back (*output);
 

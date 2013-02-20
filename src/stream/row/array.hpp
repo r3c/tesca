@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_ROW_ARRAY_HPP
-#define __TESCA_ROW_ARRAY_HPP
+#ifndef __TESCA_STREAM_ROW_ARRAY_HPP
+#define __TESCA_STREAM_ROW_ARRAY_HPP
 
 #include <array>
 #include "../row.hpp"
@@ -10,8 +10,8 @@ namespace	Tesca
 	class	ArrayRow : public Row
 	{
 		public:
-			/**/	ArrayRow (const ArrayRow&);
-			/**/	ArrayRow (Glay::Int32u);
+					ArrayRow (const ArrayRow&);
+					ArrayRow (Glay::Int32u);
 			virtual	~ArrayRow ();
 
 			ArrayRow&				operator = (const ArrayRow&);

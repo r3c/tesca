@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_READER_MAP_HPP
-#define __TESCA_READER_MAP_HPP
+#ifndef __TESCA_STREAM_READER_MAP_HPP
+#define __TESCA_STREAM_READER_MAP_HPP
 
 #include <list>
 #include <map>

@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_ROW_HPP
-#define __TESCA_ROW_HPP
+#ifndef __TESCA_STREAM_ROW_HPP
+#define __TESCA_STREAM_ROW_HPP
 
 #include "../glay/glay.hpp"
 #include "variant.hpp"
