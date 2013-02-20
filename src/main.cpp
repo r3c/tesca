@@ -75,12 +75,31 @@ void	debug_print (const Table& table)
 	}
 }
 
+bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, const Reader::Fields* fields, const char* expression)
+{
+	Reader*	reader;
+
+	reader = format.create (stream, fields, expression);
+
+	if (!reader)
+	{
+		cerr << "error: cannot use format \"" << expression << "\"" << endl;
+
+		return false;
+	}
+
+	while (reader->next ())
+		table.push (reader->current ());
+
+	delete reader;
+
+	return true;
+}
+
 int	main (int argc, char* argv[])
 {
-	Format			format;
-	Formula			formula;
-	Reader*			reader;
-	Pipe::IStream*	stream;
+	Format	format;
+	Formula	formula;
 
 	if (argc < 3)
 	{
@@ -102,44 +121,22 @@ int	main (int argc, char* argv[])
 	{
 		for (int i = 3; i < argc; ++i)
 		{
-			stream = new Pipe::FileIStream (argv[i]);
+			Pipe::FileIStream	stream (argv[i]);
 
-			if (*stream)
-			{
-				reader = format.create (stream, &formula.getFields (), argv[2]);
-
-				if (reader)
-				{
-					while (reader->next ())
-						table.push (reader->current ());
-
-					delete reader;
-				}
-				else
-					cerr << "error: cannot use format \"" << argv[2] << "\"" << endl;
-
-				delete stream;
-			}
+			if (stream)
+				debug_read (table, format, &stream, &formula.getFields (), argv[2]);
 			else
 				cerr << "error: cannot open file \"" << argv[i] << "\" for reading" << endl;
 		}
 	}
 	else
 	{
-		stream = new Pipe::StandardIStream (&cin);
-		reader = format.create (stream, &formula.getFields (), argv[2]);
+		Pipe::StandardIStream	stream (&cin);
 
-		if (reader)
-		{
-			while (reader->next ())
-				table.push (reader->current ());
-
-			delete reader;
-		}
+		if (stream)
+			debug_read (table, format, &stream, &formula.getFields (), argv[2]);
 		else
-			cerr << "error: cannot use format \"" << argv[2] << "\"" << endl;
-
-		delete stream;
+			cerr << "error: cannot read from standard output" << endl;
 	}
 
 	debug_print (table);
