@@ -2,8 +2,6 @@
 #ifndef __TESCA_STREAM_READER_LINE_HPP
 #define __TESCA_STREAM_READER_LINE_HPP
 
-#include <sstream>
-#include <string>
 #include "../../glay/glay.hpp"
 #include "../reader.hpp"
 
@@ -20,15 +18,17 @@ namespace	Tesca
 			virtual bool	next ();
 
 		protected:
-			virtual void	parse (const std::string&) = 0;
-			bool			read (std::stringstream&);
+			virtual void	parse (const char*, Glay::Int32u) = 0;
+			bool			read (const char**, Glay::Int32u*);
 
 		private:
-			char					current;
+			char*					buffer;
+			bool					capture;
+			Glay::Int32u			cursor;
+			bool					eof;
 			Glay::Pipe::IStream&	input;
-			bool					set;
-
-
+			Glay::Int32u			size;
+			Glay::Int32u			store;
 	};
 }
 

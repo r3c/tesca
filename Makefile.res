@@ -49,7 +49,6 @@ SOURCE	= \
 	stream/format.cpp \
 	stream/parser.cpp \
 	stream/reader/line/csv.cpp \
-	stream/reader/line/regex.cpp \
 	stream/reader/line.cpp \
 	stream/reader/map.cpp \
 	stream/reader.cpp \

@@ -2,6 +2,7 @@
 #include "csv.hpp"
 
 #include <sstream>
+#include <string>
 
 using namespace std;
 using namespace Glay;
@@ -13,14 +14,17 @@ namespace	Tesca
 		row (fields->size ()),
 		separator (separator)
 	{
-		stringstream	buffer;
+		const char*		buffer;
 		Int32u			index;
+		Int32u			length;
+		stringstream	stream;
 
-		if (headers && this->read (buffer))
+		if (headers && this->read (&buffer, &length))
 		{
-			this->split (buffer.str (), [&] (Int32u index, const string& value)
+			this->split (buffer, length, [&] (Int32u index, const char* value, Int32u length)
 			{
 				Fields::const_iterator	field;
+				string					name (value, length);
 
 				field = fields->find (value);
 
@@ -32,13 +36,13 @@ namespace	Tesca
 		{
 			for (auto i = fields->begin (); i != fields->end (); ++i)
 			{
-				buffer.str (i->first);
-				buffer >> index;
+				stream.str (i->first);
+				stream >> index;
 
-				if (!buffer.fail ())
+				if (!stream.fail ())
 					this->lookup[index] = i->second;
 
-				buffer.clear ();
+				stream.clear ();
 			}
 		}
 	}
@@ -48,37 +52,43 @@ namespace	Tesca
 		return this->row;
 	}
 
-	void	CSVLineReader::parse (const string& line)
+	void	CSVLineReader::parse (const char* line, Int32u length)
 	{
 		this->row.clear ();
 
-		this->split (line, [&] (Int32u index, const string& value)
+		this->split (line, length, [&] (Int32u index, const char* value, Int32u length)
 		{
 			auto	field = this->lookup.find (index);
 
 			if (field != this->lookup.end ())
-				this->row[field->second] = Variant (value);
+				this->row[field->second] = Variant (value, length);
 		});
 	}
 
-	void	CSVLineReader::split (const string& line, const Callback& callback)
+	void	CSVLineReader::split (const char* line, Int32u length, Callback callback)
 	{
-		Int32u	index;
-		Int32u	start;
+		const char*	cursor;
+		Int32u		index;
+		const char*	start;
+		const char*	stop;
 
+		cursor = line;
 		index = 0;
-		start = 0;
+		start = line;
+		stop = line + length;
 
-		for (Int32u i = 0; i < line.length (); ++i)
+		while (length-- > 0)
 		{
-			if (line[i] == this->separator)
+			if (*cursor == this->separator)
 			{
-				callback (index++, line.substr (start, i - start));
+				callback (index++, start, start - cursor);
 
-				start = i + 1;
+				start = cursor + 1;
 			}
+
+			++cursor;
 		}
 
-		callback (index, line.substr (start));
+		callback (index, start, stop - start);
 	}
 }

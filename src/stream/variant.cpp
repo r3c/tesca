@@ -35,34 +35,20 @@ namespace	Tesca
 		this->value.number = integer;
 	}
 
-	Variant::Variant (const string& string) :
+	Variant::Variant (const char* string, Int32u length) :
 		type (Variant::STRING)
 	{
-		char*	buffer;
-		size_t	size;
-
-		size = string.length () + 1;
-		buffer = new char[size];
-
-		memcpy (buffer, string.c_str (), size * sizeof (*buffer));
-
-		this->share = new Int32u (1);
-		this->value.string = buffer;
+		this->init (string, length);
 	}
 
-	Variant::Variant (const char* string) :
-		type (Variant::STRING)
+	Variant::Variant (const char* string)
 	{
-		char*	buffer;
-		size_t	size;
+		this->init (string, strlen (string));
+	}
 
-		size = strlen (string) + 1;
-		buffer = new char[size];
-
-		memcpy (buffer, string, size * sizeof (*buffer));
-
-		this->share = new Int32u (1);
-		this->value.string = buffer;
+	Variant::Variant (const string& string) 
+	{
+		this->init (string.c_str (), string.length ());
 	}
 
 	Variant::Variant () :
@@ -109,11 +95,6 @@ namespace	Tesca
 		}
 
 		return *this;
-	}
-
-	Variant::Type	Variant::getType () const
-	{
-		return this->type;
 	}
 
 	Int32s	Variant::compare (const Variant& other) const
@@ -169,6 +150,18 @@ namespace	Tesca
 			return 1;
 		else
 			return 0;
+	}
+
+	void	Variant::init (const char* string, Int32u length)
+	{
+		char*	buffer;
+
+		buffer = new char[length + 1];
+
+		memcpy (buffer, string, (length + 1) * sizeof (*buffer));
+
+		this->share = new Int32u (1);
+		this->value.string = buffer;
 	}
 
 	void	Variant::reset ()

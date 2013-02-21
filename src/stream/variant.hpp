@@ -24,14 +24,13 @@ namespace	Tesca
 			Variant (bool);
 			Variant (Glay::Float64);
 			Variant (Glay::Int32s);
-			Variant (const std::string&);
+			Variant (const char*, Glay::Int32u);
 			Variant (const char*);
+			Variant (const std::string&);			
 			Variant ();
 			~Variant ();
 
 			Variant&	operator = (const Variant&);
-
-			Type	getType () const;
 
 			Glay::Int32s	compare (const Variant&) const;
 			void			reset ();
@@ -47,6 +46,8 @@ namespace	Tesca
 				Glay::Float64	number;
 				const char*		string;
 			};
+
+			void	init (const char*, Glay::Int32u);
 
 			Glay::Int32u*	share;
 			Type			type;

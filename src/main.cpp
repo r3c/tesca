@@ -9,48 +9,43 @@ using namespace std;
 using namespace Glay;
 using namespace Tesca;
 
+#include "stream/reader/line.hpp"
+#include "stream/row/array.hpp"
+
+class	MyLineReader : public LineReader
+{
+	public:
+		MyLineReader (Glay::Pipe::IStream* stream) :
+			LineReader (stream),
+			row (0)
+		{
+		}
+
+		virtual const Row&	current () const
+		{
+			return this->row;
+		}
+
+	protected:
+		virtual void	parse (const char* line, Glay::Int32u length)
+		{
+			cout << "got line: [" << string (line, length) << "]" << endl;
+		}
+
+	private:
+		ArrayRow	row;
+};
+
+//
+
 ostream&	operator << (ostream& stream, const Variant& value)
 {
-	bool	asBoolean;
-	Float64	asNumber;
-	string	asString;
+	string	buffer;
 
-	switch (value.getType ())
-	{
-		case Tesca::Variant::BOOLEAN:
-			if (value.toBoolean (&asBoolean))
-				stream << (asBoolean ? "true" : "false");
-			else
-				stream << "!";
-
-			break;
-
-		case Tesca::Variant::NUMBER:
-			if (value.toNumber (&asNumber))
-				stream << asNumber;
-			else
-				stream << "!";
-
-			break;
-
-		case Tesca::Variant::STRING:
-			if (value.toString (&asString))
-				stream << asString;
-			else
-				stream << "!";
-
-			break;
-
-		case Tesca::Variant::NONE:
-			stream << "void";
-
-			break;
-
-		default:
-			stream << "?";
-
-			break;
-	}
+	if (value.toString (&buffer))
+		stream << buffer;
+	else
+		stream << "!";
 
 	return stream;
 }
@@ -89,7 +84,8 @@ bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, cons
 	}
 
 	while (reader->next ())
-		table.push (reader->current ());
+//		table.push (reader->current ());
+		;
 
 	delete reader;
 
@@ -100,6 +96,15 @@ int	main (int argc, char* argv[])
 {
 	Format	format;
 	Formula	formula;
+
+	{
+		MyLineReader	r (new Pipe::StandardIStream (&cin));
+
+		while (r.next ())
+			;
+
+		return 1;
+	}
 
 	if (argc < 3)
 	{

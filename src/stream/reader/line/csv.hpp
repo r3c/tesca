@@ -20,13 +20,13 @@ namespace	Tesca
 			virtual const Row&	current () const;
 
 		protected:
-			virtual void	parse (const std::string&);
+			virtual void	parse (const char*, Glay::Int32u);
 
 		private:
-			typedef std::function<void (Glay::Int32u, const std::string&)>	Callback;
-			typedef std::map<Glay::Int32u, Glay::Int32u>					Lookup;
+			typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
+			typedef std::map<Glay::Int32u, Glay::Int32u>							Lookup;
 
-			virtual void	split (const std::string&, const Callback&);
+			virtual void	split (const char*, Glay::Int32u, Callback);
 
 			Lookup		lookup;
 			ArrayRow	row;

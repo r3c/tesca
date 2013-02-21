@@ -4,53 +4,112 @@
 using namespace std;
 using namespace Glay;
 
+#warning FIXME
+#include <iostream>
+
 namespace	Tesca
 {
 	LineReader::LineReader (Pipe::IStream* input) :
-		input (*input)
+		buffer (0),
+		capture (true),
+		cursor (0),
+		eof (false),
+		input (*input),
+		size (0),
+		store (0)
 	{
-		this->set = this->input.read (&this->current, sizeof (this->current)) == sizeof (this->current);
 	}
 
 	bool	LineReader::next ()
 	{
-		stringstream	buffer;
+		const char*	buffer;
+		Int32u		length;
 
-		if (!this->read (buffer))
+		if (!this->read (&buffer, &length))
 			return false;
 
-		this->parse (buffer.str ());
+		this->parse (buffer, length);
 
 		return true;
 	}
 
-	bool	LineReader::read (stringstream& buffer)
+	bool	LineReader::read (const char** buffer, Int32u* length)
 	{
-		if (!this->set)
-			return false;
+		Int32u	delta;
+		char*	swap;
 
-		while (this->current != '\n' && this->current != '\r')
+		// Move unused data at the beginning of buffer
+		delta = this->store - this->cursor;
+
+		memmove (this->buffer, this->buffer + this->cursor, delta);
+cout << "remaining = " << delta << ": [" << string (this->buffer, delta) << "]" << endl;
+		this->cursor = delta;
+		this->store = delta;
+
+		// Append incoming data from string into buffer
+		Int32u	i = 0;
+
+		while (true)
 		{
-			buffer << this->current;
+			delta = this->input.read (this->buffer + this->cursor, this->size - this->store);
+cout << "read " << delta << " bytes on " << (this->size - this->store) << ": [" << string (this->buffer + this->cursor, delta) << "]" << endl;
+			if (delta < this->size - this->store)
+				this->eof = true;
 
-			if (this->input.read (&this->current, sizeof (this->current)) != sizeof (this->current))
+			this->store += delta;
+
+			if (this->capture)
 			{
-				this->set = false;
+				while (i < this->store && (this->buffer[i] != '\n' && this->buffer[i] != '\r'))
+					++i;
 
-				return true;
+				this->cursor = i;
+
+				if (i < this->store || this->eof)
+				{
+					this->capture = false;
+
+					*buffer = this->buffer;
+					*length = i;
+
+					return i > 0;
+				}
 			}
-		}
-
-		while (this->current == '\n' || this->current == '\r')
-		{
-			if (this->input.read (&this->current, sizeof (this->current)) != sizeof (this->current))
+			else
 			{
-				this->set = false;
+				while (i < this->store && (this->buffer[i] == '\n' || this->buffer[i] == '\r'))
+					++i;
 
-				return true;
+				this->cursor = i;
+
+				if (i < this->store || this->eof)
+				{
+					this->capture = true;
+
+					this->cursor = 0;
+					this->store -= i;
+
+					memmove (this->buffer, this->buffer + i, this->store);
+
+					continue;
+				}
 			}
-		}
 
-		return true;
+			this->size = this->size * 2 + 1;
+
+			swap = static_cast<char*> (realloc (this->buffer, sizeof (*this->buffer) * this->size));
+
+			if (swap == 0)
+			{
+				free (this->buffer);
+
+				this->buffer = 0;
+				this->size = 0;
+
+				return false;
+			}
+
+			this->buffer = swap;
+		}
 	}
 }
