@@ -67,26 +67,24 @@ namespace	Tesca
 
 	void	CSVLineReader::split (const char* line, Int32u length, Callback callback)
 	{
-		const char*	cursor;
 		Int32u		index;
 		const char*	start;
 		const char*	stop;
 
-		cursor = line;
 		index = 0;
 		start = line;
-		stop = line + length;
+		stop = line;
 
 		while (length-- > 0)
 		{
-			if (*cursor == this->separator)
+			if (*stop == this->separator)
 			{
-				callback (index++, start, start - cursor);
+				callback (index++, start, stop - start);
 
-				start = cursor + 1;
+				start = stop + 1;
 			}
 
-			++cursor;
+			++stop;
 		}
 
 		callback (index, start, stop - start);

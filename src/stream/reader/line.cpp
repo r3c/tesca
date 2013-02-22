@@ -4,19 +4,16 @@
 using namespace std;
 using namespace Glay;
 
-#warning FIXME
-#include <iostream>
-
 namespace	Tesca
 {
 	LineReader::LineReader (Pipe::IStream* input) :
 		buffer (0),
-		capture (true),
-		cursor (0),
 		eof (false),
 		input (*input),
+		length (0),
 		size (0),
-		store (0)
+		start (0),
+		stop (0)
 	{
 	}
 
@@ -35,81 +32,88 @@ namespace	Tesca
 
 	bool	LineReader::read (const char** buffer, Int32u* length)
 	{
-		Int32u	delta;
+		bool	capture;
+		Int32u	count;
+		Int32u	marker;
 		char*	swap;
 
-		// Move unused data at the beginning of buffer
-		delta = this->store - this->cursor;
-
-		memmove (this->buffer, this->buffer + this->cursor, delta);
-cout << "remaining = " << delta << ": [" << string (this->buffer, delta) << "]" << endl;
-		this->cursor = delta;
-		this->store = delta;
-
-		// Append incoming data from string into buffer
-		Int32u	i = 0;
+		// Read next line from stream
+		capture = true;
 
 		while (true)
 		{
-			delta = this->input.read (this->buffer + this->cursor, this->size - this->store);
-cout << "read " << delta << " bytes on " << (this->size - this->store) << ": [" << string (this->buffer + this->cursor, delta) << "]" << endl;
-			if (delta < this->size - this->store)
-				this->eof = true;
-
-			this->store += delta;
-
-			if (this->capture)
+			// Capture characters until next line break then ignore line breaks
+			if (capture)
 			{
-				while (i < this->store && (this->buffer[i] != '\n' && this->buffer[i] != '\r'))
-					++i;
+				while (this->stop < this->length && (this->buffer[this->stop] != '\n' && this->buffer[this->stop] != '\r'))
+					++this->stop;
 
-				this->cursor = i;
+				if (this->start == this->stop && this->eof)
+					return false;
 
-				if (i < this->store || this->eof)
+				if (this->stop < this->length || this->eof)
 				{
-					this->capture = false;
-
-					*buffer = this->buffer;
-					*length = i;
-
-					return i > 0;
+					capture = false;
+					marker = this->stop;
 				}
 			}
 			else
 			{
-				while (i < this->store && (this->buffer[i] == '\n' || this->buffer[i] == '\r'))
-					++i;
+				while (this->stop < this->length && (this->buffer[this->stop] == '\n' || this->buffer[this->stop] == '\r'))
+					++this->stop;
 
-				this->cursor = i;
-
-				if (i < this->store || this->eof)
-				{
-					this->capture = true;
-
-					this->cursor = 0;
-					this->store -= i;
-
-					memmove (this->buffer, this->buffer + i, this->store);
-
-					continue;
-				}
+				if (this->stop < this->length || this->eof)
+					break;
 			}
 
-			this->size = this->size * 2 + 1;
-
-			swap = static_cast<char*> (realloc (this->buffer, sizeof (*this->buffer) * this->size));
-
-			if (swap == 0)
+			// Make some buffer space by moving unused content or resizing it
+			if (this->start > 0)
 			{
-				free (this->buffer);
+				count = this->start;
 
-				this->buffer = 0;
-				this->size = 0;
+				memmove (this->buffer, this->buffer + count, sizeof (*this->buffer) * (this->length - count));
 
-				return false;
+				this->length -= count;
+				this->start = 0;
+				this->stop -= count;
+
+				marker -= count;
+			}
+			else
+			{
+				this->size = this->size * 2 + 1;
+
+				swap = static_cast<char*> (realloc (this->buffer, sizeof (*this->buffer) * this->size));
+
+				if (swap == 0)
+				{
+					if (this->buffer)
+						free (this->buffer);
+
+					this->buffer = 0;
+					this->size = 0;
+
+					return false;
+				}
+
+				this->buffer = swap;
 			}
 
-			this->buffer = swap;
+			// Read data from stream to buffer
+			count = this->input.read (this->buffer + this->length, this->size - this->length);
+
+			if (count < this->size - this->length)
+				this->eof = true;
+
+			this->length += count;
 		}
+
+		// Set capture information and exit
+		*buffer = this->buffer + this->start;
+		*length = marker - this->start;
+
+		this->start = this->stop;
+
+		return true;
 	}
 }

@@ -15,10 +15,16 @@ using namespace Tesca;
 class	MyLineReader : public LineReader
 {
 	public:
-		MyLineReader (Glay::Pipe::IStream* stream) :
+		MyLineReader (Pipe::IStream* stream) :
 			LineReader (stream),
+			count (0),
 			row (0)
 		{
+		}
+
+		Int32u	getCount () const
+		{
+			return this->count;
 		}
 
 		virtual const Row&	current () const
@@ -27,12 +33,13 @@ class	MyLineReader : public LineReader
 		}
 
 	protected:
-		virtual void	parse (const char* line, Glay::Int32u length)
+		virtual void	parse (const char*, Int32u)
 		{
-			cout << "got line: [" << string (line, length) << "]" << endl;
+			++this->count;
 		}
 
 	private:
+		Int32u		count;
 		ArrayRow	row;
 };
 
@@ -84,8 +91,7 @@ bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, cons
 	}
 
 	while (reader->next ())
-//		table.push (reader->current ());
-		;
+		table.push (reader->current ());
 
 	delete reader;
 
@@ -97,14 +103,19 @@ int	main (int argc, char* argv[])
 	Format	format;
 	Formula	formula;
 
+	// FIXME
+	if (argc < 2)
 	{
 		MyLineReader	r (new Pipe::StandardIStream (&cin));
 
 		while (r.next ())
 			;
 
+		cout << "got " << r.getCount () << " line(s)" << endl;
+
 		return 1;
 	}
+	// FIXME
 
 	if (argc < 3)
 	{

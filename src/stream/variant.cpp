@@ -157,8 +157,9 @@ namespace	Tesca
 		char*	buffer;
 
 		buffer = new char[length + 1];
+		buffer[length] = '\0';
 
-		memcpy (buffer, string, (length + 1) * sizeof (*buffer));
+		memcpy (buffer, string, length * sizeof (*buffer));
 
 		this->share = new Int32u (1);
 		this->value.string = buffer;

@@ -23,12 +23,12 @@ namespace	Tesca
 
 		private:
 			char*					buffer;
-			bool					capture;
-			Glay::Int32u			cursor;
 			bool					eof;
 			Glay::Pipe::IStream&	input;
+			Glay::Int32u			length;
 			Glay::Int32u			size;
-			Glay::Int32u			store;
+			Glay::Int32u			start;
+			Glay::Int32u			stop;
 	};
 }
 
