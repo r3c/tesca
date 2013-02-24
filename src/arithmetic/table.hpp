@@ -22,7 +22,7 @@ namespace	Tesca
 			typedef Groups::const_iterator		iterator;
 
 			Table (const Table&);
-			Table (const Columns*);
+			Table ();
 			~Table ();
 
 			Table&	operator = (const Table&);
@@ -35,6 +35,7 @@ namespace	Tesca
 
 			void	clear ();
 			void	push (const Row&);
+			void	reset (const Columns*);
 
 		private:
 			typedef std::vector<Slot*>	Slots;

@@ -77,18 +77,14 @@ void	debug_print (const Table& table)
 	}
 }
 
-bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, const Reader::Fields* fields, const char* expression)
+bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, const Reader::Fields* fields)
 {
 	Reader*	reader;
 
-	reader = format.create (stream, fields, expression);
+	reader = format.create (stream, fields);
 
 	if (!reader)
-	{
-		cerr << "error: cannot use format \"" << expression << "\"" << endl;
-
 		return false;
-	}
 
 	while (reader->next ())
 		table.push (reader->current ());
@@ -100,60 +96,45 @@ bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, cons
 
 int	main (int argc, char* argv[])
 {
-	Format	format;
-	Formula	formula;
-
-	// FIXME
-	if (argc < 2)
-	{
-		MyLineReader	r (new Pipe::FileIStream (stdin));
-
-		while (r.next ())
-			;
-
-		cout << "got " << r.getCount () << " line(s)" << endl;
-
-		return 1;
-	}
-	// FIXME
+	Format				format;
+	Formula				formula;
+	Pipe::FileIStream*	stream;
+	Table				table;
 
 	if (argc < 3)
 	{
-		cout << "usage: " << argv[0] << " <formula> <format> [<file> [<file>...]]" << endl;
+		cout << "usage: " << argv[0] << " <input format> <output formula> [<file> [<file>...]]" << endl;
 
 		return 0;
 	}
 
-	if (!formula.parse (argv[1]))
+	if (!format.parse (argv[1]))
+	{
+		cerr << "error: invalid input format" << endl;
+	}
+
+	if (!formula.parse (argv[2]))
 	{
 		cerr << "error: " << formula.getError () << endl;
 
 		return 1;
 	}
 
-	Table	table (&formula.getColumns ());
+	table.reset (&formula.getColumns ());
 
 	if (argc > 3)
-	{
-		for (int i = 3; i < argc; ++i)
-		{
-			Pipe::FileIStream	stream (argv[i]);
-
-			if (stream)
-				debug_read (table, format, &stream, &formula.getFields (), argv[2]);
-			else
-				cerr << "error: cannot open file \"" << argv[i] << "\" for reading" << endl;
-		}
-	}
+		stream = new Pipe::FileIStream (argv[3]);
 	else
-	{
-		Pipe::FileIStream	stream (stdin);
+		stream = new Pipe::FileIStream (stdin);
 
-		if (stream)
-			debug_read (table, format, &stream, &formula.getFields (), argv[2]);
-		else
-			cerr << "error: cannot read from standard output" << endl;
-	}
+	if (*stream)
+		debug_read (table, format, stream, &formula.getFields ());
+	else if (argc > 3)
+		cerr << "error: cannot open file \"" << argv[3] << "\" for reading" << endl;
+	else
+		cerr << "error: cannot open standard input for reading" << endl;
+
+	delete stream;
 
 	debug_print (table);
 }

@@ -7,40 +7,46 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	Format::Format ()
+	Format::Format () :
+		parser (0)
 	{
+	
 	}
 
 	Format::~Format ()
 	{
 	}
 
-	Reader*	Format::create (Pipe::IStream* stream, const Reader::Fields* fields, const char* expression) const
+	Reader*	Format::create (Pipe::IStream* stream, const Reader::Fields* fields) const
 	{
-		const Parser*	parser;
-		const char*		stop;
+		if (this->parser != 0)
+			return this->parser->builder (stream, fields, this->config.c_str ());
+
+		return 0;
+	}
+
+	bool	Format::parse (const char* expression)
+	{
+		const char*	stop;
 
 		for (stop = expression; *stop != '\0' && *stop != ':'; )
 			++stop;
-
-		parser = 0;
 
 		for (Int32u i = 0; Parser::parsers[i].name; ++i)
 		{
 			if (strncmp (Parser::parsers[i].name, expression, stop - expression) == 0)
 			{
-				parser = &Parser::parsers[i];
+				this->parser = &Parser::parsers[i];
 
 				break;
 			}
 		}
 
-		if (!parser)
-			return 0;
-
 		if (*stop != '\0')
-			++stop;
+			this->config = stop + 1;
+		else
+			this->config = "";
 
-		return parser->builder (stream, fields, stop);
+		return this->parser != 0;
 	}
 }

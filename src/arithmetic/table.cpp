@@ -3,17 +3,17 @@
 
 using namespace Glay;
 
+namespace
+{
+	static const Tesca::Table::Columns	emptyColumns[0];
+}
+
 namespace	Tesca
 {
-	Table::Table (const Columns* columns) :
-		columns (columns),
+	Table::Table () :
+		columns (emptyColumns),
 		keys (0)
 	{
-		for (auto i = columns->begin (); i != columns->end (); ++i)
-		{
-			if ((*i)->key ())
-				++this->keys;
-		}
 	}
 
 	Table::~Table ()
@@ -101,5 +101,19 @@ namespace	Tesca
 		// Append column values to group
 		for (Int32u i = this->columns->size (); i-- > 0; )
 			slots[i]->push (values[i]);
+	}
+
+	void	Table::reset (const Columns* columns)
+	{
+		this->clear ();
+
+		this->columns = columns;
+		this->keys = 0;
+
+		for (auto i = columns->begin (); i != columns->end (); ++i)
+		{
+			if ((*i)->key ())
+				++this->keys;
+		}
 	}
 }
