@@ -49,7 +49,7 @@ namespace	Tesca
 		values = this->lines.front ();
 
 		for (auto i = this->fields->size (); i-- > 0; )
-			this->row[i] = values[i];
+			this->row.set (i, values[i]);
 
 		delete [] values;
 

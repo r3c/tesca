@@ -17,13 +17,15 @@ namespace	Tesca
 			Bucket&			operator = (const Bucket&);
 			const Variant&	operator [] (Glay::Int32u) const;
 
+			Glay::Int32u	getLength () const;
+
 			Glay::Int16s	compare (const Bucket&) const;
-			Glay::Int32u	length () const;
+			Bucket&			keep ();
 			void			set (Glay::Int32u, const Variant&);
 
 		private:
 			Variant*		buffer;
-			Glay::Int32u	size;
+			Glay::Int32u	length;
 	};
 
 	bool	operator < (const Bucket&, const Bucket&);

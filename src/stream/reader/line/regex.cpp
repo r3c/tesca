@@ -1,10 +1,9 @@
 
 #include "regex.hpp"
 
-#include <sstream>
-
 using namespace std;
 using namespace Glay;
+using namespace Glay::System;
 
 namespace	Tesca
 {
@@ -13,15 +12,11 @@ namespace	Tesca
 		regex (pattern),
 		row (fields->size ())
 	{
-		stringstream	buffer;
-		Int32u			group;
+		Int32u	group;
 
 		for (auto i = fields->begin (); i != fields->end (); ++i)
 		{
-			buffer.str (i->first);
-			buffer >> group;
-
-			if (!buffer.fail ())
+			if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
 				this->lookup[group] = i->second;
 
 			buffer.clear ();
@@ -44,7 +39,7 @@ namespace	Tesca
 			for (auto i = this->lookup.begin (); i != this->lookup.end (); ++i)
 			{
 				if (i->first < match.size ())
-					this->row[i->second] = Variant (match[i->first]);
+					this->row.set (i->second, Variant (match[i->first]));
 			}
 		}
 	}

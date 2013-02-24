@@ -5,9 +5,9 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	ArrayRow::ArrayRow (Int32u size) :
-		size (size),
-		values (new Variant[size])
+	ArrayRow::ArrayRow (Int32u length) :
+		length (length),
+		values (new Variant[length])
 	{
 	}
 
@@ -18,23 +18,30 @@ namespace	Tesca
 
 	const Variant&	ArrayRow::operator [] (Int32u key) const
 	{
-		if (key < this->size)
+		if (key < this->length)
 			return this->values[key];
 
 		return Variant::empty;
 	}
 
-	Variant&	ArrayRow::operator [] (Int32u key)
+	Int32u	ArrayRow::getLength () const
 	{
-		if (key < this->size)
-			return this->values[key];
-
-		return this->dummy;
+		return this->length;
 	}
 
 	void	ArrayRow::clear ()
 	{
-		for (auto i = this->size; i-- > 0; )
+		for (auto i = this->length; i-- > 0; )
 			this->values[i] = Variant::empty;
+	}
+
+	bool	ArrayRow::set (Int32u key, const Variant& value)
+	{
+		if (key >= this->length)
+			return false;
+
+		this->values[key] = value;
+
+		return true;
 	}
 }

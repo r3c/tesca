@@ -16,6 +16,8 @@ namespace	Tesca
 
 			Row&					operator = (const Row&);
 			virtual const Variant&	operator [] (Glay::Int32u) const = 0;
+
+			virtual Glay::Int32u	getLength () const = 0;
 	};
 }
 

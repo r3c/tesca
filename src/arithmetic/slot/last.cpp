@@ -13,6 +13,7 @@ namespace	Tesca
 	bool	LastSlot::push (const Variant& value)
 	{
 		this->last = value;
+		this->last.keep ();
 
 		return true;
 	}

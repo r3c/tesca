@@ -16,13 +16,14 @@ namespace	Tesca
 
 			ArrayRow&				operator = (const ArrayRow&);
 			virtual const Variant&	operator [] (Glay::Int32u) const;
-			Variant&				operator [] (Glay::Int32u);
+
+			virtual Glay::Int32u	getLength () const;
 
 			void	clear ();
+			bool	set (Glay::Int32u, const Variant&);
 
 		private:
-			Variant			dummy;
-			Glay::Int32u	size;
+			Glay::Int32u	length;
 			Variant*		values;
 	};
 }

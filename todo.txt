@@ -1,4 +1,4 @@
 X Value => Variant
 X Split column & aggregator
 X Shared string pointer for variants
-X Implement a cleaner error messages system
+- Implement a cleaner error messages system

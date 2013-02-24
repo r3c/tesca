@@ -6,22 +6,22 @@ using namespace Glay;
 namespace	Tesca
 {
 	Bucket::Bucket (const Bucket& other) :
-		size (other.size)
+		length (other.length)
 	{
 		Variant*	buffer;
 
-		buffer = new Variant[other.size];
+		buffer = new Variant[other.length];
 
-		for (Int32u i = other.size; i-- > 0; )
+		for (Int32u i = other.length; i-- > 0; )
 			buffer[i] = other.buffer[i];
 
 		this->buffer = buffer;
 	}
 
-	Bucket::Bucket (Int32u size) :
-		size (size)
+	Bucket::Bucket (Int32u length) :
+		length (length)
 	{
-		this->buffer = new Variant[size];
+		this->buffer = new Variant[length];
 	}
 
 	Bucket::~Bucket ()
@@ -34,17 +34,22 @@ namespace	Tesca
 		return this->buffer[index];
 	}
 
+	Int32u	Bucket::getLength () const
+	{
+		return this->length;
+	}
+
 	Int16s	Bucket::compare (const Bucket& other) const
 	{
-		if (this->length () < other.length ())
+		if (this->length < other.length)
 			return -1;
-		else if (this->length () > other.length ())
+		else if (this->length > other.length)
 			return 1;
 
-		for (Int32u index = 0; index < this->length (); ++index)
+		for (Int32u index = 0; index < this->length; ++index)
 		{
-			const Variant&	lhs = (*this)[index];
-			const Variant&	rhs = other[index];
+			const Variant&	lhs = this->buffer[index];
+			const Variant&	rhs = other.buffer[index];
 
 			if (lhs < rhs)
 				return -1;
@@ -55,9 +60,12 @@ namespace	Tesca
 		return 0;
 	}
 
-	Int32u	Bucket::length () const
+	Bucket&	Bucket::keep ()
 	{
-		return this->size;
+		for (Int32u index = this->length; index-- > 0; )
+			this->buffer[index].keep ();
+
+		return *this;
 	}
 
 	void	Bucket::set (Int32u index, const Variant& value)

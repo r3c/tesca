@@ -12,6 +12,12 @@ namespace	Tesca
 		public:
 			static const Variant	empty;
 
+			struct	String
+			{
+				const char*		buffer;
+				Glay::Int32u	length;
+			};
+
 			enum	Type
 			{
 				NONE,
@@ -25,14 +31,14 @@ namespace	Tesca
 			Variant (Glay::Float64);
 			Variant (Glay::Int32s);
 			Variant (const char*, Glay::Int32u);
-			Variant (const char*);
-			Variant (const std::string&);			
+			Variant (const std::string&);
 			Variant ();
 			~Variant ();
 
 			Variant&	operator = (const Variant&);
 
 			Glay::Int32s	compare (const Variant&) const;
+			Variant&		keep ();
 			void			reset ();
 
 			bool	toBoolean (bool*) const;
@@ -44,14 +50,12 @@ namespace	Tesca
 			{
 				bool			boolean;
 				Glay::Float64	number;
-				const char*		string;
+				String			string;
 			};
 
-			void	init (const char*, Glay::Int32u);
-
+			Value			content;
 			Glay::Int32u*	share;
 			Type			type;
-			Value			value;
 	};
 
 	bool	operator == (const Variant&, const Variant&);

@@ -1,11 +1,9 @@
 
 #include "csv.hpp"
 
-#include <sstream>
-#include <string>
-
 using namespace std;
 using namespace Glay;
+using namespace Glay::System;
 
 namespace	Tesca
 {
@@ -14,19 +12,15 @@ namespace	Tesca
 		row (fields->size ()),
 		separator (separator)
 	{
-		const char*		buffer;
-		Int32u			index;
-		Int32u			length;
-		stringstream	stream;
+		const char*	buffer;
+		Int32u		index;
+		Int32u		length;
 
-		if (headers && this->read (&buffer, &length))
+		if (headers && this->fetch (&buffer, &length))
 		{
-			this->split (buffer, length, [&] (Int32u index, const char* value, Int32u length)
+			this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 			{
-				Fields::const_iterator	field;
-				string					name (value, length);
-
-				field = fields->find (value);
+				auto	field = fields->find (string (buffer, length));
 
 				if (field != fields->end ())
 					this->lookup[index] = field->second;
@@ -36,13 +30,8 @@ namespace	Tesca
 		{
 			for (auto i = fields->begin (); i != fields->end (); ++i)
 			{
-				stream.str (i->first);
-				stream >> index;
-
-				if (!stream.fail ())
+				if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
 					this->lookup[index] = i->second;
-
-				stream.clear ();
 			}
 		}
 	}
@@ -56,12 +45,12 @@ namespace	Tesca
 	{
 		this->row.clear ();
 
-		this->split (line, length, [&] (Int32u index, const char* value, Int32u length)
+		this->split (line, length, [&] (Int32u index, const char* buffer, Int32u length)
 		{
 			auto	field = this->lookup.find (index);
 
 			if (field != this->lookup.end ())
-				this->row[field->second] = Variant (value, length);
+				this->row.set (field->second, Variant (buffer, length));
 		});
 	}
 

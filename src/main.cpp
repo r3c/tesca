@@ -106,7 +106,7 @@ int	main (int argc, char* argv[])
 	// FIXME
 	if (argc < 2)
 	{
-		MyLineReader	r (new Pipe::StandardIStream (&cin));
+		MyLineReader	r (new Pipe::FileIStream (stdin));
 
 		while (r.next ())
 			;
@@ -147,7 +147,7 @@ int	main (int argc, char* argv[])
 	}
 	else
 	{
-		Pipe::StandardIStream	stream (&cin);
+		Pipe::FileIStream	stream (stdin);
 
 		if (stream)
 			debug_read (table, format, &stream, &formula.getFields (), argv[2]);

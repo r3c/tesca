@@ -39,11 +39,11 @@ SOURCE	= \
 	glay/pipe/stream/file.cpp \
 	glay/pipe/stream/memory.cpp \
 	glay/pipe/stream/seek.cpp \
-	glay/pipe/stream/standard.cpp \
 	glay/pipe/writer/binary.cpp \
 	glay/pipe/writer/type.cpp \
 	glay/pipe/reader.cpp \
 	glay/pipe/writer.cpp \
+	glay/system/convert.cpp \
 	glay/system/endian.cpp \
 	glay/system/stopwatch.cpp \
 	stream/format.cpp \

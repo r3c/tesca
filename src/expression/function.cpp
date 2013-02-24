@@ -79,7 +79,7 @@ namespace	Tesca
 			{
 				transform (argument.begin (), argument.end (), argument.begin (), ::tolower);
 
-				return Variant (argument);
+				return Variant (argument).keep ();
 			});
 		}},
 		{"le",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
@@ -143,7 +143,7 @@ namespace	Tesca
 			{
 				transform (argument.begin (), argument.end (), argument.begin (), ::toupper);
 
-				return Variant (argument);
+				return Variant (argument).keep ();
 			});
 		}},
 		{0, 0, 0, 0}

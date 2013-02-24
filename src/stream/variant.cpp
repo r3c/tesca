@@ -1,11 +1,11 @@
 
 #include "variant.hpp"
 
-#include <sstream>
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 using namespace Glay;
+using namespace Glay::System;
 
 namespace	Tesca
 {
@@ -20,35 +20,35 @@ namespace	Tesca
 	Variant::Variant (bool boolean) :
 		type (Variant::BOOLEAN)
 	{
-		this->value.boolean = boolean;
+		this->content.boolean = boolean;
 	}
 
 	Variant::Variant (Float64 number) :
 		type (Variant::NUMBER)
 	{
-		this->value.number = number;
+		this->content.number = number;
 	}
 
 	Variant::Variant (Int32s integer) :
 		type (Variant::NUMBER)
 	{
-		this->value.number = integer;
+		this->content.number = integer;
 	}
 
-	Variant::Variant (const char* string, Int32u length) :
+	Variant::Variant (const char* buffer, Int32u length) :
+		share (0),
 		type (Variant::STRING)
 	{
-		this->init (string, length);
+		this->content.string.buffer = buffer;
+		this->content.string.length = length;
 	}
 
-	Variant::Variant (const char* string)
+	Variant::Variant (const string& string) :
+		share (0),
+		type (Variant::STRING)
 	{
-		this->init (string, strlen (string));
-	}
-
-	Variant::Variant (const string& string) 
-	{
-		this->init (string.c_str (), string.length ());
+		this->content.string.buffer = string.c_str ();
+		this->content.string.length = string.length ();
 	}
 
 	Variant::Variant () :
@@ -70,20 +70,21 @@ namespace	Tesca
 			switch (other.type)
 			{
 				case Variant::BOOLEAN:
-					this->value.boolean = other.value.boolean;
+					this->content.boolean = other.content.boolean;
 
 					break;
 
 				case Variant::NUMBER:
-					this->value.number = other.value.number;
+					this->content.number = other.content.number;
 
 					break;
 
 				case Variant::STRING:
-					this->share = other.share;
-					this->value.string = other.value.string;
+					if (other.share != 0)
+						++*other.share;
 
-					++*this->share;
+					this->content.string = other.content.string;
+					this->share = other.share;
 
 					break;
 
@@ -99,44 +100,72 @@ namespace	Tesca
 
 	Int32s	Variant::compare (const Variant& other) const
 	{
-		bool	boolean1;
-		bool	boolean2;
-		Float64	number1;
-		Float64	number2;
-		string	string1;
-		string	string2;
+		Int32u	compare;
 
-		switch (other.type)
+		if (this->type < other.type)
+			return -1;
+		else if (this->type > other.type)
+			return 1;
+
+		switch (this->type)
 		{
 			case Variant::BOOLEAN:
-				if (this->toBoolean (&boolean1) && other.toBoolean (&boolean2))
-				{
-					if (boolean1 < boolean2)
-						return -1;
-					else if (boolean1 > boolean2)
-						return 1;
-					else
-						return 0;
-				}
+				if (this->content.boolean > other.content.boolean)
+					return -1;
+				else if (this->content.boolean < other.content.boolean)
+					return 1;
 
-				break;
+				return 0;
 
 			case Variant::NUMBER:
-				if (this->toNumber (&number1) && other.toNumber (&number2))
-				{
-					if (number1 < number2)
-						return -1;
-					else if (number1 > number2)
-						return 1;
-					else
-						return 0;
-				}
+				if (this->content.number < other.content.number)
+					return -1;
+				else if (this->content.number > other.content.number)
+					return 1;
 
-				break;
+				return 0;
 
 			case Variant::STRING:
-				if (this->toString (&string1) && other.toString (&string2))
-					return string1.compare (string2);
+				compare = memcmp (this->content.string.buffer, other.content.string.buffer, std::min (this->content.string.length, other.content.string.length));
+
+				if (compare != 0)
+					return compare;
+				else if (this->content.string.length < other.content.string.length)
+					return -1;
+				else if (this->content.string.length > other.content.string.length)
+					return -1;
+
+				return 0;
+
+			default:
+				return 0;
+		}
+	}
+
+	Variant&	Variant::keep ()
+	{
+		Int32u	length;
+		char*	target;
+
+		switch (this->type)
+		{
+			case Variant::STRING:
+
+				if (this->share != 0)
+				{
+					if (*this->share <= 1)
+						break;
+
+					--*this->share;
+				}
+
+				length = this->content.string.length;
+				target = static_cast<char*> (malloc (length * sizeof (*target)));
+
+				memcpy (target, this->content.string.buffer, length * sizeof (*target));
+
+				this->content.string.buffer = target;
+				this->share = static_cast <Int32u*> (malloc (sizeof (*this->share)));
 
 				break;
 
@@ -144,25 +173,7 @@ namespace	Tesca
 				break;
 		}
 
-		if (this->type < other.type)
-			return -1;
-		else if (this->type > other.type)
-			return 1;
-		else
-			return 0;
-	}
-
-	void	Variant::init (const char* string, Int32u length)
-	{
-		char*	buffer;
-
-		buffer = new char[length + 1];
-		buffer[length] = '\0';
-
-		memcpy (buffer, string, length * sizeof (*buffer));
-
-		this->share = new Int32u (1);
-		this->value.string = buffer;
+		return *this;
 	}
 
 	void	Variant::reset ()
@@ -170,10 +181,10 @@ namespace	Tesca
 		switch (this->type)
 		{
 			case Variant::STRING:
-				if (--*this->share < 1)
+				if (this->share != 0 && --*this->share < 1)
 				{
-					delete this->share;
-					delete [] this->value.string;
+					free (const_cast<char*> (this->content.string.buffer));
+					free (this->share);
 				}
 
 				break;
@@ -190,17 +201,17 @@ namespace	Tesca
 		switch (this->type)
 		{
 			case Variant::BOOLEAN:
-				*output = this->value.boolean;
+				*output = this->content.boolean;
 
 				return true;
 
 			case Variant::NUMBER:
-				*output = this->value.number != 0;
+				*output = this->content.number != 0;
 
 				return true;
 
 			case Variant::STRING:
-				*output = this->value.string[0] != '\0';
+				*output = this->content.string.length > 0;
 
 				return true;
 
@@ -211,31 +222,20 @@ namespace	Tesca
 
 	bool	Variant::toNumber (Float64* output) const
 	{
-		Float64			number;
-		stringstream	stream;
-
 		switch (this->type)
 		{
 			case Variant::BOOLEAN:
-				*output = this->value.boolean ? 1 : 0;
+				*output = this->content.boolean ? 1 : 0;
 
 				return true;
 
 			case Variant::NUMBER:
-				*output = this->value.number;
+				*output = this->content.number;
 
 				return true;
 
 			case Variant::STRING:
-				stream << this->value.string;
-				stream >> number;
-
-				if (stream.fail ())
-					return false;
-
-				*output = number;
-
-				return true;
+				return Convert::toFloat64 (output, this->content.string.buffer, this->content.string.length);
 
 			default:
 				return false;
@@ -244,24 +244,28 @@ namespace	Tesca
 
 	bool	Variant::toString (string* output) const
 	{
-		ostringstream	stream;
+		char	buffer[64];
+		Int32u	length;
 
 		switch (this->type)
 		{
 			case Variant::BOOLEAN:
-				*output = this->value.boolean ? "true" : "false";
+				*output = this->content.boolean ? "true" : "false";
 
 				return true;
 
 			case Variant::NUMBER:
-				stream << this->value.number;
+				length = Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), this->content.number);
 
-				*output = stream.str ();
+				if (length == 0)
+					return false;
+
+				*output = string (buffer, length);
 
 				return true;
 
 			case Variant::STRING:
-				*output = this->value.string;
+				*output = string (this->content.string.buffer, this->content.string.length);
 
 				return true;
 
