@@ -3,7 +3,7 @@
 
 namespace	Tesca
 {
-	CallbackUnaryAccessor::CallbackUnaryAccessor (const Accessor* source, const Callback* callback) :
+	CallbackUnaryAccessor::CallbackUnaryAccessor (const Accessor* source, Callback callback) :
 		UnaryAccessor (source),
 		callback (callback)
 	{
@@ -11,6 +11,6 @@ namespace	Tesca
 
 	Variant	CallbackUnaryAccessor::evaluate (const Variant& argument) const
 	{
-		return (*this->callback) (argument);
+		return this->callback (argument);
 	}
 }

@@ -18,14 +18,18 @@ SOURCE	= \
 	arithmetic/accessor/unary/callback.cpp \
 	arithmetic/accessor/unary/string.cpp \
 	arithmetic/accessor/unary.cpp \
+	arithmetic/accessor/vector/callback.cpp \
+	arithmetic/accessor/vector.cpp \
 	arithmetic/accessor/void.cpp \
 	arithmetic/accessor.cpp \
 	arithmetic/bucket.cpp \
 	arithmetic/column/value.cpp \
 	arithmetic/column.cpp \
 	arithmetic/slot/average.cpp \
+	arithmetic/slot/count.cpp \
 	arithmetic/slot/last.cpp \
 	arithmetic/slot/sum.cpp \
+	arithmetic/slot/variance.cpp \
 	arithmetic/slot.cpp \
 	arithmetic/table.cpp \
 	expression/aggregator.cpp \

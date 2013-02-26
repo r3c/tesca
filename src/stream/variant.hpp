@@ -30,6 +30,7 @@ namespace	Tesca
 			Variant (bool);
 			Variant (Glay::Float64);
 			Variant (Glay::Int32s);
+			Variant (Glay::Int32u);
 			Variant (const char*, Glay::Int32u);
 			Variant (const std::string&);
 			Variant ();

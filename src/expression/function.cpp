@@ -12,6 +12,7 @@
 #include "../arithmetic/accessor/logical/or.hpp"
 #include "../arithmetic/accessor/unary/callback.hpp"
 #include "../arithmetic/accessor/unary/string.hpp"
+#include "../arithmetic/accessor/vector/callback.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -94,6 +95,50 @@ namespace	Tesca
 			return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
 			{
 				return Variant (a < b);
+			});
+		}},
+		{"max",		1,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+		{
+			return new CallbackVectorAccessor (arguments, [] (const vector<Variant>& values)
+			{
+				bool	defined;
+				Float64	number;
+				Float64	result;
+
+				defined = false;
+
+				for (auto i = values.begin (); i != values.end (); ++i)
+				{
+					if (i->toNumber (&number) && (!defined || number > result))
+					{
+						defined = true;
+						result = number;
+					}
+				}
+
+				return defined ? Variant (result) : Variant::empty;
+			});
+		}},
+		{"min",		1,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+		{
+			return new CallbackVectorAccessor (arguments, [] (const vector<Variant>& values)
+			{
+				bool	defined;
+				Float64	number;
+				Float64	result;
+
+				defined = false;
+
+				for (auto i = values.begin (); i != values.end (); ++i)
+				{
+					if (i->toNumber (&number) && (!defined || number < result))
+					{
+						defined = true;
+						result = number;
+					}
+				}
+
+				return defined ? Variant (result) : Variant::empty;
 			});
 		}},
 		{"mod",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*

@@ -75,20 +75,6 @@ namespace	Tesca
 
 			this->skip (lexer);
 
-			// Read column aggregator
-			if (lexer.getCurrent () == ':')
-			{
-				if (!lexer.next () || !this->skip (lexer))
-					return this->fail (lexer, "expected column aggregator");
-
-				if (!this->readAggregator (lexer, &aggregator))
-					return false;
-
-				this->skip (lexer);
-			}
-			else
-				aggregator = 0;
-
 			// Read column expression
 			if (lexer.getCurrent () == '=')
 			{
@@ -103,9 +89,19 @@ namespace	Tesca
 			else
 				accessor = &VoidAccessor::instance;
 
-			// Create and push column
-			if (aggregator != 0)
+			// Read column aggregator
+			if (lexer.getCurrent () == ':')
+			{
+				if (!lexer.next () || !this->skip (lexer))
+					return this->fail (lexer, "expected column aggregator");
+
+				if (!this->readAggregator (lexer, &aggregator))
+					return false;
+
 				column = aggregator->builder (identifier, accessor);
+
+				this->skip (lexer);
+			}
 			else
 				column = new ValueColumn (identifier, accessor);
 

@@ -2,6 +2,7 @@
 #ifndef __TESCA_STREAM_READER_LINE_CSV_HPP
 #define __TESCA_STREAM_READER_LINE_CSV_HPP
 
+#include <cstdlib>
 #include <functional>
 #include <map>
 #include "../../row/array.hpp"
@@ -13,7 +14,7 @@ namespace	Tesca
 	{
 		public:
 			CSVLineReader (const CSVLineReader&);
-			CSVLineReader (Glay::Pipe::IStream*, const Fields*, bool, char);
+			CSVLineReader (Glay::Pipe::IStream*, const Fields*, const Config&);
 
 			CSVLineReader&	operator = (const CSVLineReader&);
 
@@ -30,7 +31,7 @@ namespace	Tesca
 
 			Lookup		lookup;
 			ArrayRow	row;
-			char		separator;
+			char*		splits;
 
 
 	};

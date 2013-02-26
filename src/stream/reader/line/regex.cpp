@@ -7,9 +7,9 @@ using namespace Glay::System;
 
 namespace	Tesca
 {
-	RegexLineReader::RegexLineReader (Pipe::IStream* input, const Fields* fields, const string& pattern) :
+	RegexLineReader::RegexLineReader (Pipe::IStream* input, const Fields* fields, const Config& config) :
 		LineReader (input),
-		regex (pattern),
+		regex ("FIXME"),
 		row (fields->size ())
 	{
 		Int32u	group;

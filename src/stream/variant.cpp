@@ -35,6 +35,12 @@ namespace	Tesca
 		this->content.number = integer;
 	}
 
+	Variant::Variant (Int32u integer) :
+		type (Variant::NUMBER)
+	{
+		this->content.number = integer;
+	}
+
 	Variant::Variant (const char* buffer, Int32u length) :
 		share (0),
 		type (Variant::STRING)

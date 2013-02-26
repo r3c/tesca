@@ -7,16 +7,18 @@ using namespace Glay::System;
 
 namespace	Tesca
 {
-	CSVLineReader::CSVLineReader (Pipe::IStream* input, const Fields* fields, bool headers, char separator) :
+	CSVLineReader::CSVLineReader (Pipe::IStream* input, const Fields* fields, const Config& config) :
 		LineReader (input),
-		row (fields->size ()),
-		separator (separator)
+		row (fields->size ())
 	{
 		const char*	buffer;
 		Int32u		index;
 		Int32u		length;
 
-		if (headers && this->fetch (&buffer, &length))
+		// Read headers or use numbered default
+		auto	headers = config.find ("headers");
+
+		if (headers != config.end () && this->fetch (&buffer, &length))
 		{
 			this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 			{
@@ -34,6 +36,19 @@ namespace	Tesca
 					this->lookup[index] = i->second;
 			}
 		}
+
+		// Read split characters from configuration
+		auto	splits = config.find ("splits");
+
+		this->splits = static_cast<char*> (calloc (1 << (sizeof (*this->splits) * 8), sizeof (*this->splits)));
+
+		if (splits != config.end ())
+			buffer = splits->second.c_str ();
+		else
+			buffer = ";";
+
+		while (*buffer)
+			this->splits[(Int32u)*buffer++] = 1;
 	}
 
 	const Row&	CSVLineReader::current () const
@@ -66,7 +81,7 @@ namespace	Tesca
 
 		while (length-- > 0)
 		{
-			if (*stop == this->separator)
+			if (this->splits[(Int32u)*stop])
 			{
 				callback (index++, start, stop - start);
 

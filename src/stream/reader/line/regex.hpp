@@ -13,7 +13,7 @@ namespace	Tesca
 	{
 		public:
 			RegexLineReader (const RegexLineReader&);
-			RegexLineReader (Glay::Pipe::IStream*, const Fields*, const std::string&);
+			RegexLineReader (Glay::Pipe::IStream*, const Fields*, const Config&);
 
 			RegexLineReader&	operator = (const RegexLineReader&);
 

@@ -5,10 +5,9 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	AverageSlot::AverageSlot () :
-		count (0),
-		sum (0)
+	AverageSlot::AverageSlot ()
 	{
+		this->reset ();
 	}
 
 	Variant	AverageSlot::current () const

@@ -2,7 +2,9 @@
 #include "format.hpp"
 
 #include <cstring>
+#include <sstream>
 
+using namespace std;
 using namespace Glay;
 
 namespace	Tesca
@@ -20,14 +22,16 @@ namespace	Tesca
 	Reader*	Format::create (Pipe::IStream* stream, const Reader::Fields* fields) const
 	{
 		if (this->parser != 0)
-			return this->parser->builder (stream, fields, this->config.c_str ());
+			return this->parser->builder (stream, fields, this->config);
 
 		return 0;
 	}
 
 	bool	Format::parse (const char* expression)
 	{
-		const char*	stop;
+		stringstream	buffer;
+		string			key;
+		const char*		stop;
 
 		for (stop = expression; *stop != '\0' && *stop != ':'; )
 			++stop;
@@ -42,10 +46,40 @@ namespace	Tesca
 			}
 		}
 
-		if (*stop != '\0')
-			this->config = stop + 1;
-		else
-			this->config = "";
+		// Read configuration
+		this->config.clear ();
+
+		while (*stop != '\0')
+		{
+			// Read configuration key
+			buffer.str ("");
+
+			for (++stop; *stop != '\0' && *stop != '='; ++stop)
+			{
+				if (*stop == '\\' && *(stop + 1) != '\0')
+					++stop;
+
+				buffer.put (*stop);
+			}
+
+			if (*stop == '\0')
+				break;
+
+			key = buffer.str ();
+
+			// Read and store configuration pair
+			buffer.str ("");
+
+			for (++stop; *stop != '\0' && *stop != ';'; ++stop)
+			{
+				if (*stop == '\\' && *(stop + 1) != '\0')
+					++stop;
+
+				buffer.put (*stop);
+			}
+
+			this->config[key] = buffer.str ();
+		}
 
 		return this->parser != 0;
 	}

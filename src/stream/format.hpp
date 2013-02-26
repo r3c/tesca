@@ -2,6 +2,7 @@
 #ifndef __TESCA_STREAM_FORMAT_HPP
 #define __TESCA_STREAM_FORMAT_HPP
 
+#include <map>
 #include <string>
 #include "../glay/glay.hpp"
 #include "parser.hpp"
@@ -22,7 +23,7 @@ namespace	Tesca
 			bool	parse (const char*);
 
 		private:
-			std::string		config;
+			Reader::Config	config;
 			const Parser*	parser;
 	};
 }

@@ -5,9 +5,9 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	SumSlot::SumSlot () :
-		sum (0)
+	SumSlot::SumSlot ()
 	{
+		this->reset ();
 	}
 
 	Variant	SumSlot::current () const
