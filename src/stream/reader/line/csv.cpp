@@ -7,9 +7,9 @@ using namespace Glay::System;
 
 namespace	Tesca
 {
-	CSVLineReader::CSVLineReader (Pipe::IStream* input, const Fields* fields, const Config& config) :
+	CSVLineReader::CSVLineReader (Pipe::IStream* input, const Fields& fields, const Config& config) :
 		LineReader (input),
-		row (fields->size ())
+		row (fields.size ())
 	{
 		const char*	buffer;
 		Int32u		index;
@@ -22,15 +22,15 @@ namespace	Tesca
 		{
 			this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 			{
-				auto	field = fields->find (string (buffer, length));
+				auto	field = fields.find (string (buffer, length));
 
-				if (field != fields->end ())
+				if (field != fields.end ())
 					this->lookup[index] = field->second;
 			});
 		}
 		else
 		{
-			for (auto i = fields->begin (); i != fields->end (); ++i)
+			for (auto i = fields.begin (); i != fields.end (); ++i)
 			{
 				if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
 					this->lookup[index] = i->second;

@@ -19,7 +19,7 @@ namespace	Tesca
 	}
 
 	template<typename T>
-	bool	GroupColumn<T>::key () const
+	bool	GroupColumn<T>::group () const
 	{
 		return false;
 	}

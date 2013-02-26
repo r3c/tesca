@@ -19,7 +19,7 @@ namespace	Tesca
 
 			Format&	operator = (const Format&);
 
-			Reader*	create (Glay::Pipe::IStream*, const Reader::Fields*) const;
+			Reader*	create (Glay::Pipe::IStream*, const Reader::Fields&) const;
 			bool	parse (const char*);
 
 		private:

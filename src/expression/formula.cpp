@@ -10,6 +10,7 @@
 using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
+using namespace Glay::System;
 
 namespace	Tesca
 {
@@ -293,9 +294,7 @@ namespace	Tesca
 
 		if (buffer.tellp () > 0)
 		{
-			buffer >> number;
-
-			if (buffer.fail ())
+			if (!Convert::toFloat64 (&number, buffer.str ().c_str (), buffer.str ().length ()))
 				return this->fail (lexer, "invalid number");
 
 			*output = new ConstantAccessor (Variant (number));

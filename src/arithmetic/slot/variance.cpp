@@ -19,7 +19,8 @@ namespace	Tesca
 	}
 
 	/*
-	** From: http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Online_algorithm
+	** From:
+	** http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Online_algorithm
 	*/
 	bool	VarianceSlot::push (const Variant& value)
 	{

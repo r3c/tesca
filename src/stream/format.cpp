@@ -19,7 +19,7 @@ namespace	Tesca
 	{
 	}
 
-	Reader*	Format::create (Pipe::IStream* stream, const Reader::Fields* fields) const
+	Reader*	Format::create (Pipe::IStream* stream, const Reader::Fields& fields) const
 	{
 		if (this->parser != 0)
 			return this->parser->builder (stream, fields, this->config);

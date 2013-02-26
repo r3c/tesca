@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_ACCESSOR_BINARY_NUMBER_HPP
-#define __TESCA_ACCESSOR_BINARY_NUMBER_HPP
+#ifndef __TESCA_ARITHMETIC_ACCESSOR_BINARY_NUMBER_HPP
+#define __TESCA_ARITHMETIC_ACCESSOR_BINARY_NUMBER_HPP
 
 #include "../../../glay/glay.hpp"
 #include "../binary.hpp"

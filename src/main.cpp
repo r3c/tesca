@@ -77,7 +77,7 @@ void	debug_print (const Table& table)
 	}
 }
 
-bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, const Reader::Fields* fields)
+bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, const Reader::Fields& fields)
 {
 	Reader*	reader;
 
@@ -120,7 +120,7 @@ int	main (int argc, char* argv[])
 		return 1;
 	}
 
-	table.reset (&formula.getColumns ());
+	table.reset (formula.getColumns ());
 
 	if (argc > 3)
 		stream = new Pipe::FileIStream (argv[3]);
@@ -128,7 +128,7 @@ int	main (int argc, char* argv[])
 		stream = new Pipe::FileIStream (stdin);
 
 	if (*stream)
-		debug_read (table, format, stream, &formula.getFields ());
+		debug_read (table, format, stream, formula.getFields ());
 	else if (argc > 3)
 		cerr << "error: cannot open file \"" << argv[3] << "\" for reading" << endl;
 	else

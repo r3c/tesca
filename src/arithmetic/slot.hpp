@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_SLOT_HPP
-#define __TESCA_SLOT_HPP
+#ifndef __TESCA_ARITHMETIC_SLOT_HPP
+#define __TESCA_ARITHMETIC_SLOT_HPP
 
 #include "../stream/variant.hpp"
 

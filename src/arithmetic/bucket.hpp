@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_BUCKET_HPP
-#define __TESCA_BUCKET_HPP
+#ifndef __TESCA_ARITHMETIC_BUCKET_HPP
+#define __TESCA_ARITHMETIC_BUCKET_HPP
 
 #include "../glay/glay.hpp"
 #include "../stream/variant.hpp"

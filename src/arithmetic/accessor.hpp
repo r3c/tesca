@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_ACCESSOR_HPP
-#define __TESCA_ACCESSOR_HPP
+#ifndef __TESCA_ARITHMETIC_ACCESSOR_HPP
+#define __TESCA_ARITHMETIC_ACCESSOR_HPP
 
 #include "../stream/row.hpp"
 #include "../stream/variant.hpp"

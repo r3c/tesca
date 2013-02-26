@@ -17,7 +17,7 @@ namespace	Tesca
 		return new LastSlot ();
 	}
 
-	bool	ValueColumn::key () const
+	bool	ValueColumn::group () const
 	{
 		return true;
 	}

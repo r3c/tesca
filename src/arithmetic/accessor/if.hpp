@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_ACCESSOR_IF_HPP
-#define __TESCA_ACCESSOR_IF_HPP
+#ifndef __TESCA_ARITHMETIC_ACCESSOR_IF_HPP
+#define __TESCA_ARITHMETIC_ACCESSOR_IF_HPP
 
 #include "../accessor.hpp"
 

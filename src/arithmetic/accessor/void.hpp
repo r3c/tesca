@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_ACCESSOR_VOID_HPP
-#define __TESCA_ACCESSOR_VOID_HPP
+#ifndef __TESCA_ARITHMETIC_ACCESSOR_VOID_HPP
+#define __TESCA_ARITHMETIC_ACCESSOR_VOID_HPP
 
 #include "../accessor.hpp"
 

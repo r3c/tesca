@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_COLUMN_HPP
-#define __TESCA_COLUMN_HPP
+#ifndef __TESCA_ARITHMETIC_COLUMN_HPP
+#define __TESCA_ARITHMETIC_COLUMN_HPP
 
 #include <string>
 #include "../stream/row.hpp"
@@ -22,7 +22,7 @@ namespace	Tesca
 			const std::string&	getIdentifier () const;
 
 			virtual Slot*	create () const = 0;
-			virtual bool	key () const = 0;
+			virtual bool	group () const = 0;
 			Variant			read (const Row&) const;
 
 		private:

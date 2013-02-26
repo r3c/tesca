@@ -99,17 +99,18 @@ namespace	Tesca
 		}},
 		{"max",		1,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new CallbackVectorAccessor (arguments, [] (const vector<Variant>& values)
+			return new CallbackVectorAccessor (arguments, [] (const Variant* values, Int32u length)
 			{
 				bool	defined;
 				Float64	number;
 				Float64	result;
 
 				defined = false;
+				result = 0;
 
-				for (auto i = values.begin (); i != values.end (); ++i)
+				for (; length-- > 0; ++values)
 				{
-					if (i->toNumber (&number) && (!defined || number > result))
+					if (values->toNumber (&number) && (!defined || number > result))
 					{
 						defined = true;
 						result = number;
@@ -121,17 +122,18 @@ namespace	Tesca
 		}},
 		{"min",		1,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 		{
-			return new CallbackVectorAccessor (arguments, [] (const vector<Variant>& values)
+			return new CallbackVectorAccessor (arguments, [] (const Variant* values, Int32u length)
 			{
 				bool	defined;
 				Float64	number;
 				Float64	result;
 
 				defined = false;
+				result = 0;
 
-				for (auto i = values.begin (); i != values.end (); ++i)
+				for (; length-- > 0; ++values)
 				{
-					if (i->toNumber (&number) && (!defined || number < result))
+					if (values->toNumber (&number) && (!defined || number < result))
 					{
 						defined = true;
 						result = number;

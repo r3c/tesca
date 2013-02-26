@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_ACCESSOR_UNARY_HPP
-#define __TESCA_ACCESSOR_UNARY_HPP
+#ifndef __TESCA_ARITHMETIC_ACCESSOR_UNARY_HPP
+#define __TESCA_ARITHMETIC_ACCESSOR_UNARY_HPP
 
 #include "../accessor.hpp"
 

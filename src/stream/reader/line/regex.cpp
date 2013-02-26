@@ -7,14 +7,14 @@ using namespace Glay::System;
 
 namespace	Tesca
 {
-	RegexLineReader::RegexLineReader (Pipe::IStream* input, const Fields* fields, const Config& config) :
+	RegexLineReader::RegexLineReader (Pipe::IStream* input, const Fields& fields, const Config& config) :
 		LineReader (input),
 		regex ("FIXME"),
-		row (fields->size ())
+		row (fields.size ())
 	{
 		Int32u	group;
 
-		for (auto i = fields->begin (); i != fields->end (); ++i)
+		for (auto i = fields.begin (); i != fields.end (); ++i)
 		{
 			if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
 				this->lookup[group] = i->second;

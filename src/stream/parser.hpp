@@ -13,7 +13,7 @@ namespace	Tesca
 	struct	Parser
 	{
 		typedef std::map<std::string, std::string>	Config;
-		typedef std::function<Reader* (Glay::Pipe::IStream*, const Reader::Fields*, const Config&)>	Builder;
+		typedef std::function<Reader* (Glay::Pipe::IStream*, const Reader::Fields&, const Config&)>	Builder;
 
 		static const Parser	parsers[];
 

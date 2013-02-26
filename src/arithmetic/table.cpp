@@ -3,16 +3,9 @@
 
 using namespace Glay;
 
-namespace
-{
-	static const Tesca::Table::Columns	emptyColumns[0];
-}
-
 namespace	Tesca
 {
-	Table::Table () :
-		columns (emptyColumns),
-		keys (0)
+	Table::Table ()
 	{
 	}
 
@@ -23,12 +16,12 @@ namespace	Tesca
 
 	const Table::Columns&	Table::getColumns () const
 	{
-		return *this->columns;
+		return this->columns;
 	}
 
 	Int32u	Table::getWidth () const
 	{
-		return this->columns->size ();
+		return this->columns.size ();
 	}
 
 	Table::iterator	Table::begin () const
@@ -55,42 +48,33 @@ namespace	Tesca
 
 	void	Table::push (const Row& row)
 	{
-		Bucket	bucket (this->keys);
+		Bucket	bucket (this->indices.size ());
 		Int32u	index;
-		Int32u	key;
 		Slot*	slot;
 		Slot**	slots;
-		Variant	values[this->columns->size ()];
+		Variant	values[this->columns.size ()];
 
 		// Update columns and build bucket
-		index = 0;
-		key = 0;
+		for (auto i = this->columns.size (); i-- > 0; )
+			values[i] = this->columns[i]->read (row);
 
-		for (auto i = this->columns->begin (); i != this->columns->end (); ++i)
-		{
-			values[index] = (*i)->read (row);
-
-			if ((*i)->key ())
-				bucket.set (key++, values[index]);
-
-			++index;
-		}
+		for (auto i = this->indices.size (); i-- > 0; )
+			bucket.set (i, values[this->indices[i]]);
 
 		// Retrieve group from bucket or create it
 		auto	found = this->groups.find (bucket);
 
 		if (found == this->groups.end ())
 		{
-			index = 0;
-			slots = new Slot*[this->columns->size ()];
+			slots = new Slot*[this->columns.size ()];
 
-			for (auto i = this->columns->begin (); i != this->columns->end (); ++i)
+			for (auto i = this->columns.size (); i-- > 0; )
 			{
-				slot = (*i)->create ();
+				slot = this->columns[i]->create ();
 
 				this->slots.push_back (slot);
 
-				slots[index++] = slot;
+				slots[i] = slot;
 			}
 
 			this->groups[bucket.keep ()] = slots;
@@ -99,21 +83,27 @@ namespace	Tesca
 			slots = found->second;
 
 		// Append column values to group
-		for (Int32u i = this->columns->size (); i-- > 0; )
+		for (auto i = this->columns.size (); i-- > 0; )
 			slots[i]->push (values[i]);
 	}
 
-	void	Table::reset (const Columns* columns)
+	void	Table::reset (const Columns& columns)
 	{
+		Int32u	index;
+
 		this->clear ();
 
 		this->columns = columns;
-		this->keys = 0;
+		this->indices.clear ();
 
-		for (auto i = columns->begin (); i != columns->end (); ++i)
+		index = 0;
+
+		for (auto i = columns.begin (); i != columns.end (); ++i)
 		{
-			if ((*i)->key ())
-				++this->keys;
+			if ((*i)->group ())
+				this->indices.push_back (index);
+
+			++index;
 		}
 	}
 }

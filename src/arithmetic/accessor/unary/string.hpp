@@ -1,7 +1,8 @@
 
-#ifndef __TESCA_ACCESSOR_UNARY_STRING_HPP
-#define __TESCA_ACCESSOR_UNARY_STRING_HPP
+#ifndef __TESCA_ARITHMETIC_ACCESSOR_UNARY_STRING_HPP
+#define __TESCA_ARITHMETIC_ACCESSOR_UNARY_STRING_HPP
 
+#include <functional>
 #include "../unary.hpp"
 
 namespace	Tesca
@@ -9,14 +10,14 @@ namespace	Tesca
 	class	StringUnaryAccessor : public UnaryAccessor
 	{
 		public:
-			typedef	Variant	(Callback) (std::string&);
+			typedef	std::function<Variant (std::string&)>	Callback;
 
-			StringUnaryAccessor (const Accessor*, const Callback*);
+			StringUnaryAccessor (const Accessor*, Callback);
 
 			virtual Variant	evaluate (const Variant&) const;
 
 		private:
-			Callback*	callback;
+			Callback	callback;
 	};
 }
 

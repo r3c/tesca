@@ -6,7 +6,7 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	StringUnaryAccessor::StringUnaryAccessor (const Accessor* source, const Callback* callback) :
+	StringUnaryAccessor::StringUnaryAccessor (const Accessor* source, Callback callback) :
 		UnaryAccessor (source),
 		callback (callback)
 	{
@@ -17,7 +17,7 @@ namespace	Tesca
 		string	str;
 
 		if (argument.toString (&str))
-			return (*this->callback) (str);
+			return this->callback (str);
 
 		return Variant::empty;
 	}

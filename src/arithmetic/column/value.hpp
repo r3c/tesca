@@ -12,7 +12,7 @@ namespace	Tesca
 			ValueColumn (const std::string&, const Accessor*);
 
 			virtual Slot*	create () const;
-			virtual bool	key () const;
+			virtual bool	group () const;
 	};
 }
 
