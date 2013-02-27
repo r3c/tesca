@@ -11,28 +11,31 @@
 
 namespace	Tesca
 {
-	const Aggregator	Aggregator::aggregators[] =
+	namespace	Expression
 	{
-		{"avg",		[] (const string& identifier, const Accessor* accessor) -> Column*
+		const Aggregator	Aggregator::aggregators[] =
 		{
-			return new GroupColumn<AverageSlot> (identifier, accessor);
-		}},
-		{"count",	[] (const string& identifier, const Accessor* accessor) -> Column*
-		{
-			return new GroupColumn<CountSlot> (identifier, accessor);
-		}},
-		{"last",	[] (const string& identifier, const Accessor* accessor) -> Column*
-		{
-			return new GroupColumn<LastSlot> (identifier, accessor);
-		}},
-		{"sum",		[] (const string& identifier, const Accessor* accessor) -> Column*
-		{
-			return new GroupColumn<SumSlot> (identifier, accessor);
-		}},
-		{"var",		[] (const string& identifier, const Accessor* accessor) -> Column*
-		{
-			return new GroupColumn<VarianceSlot> (identifier, accessor);
-		}},
-		{0, 0}
-	};
+			{"avg",		[] (const string& identifier, const Accessor* accessor) -> Column*
+			{
+				return new GroupColumn<AverageSlot> (identifier, accessor);
+			}},
+			{"count",	[] (const string& identifier, const Accessor* accessor) -> Column*
+			{
+				return new GroupColumn<CountSlot> (identifier, accessor);
+			}},
+			{"last",	[] (const string& identifier, const Accessor* accessor) -> Column*
+			{
+				return new GroupColumn<LastSlot> (identifier, accessor);
+			}},
+			{"sum",		[] (const string& identifier, const Accessor* accessor) -> Column*
+			{
+				return new GroupColumn<SumSlot> (identifier, accessor);
+			}},
+			{"var",		[] (const string& identifier, const Accessor* accessor) -> Column*
+			{
+				return new GroupColumn<VarianceSlot> (identifier, accessor);
+			}},
+			{0, 0}
+		};
+	}
 }

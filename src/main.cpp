@@ -1,8 +1,10 @@
 
 #include <iostream>
 #include <vector>
+#include "arithmetic/lookup.hpp"
 #include "arithmetic/table.hpp"
 #include "expression/formula.hpp"
+#include "expression/select.hpp"
 #include "stream/format.hpp"
 
 using namespace std;
@@ -43,8 +45,6 @@ class	MyLineReader : public LineReader
 		ArrayRow	row;
 };
 
-//
-
 ostream&	operator << (ostream& stream, const Variant& value)
 {
 	string	buffer;
@@ -77,11 +77,11 @@ void	debug_print (const Table& table)
 	}
 }
 
-bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, const Reader::Fields& fields)
+bool	debug_read (Table& table, const Format& format, const Lookup& lookup, Pipe::IStream* stream)
 {
 	Reader*	reader;
 
-	reader = format.create (stream, fields);
+	reader = format.create (stream, lookup);
 
 	if (!reader)
 		return false;
@@ -97,44 +97,117 @@ bool	debug_read (Table& table, const Format& format, Pipe::IStream* stream, cons
 int	main (int argc, char* argv[])
 {
 	Format				format;
-	Formula				formula;
+	const char*			formatString;
+	Expression::Formula	formula;
+	const char*			formulaString;
+	int					index;
+	Lookup				lookup;
+//	const char*			outputString;
+	Expression::Select	select;
+	const char*			selectString;
 	Pipe::FileIStream*	stream;
 	Table				table;
 
-	if (argc < 3)
-	{
-		cout << "usage: " << argv[0] << " <input format> <output formula> [<file> [<file>...]]" << endl;
+	formatString = "csv";
+	formulaString = "nb_lines:count";
+	selectString = "1";
 
-		return 0;
+	for (index = 1; index < argc && argv[index][0] == '-'; ++index)
+	{
+		switch (argv[index][1])
+		{
+			case 'f':
+				if (++index >= argc)
+				{
+					cerr << "error: missing formula expression argument" << endl;
+
+					return 1;
+				}
+
+				formulaString = argv[index];
+
+				break;
+
+			case 'h':
+				cout << "usage: " << argv[0] << " [-i <format>] [-f <formula>] [<file> [<file>...]]" << endl;
+				cout << "  -f: result formula, e.g. 'name = $0, duration = $1:sum'" << endl;
+				cout << "  -i: input format, e.g. 'csv'" << endl;
+//				cout << "  -o: output format, e.g. 'FIXME'" << endl;
+				cout << "  -s: selection filter, e.g. 'ge(len($0), 4)'" << endl;
+
+				return 0;
+
+			case 'i':
+				if (++index >= argc)
+				{
+					cerr << "error: missing input format argument" << endl;
+
+					return 1;
+				}
+
+				formatString = argv[index];
+
+				break;
+
+			case 's':
+				if (++index >= argc)
+				{
+					cerr << "error: missing select filter argument" << endl;
+
+					return 1;
+				}
+
+				selectString = argv[index];
+
+				break;
+
+			default:
+				cerr << "error: unknown option '" << argv[index][1] << "'" << endl;
+
+				return 1;
+		}
 	}
 
-	if (!format.parse (argv[1]))
+	if (!format.parse (formatString))
 	{
 		cerr << "error: invalid input format" << endl;
-	}
-
-	if (!formula.parse (argv[2]))
-	{
-		cerr << "error: " << formula.getError () << endl;
 
 		return 1;
 	}
 
-	table.reset (formula.getColumns ());
+	if (!formula.parse (lookup, formulaString))
+	{
+		cerr << "error: invalid formula expression (" << formula.getMessage () << ")" << endl;
 
-	if (argc > 3)
-		stream = new Pipe::FileIStream (argv[3]);
-	else
-		stream = new Pipe::FileIStream (stdin);
+		return 1;
+	}
 
-	if (*stream)
-		debug_read (table, format, stream, formula.getFields ());
-	else if (argc > 3)
-		cerr << "error: cannot open file \"" << argv[3] << "\" for reading" << endl;
-	else
-		cerr << "error: cannot open standard input for reading" << endl;
+	if (!select.parse (lookup, selectString))
+	{
+		cerr << "error: invalid select expression (" << select.getMessage () << ")" << endl;
 
-	delete stream;
+		return 1;
+	}
+
+	table.reset (select.getAccessor (), formula.getColumns ());
+
+	do
+	{
+		if (index < argc)
+			stream = new Pipe::FileIStream (argv[index]);
+		else
+			stream = new Pipe::FileIStream (stdin);
+
+		if (*stream)
+			debug_read (table, format, lookup, stream);
+		else if (index < argc)
+			cerr << "error: cannot open file '" << argv[index] << "' for reading" << endl;
+		else
+			cerr << "error: cannot open standard input for reading" << endl;
+
+		delete stream;
+	}
+	while (++index < argc);
 
 	debug_print (table);
 }

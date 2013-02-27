@@ -10,9 +10,9 @@ namespace	Tesca
 {
 	const Parser	Parser::parsers[] =
 	{
-		{"csv",		[] (Pipe::IStream* stream, const Reader::Fields& fields, const Config& config) -> Reader*
+		{"csv",		[] (Pipe::IStream* stream, const Lookup& lookup, const Config& config) -> Reader*
 		{
-			return new CSVLineReader (stream, fields, config);
+			return new CSVLineReader (stream, lookup, config);
 		}},
 		{0, 0}
 	};

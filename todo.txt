@@ -2,3 +2,5 @@ X Value => Variant
 X Split column & aggregator
 X Shared string pointer for variants
 - Implement a cleaner error messages system
+- Perform automatic casts on compare
+- Move lookup to stream

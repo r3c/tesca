@@ -6,24 +6,27 @@
 
 namespace	Tesca
 {
-	class	Lexer
+	namespace	Expression
 	{
-		public:
-			Lexer (const char*);
+		class	Lexer
+		{
+			public:
+				Lexer (const char*);
 
-			char			getCurrent () const;
-			Glay::Int32u	getIndex () const;
+				char			getCurrent () const;
+				Glay::Int32u	getIndex () const;
 
-			bool	eof () const;
-			bool	next ();
+				bool	eof () const;
+				bool	next ();
 
-		private:
-			char						current;
-			bool						finished;
-			Glay::Int32u				index;
-			Glay::Pipe::TypeReader		reader;
-			Glay::Pipe::MemoryIStream	stream;
-	};
+			private:
+				char						current;
+				bool						finished;
+				Glay::Int32u				index;
+				Glay::Pipe::TypeReader		reader;
+				Glay::Pipe::MemoryIStream	stream;
+		};
+	}
 }
 
 #endif

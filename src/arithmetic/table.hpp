@@ -19,7 +19,6 @@ namespace	Tesca
 		public:
 			typedef std::vector<const Column*>	Columns;
 			typedef std::map<Bucket, Slot**>	Groups;
-
 			typedef Groups::const_iterator		iterator;
 
 			Table (const Table&);
@@ -36,16 +35,17 @@ namespace	Tesca
 
 			void	clear ();
 			void	push (const Row&);
-			void	reset (const Columns&);
+			void	reset (const Accessor*, const Columns&);
 
 		private:
 			typedef std::vector<Glay::Int32u>	Indices;
 			typedef std::vector<Slot*>			Slots;
 
-			Columns	columns;
-			Indices	indices;
-			Groups	groups;
-			Slots	slots;
+			Columns			columns;
+			Indices			indices;
+			Groups			groups;
+			const Accessor*	select;
+			Slots			slots;
 	};
 }
 

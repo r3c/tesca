@@ -4,6 +4,7 @@
 
 #include <map>
 #include <string>
+#include "../arithmetic/lookup.hpp"
 #include "../glay/glay.hpp"
 #include "parser.hpp"
 #include "reader.hpp"
@@ -19,7 +20,7 @@ namespace	Tesca
 
 			Format&	operator = (const Format&);
 
-			Reader*	create (Glay::Pipe::IStream*, const Reader::Fields&) const;
+			Reader*	create (Glay::Pipe::IStream*, const Lookup&) const;
 			bool	parse (const char*);
 
 		private:

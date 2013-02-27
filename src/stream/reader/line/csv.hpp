@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <functional>
 #include <map>
+#include "../../../arithmetic/lookup.hpp"
 #include "../../row/array.hpp"
 #include "../line.hpp"
 
@@ -14,7 +15,7 @@ namespace	Tesca
 	{
 		public:
 			CSVLineReader (const CSVLineReader&);
-			CSVLineReader (Glay::Pipe::IStream*, const Fields&, const Config&);
+			CSVLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
 
 			CSVLineReader&	operator = (const CSVLineReader&);
 
@@ -25,11 +26,11 @@ namespace	Tesca
 
 		private:
 			typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
-			typedef std::map<Glay::Int32u, Glay::Int32u>							Lookup;
+			typedef std::map<Glay::Int32u, Glay::Int32u>							Mapping;
 
 			virtual void	split (const char*, Glay::Int32u, Callback);
 
-			Lookup		lookup;
+			Mapping		mapping;
 			ArrayRow	row;
 			char*		splits;
 

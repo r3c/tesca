@@ -10,17 +10,20 @@
 
 namespace	Tesca
 {
-	struct	Function
+	namespace	Expression
 	{
-		typedef std::function<Accessor* (const std::vector<const Accessor*>&)>	Builder;
+		struct	Function
+		{
+			typedef std::function<Accessor* (const std::vector<const Accessor*>&)>	Builder;
 
-		static const Function	functions[];
+			static const Function	functions[];
 
-		const char*		name;
-		Glay::Int32u	min;
-		Glay::Int32u	max;
-		Builder			builder;
-	};
+			const char*		name;
+			Glay::Int32u	min;
+			Glay::Int32u	max;
+			Builder			builder;
+		};
+	}
 }
 
 #endif

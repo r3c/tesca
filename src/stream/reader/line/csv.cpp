@@ -7,9 +7,9 @@ using namespace Glay::System;
 
 namespace	Tesca
 {
-	CSVLineReader::CSVLineReader (Pipe::IStream* input, const Fields& fields, const Config& config) :
+	CSVLineReader::CSVLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
 		LineReader (input),
-		row (fields.size ())
+		row (lookup.count ())
 	{
 		const char*	buffer;
 		Int32u		index;
@@ -22,18 +22,18 @@ namespace	Tesca
 		{
 			this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 			{
-				auto	field = fields.find (string (buffer, length));
+				Int32u	target;
 
-				if (field != fields.end ())
-					this->lookup[index] = field->second;
+				if (lookup.find (string (buffer, length), &target))
+					this->mapping[index] = target;
 			});
 		}
 		else
 		{
-			for (auto i = fields.begin (); i != fields.end (); ++i)
+			for (auto i = lookup.begin (); i != lookup.end (); ++i)
 			{
 				if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
-					this->lookup[index] = i->second;
+					this->mapping[index] = i->second;
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace	Tesca
 		if (splits != config.end ())
 			buffer = splits->second.c_str ();
 		else
-			buffer = ";";
+			buffer = ",";
 
 		while (*buffer)
 			this->splits[(Int32u)*buffer++] = 1;
@@ -62,9 +62,9 @@ namespace	Tesca
 
 		this->split (line, length, [&] (Int32u index, const char* buffer, Int32u length)
 		{
-			auto	field = this->lookup.find (index);
+			auto	field = this->mapping.find (index);
 
-			if (field != this->lookup.end ())
+			if (field != this->mapping.end ())
 				this->row.set (field->second, Variant (buffer, length));
 		});
 	}

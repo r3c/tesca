@@ -12,7 +12,6 @@ namespace	Tesca
 	{
 		public:
 			typedef std::map<std::string, std::string>	Config;
-			typedef std::map<std::string, Glay::Int32u>	Fields;
 
 					Reader (const Reader&);
 					Reader ();

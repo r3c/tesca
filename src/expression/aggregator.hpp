@@ -9,15 +9,18 @@
 
 namespace	Tesca
 {
-	struct	Aggregator
+	namespace	Expression
 	{
-		typedef std::function<Column* (const std::string&, const Accessor*)>	Builder;
+		struct	Aggregator
+		{
+			typedef std::function<Column* (const std::string&, const Accessor*)>	Builder;
 
-		static const Aggregator	aggregators[];
+			static const Aggregator	aggregators[];
 
-		const char*	name;
-		Builder		builder;
-	};
+			const char*	name;
+			Builder		builder;
+		};
+	}
 }
 
 #endif

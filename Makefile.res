@@ -25,6 +25,7 @@ SOURCE	= \
 	arithmetic/bucket.cpp \
 	arithmetic/column/value.cpp \
 	arithmetic/column.cpp \
+	arithmetic/lookup.cpp \
 	arithmetic/slot/average.cpp \
 	arithmetic/slot/count.cpp \
 	arithmetic/slot/last.cpp \
@@ -36,6 +37,8 @@ SOURCE	= \
 	expression/formula.cpp \
 	expression/function.cpp \
 	expression/lexer.cpp \
+	expression/parser.cpp \
+	expression/select.cpp \
 	glay/parallel/mutex.cpp \
 	glay/parallel/signal.cpp \
 	glay/pipe/reader/binary.cpp \

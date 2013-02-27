@@ -1,11 +1,14 @@
 
 #include "table.hpp"
 
+#include "accessor/void.hpp"
+
 using namespace Glay;
 
 namespace	Tesca
 {
-	Table::Table ()
+	Table::Table () :
+		select (&VoidAccessor::instance)
 	{
 	}
 
@@ -36,6 +39,8 @@ namespace	Tesca
 
 	void	Table::clear ()
 	{
+		this->select = &VoidAccessor::instance;
+
 		for (auto i = this->groups.begin (); i != this->groups.end (); ++i)
 			delete [] i->second;
 
@@ -49,10 +54,14 @@ namespace	Tesca
 	void	Table::push (const Row& row)
 	{
 		Bucket	bucket (this->indices.size ());
-		Int32u	index;
+		bool	filter;
 		Slot*	slot;
 		Slot**	slots;
 		Variant	values[this->columns.size ()];
+
+		// Select row or exit if it should be discarded
+		if (!this->select->read (row).toBoolean (&filter) || !filter)
+			return;
 
 		// Update columns and build bucket
 		for (auto i = this->columns.size (); i-- > 0; )
@@ -87,13 +96,15 @@ namespace	Tesca
 			slots[i]->push (values[i]);
 	}
 
-	void	Table::reset (const Columns& columns)
+	void	Table::reset (const Accessor* select, const Columns& columns)
 	{
 		Int32u	index;
 
 		this->clear ();
 
 		this->columns = columns;
+		this->select = select;
+
 		this->indices.clear ();
 
 		index = 0;
