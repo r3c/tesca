@@ -1,6 +1,8 @@
 
 #include "constant.hpp"
 
+using namespace Tesca::Stream;
+
 namespace	Tesca
 {
 	ConstantAccessor::ConstantAccessor (const Variant& constant) :

@@ -3,11 +3,14 @@
 
 namespace	Tesca
 {
-	Reader::Reader ()
+	namespace	Stream
 	{
-	}
+		Reader::Reader ()
+		{
+		}
 
-	Reader::~Reader ()
-	{
+		Reader::~Reader ()
+		{
+		}
 	}
 }

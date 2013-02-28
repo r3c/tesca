@@ -12,8 +12,8 @@ namespace	Tesca
 			LogicalAccessor (const Accessor*, const Accessor*);
 
 		protected:
-			bool	testLHS (const Row&) const;
-			bool	testRHS (const Row&) const;
+			bool	testLHS (const Stream::Row&) const;
+			bool	testRHS (const Stream::Row&) const;
 
 		private:
 			const Accessor*	lhs;

@@ -12,7 +12,7 @@ namespace	Tesca
 			static const VoidAccessor	instance;
 
 		protected:
-			virtual Variant	read (const Row&) const;
+			virtual Stream::Variant	read (const Stream::Row&) const;
 	};
 }
 

@@ -1,6 +1,8 @@
 
 #include "binary.hpp"
 
+using namespace Tesca::Stream;
+
 namespace	Tesca
 {
 	BinaryAccessor::BinaryAccessor (const Accessor* lhs, const Accessor* rhs) :

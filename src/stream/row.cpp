@@ -3,11 +3,14 @@
 
 namespace	Tesca
 {
-	Row::Row ()
+	namespace	Stream
 	{
-	}
+		Row::Row ()
+		{
+		}
 
-	Row::~Row ()
-	{
+		Row::~Row ()
+		{
+		}
 	}
 }

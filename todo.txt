@@ -1,6 +1,9 @@
 X Value => Variant
 X Split column & aggregator
 X Shared string pointer for variants
+X Perform automatic casts on compare
+X Move lookup to stream
 - Implement a cleaner error messages system
-- Perform automatic casts on compare
-- Move lookup to stream
+- Implement JSON reader
+- Implement output formatting
+- Implement chained aggregations

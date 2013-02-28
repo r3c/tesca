@@ -7,18 +7,21 @@
 
 namespace	Tesca
 {
-	class	Row
+	namespace	Stream
 	{
-		public:
-					Row (const Row&);
-					Row ();
-			virtual	~Row ();
+		class	Row
+		{
+			public:
+						Row (const Row&);
+						Row ();
+				virtual	~Row ();
 
-			Row&					operator = (const Row&);
-			virtual const Variant&	operator [] (Glay::Int32u) const = 0;
+				Row&					operator = (const Row&);
+				virtual const Variant&	operator [] (Glay::Int32u) const = 0;
 
-			virtual Glay::Int32u	getLength () const = 0;
-	};
+				virtual Glay::Int32u	getLength () const = 0;
+		};
+	}
 }
 
 #endif

@@ -11,7 +11,7 @@ namespace	Tesca
 		public:
 			AndLogicalAccessor (const Accessor*, const Accessor*);
 
-			virtual Variant	read (const Row&) const;
+			virtual Stream::Variant	read (const Stream::Row&) const;
 	};
 }
 

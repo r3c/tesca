@@ -13,7 +13,7 @@ namespace	Tesca
 			IfAccessor (const Accessor*, const Accessor*);
 
 		protected:
-			virtual Variant	read (const Row&) const;
+			virtual Stream::Variant	read (const Stream::Row&) const;
 
 		private:
 			const Accessor*	condition;

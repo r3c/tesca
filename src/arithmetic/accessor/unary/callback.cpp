@@ -1,6 +1,8 @@
 
 #include "callback.hpp"
 
+using namespace Tesca::Stream;
+
 namespace	Tesca
 {
 	CallbackUnaryAccessor::CallbackUnaryAccessor (const Accessor* source, Callback callback) :

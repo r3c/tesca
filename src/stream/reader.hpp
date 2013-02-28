@@ -8,20 +8,23 @@
 
 namespace	Tesca
 {
-	class	Reader
+	namespace	Stream
 	{
-		public:
-			typedef std::map<std::string, std::string>	Config;
+		class	Reader
+		{
+			public:
+				typedef std::map<std::string, std::string>	Config;
 
-					Reader (const Reader&);
-					Reader ();
-			virtual	~Reader ();
+						Reader (const Reader&);
+						Reader ();
+				virtual	~Reader ();
 
-			Reader&	operator = (const Reader&);
+				Reader&	operator = (const Reader&);
 
-			virtual const Row&	current () const = 0;
-			virtual bool		next () = 0;
-	};
+				virtual const Row&	current () const = 0;
+				virtual bool		next () = 0;
+		};
+	}
 }
 
 #endif

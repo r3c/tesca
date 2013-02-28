@@ -9,13 +9,13 @@ namespace	Tesca
 	class	ConstantAccessor : public Accessor
 	{
 		public:
-			ConstantAccessor (const Variant&);
+			ConstantAccessor (const Stream::Variant&);
 
 		protected:
-			virtual Variant	read (const Row&) const;
+			virtual Stream::Variant	read (const Stream::Row&) const;
 
 		private:
-			Variant	constant;
+			Stream::Variant	constant;
 	};
 }
 

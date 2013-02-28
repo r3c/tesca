@@ -10,11 +10,11 @@ namespace	Tesca
 	class	StringUnaryAccessor : public UnaryAccessor
 	{
 		public:
-			typedef	std::function<Variant (std::string&)>	Callback;
+			typedef	std::function<Stream::Variant (const std::string&)>	Callback;
 
 			StringUnaryAccessor (const Accessor*, Callback);
 
-			virtual Variant	evaluate (const Variant&) const;
+			virtual Stream::Variant	evaluate (const Stream::Variant&) const;
 
 		private:
 			Callback	callback;

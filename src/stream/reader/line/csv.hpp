@@ -5,37 +5,40 @@
 #include <cstdlib>
 #include <functional>
 #include <map>
-#include "../../../arithmetic/lookup.hpp"
 #include "../../row/array.hpp"
+#include "../../lookup.hpp"
 #include "../line.hpp"
 
 namespace	Tesca
 {
-	class	CSVLineReader : public LineReader
+	namespace	Stream
 	{
-		public:
-			CSVLineReader (const CSVLineReader&);
-			CSVLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
+		class	CSVLineReader : public LineReader
+		{
+			public:
+				CSVLineReader (const CSVLineReader&);
+				CSVLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
 
-			CSVLineReader&	operator = (const CSVLineReader&);
+				CSVLineReader&	operator = (const CSVLineReader&);
 
-			virtual const Row&	current () const;
+				virtual const Row&	current () const;
 
-		protected:
-			virtual void	parse (const char*, Glay::Int32u);
+			protected:
+				virtual void	parse (const char*, Glay::Int32u);
 
-		private:
-			typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
-			typedef std::map<Glay::Int32u, Glay::Int32u>							Mapping;
+			private:
+				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
+				typedef std::map<Glay::Int32u, Glay::Int32u>							Mapping;
 
-			virtual void	split (const char*, Glay::Int32u, Callback);
+				virtual void	split (const char*, Glay::Int32u, Callback);
 
-			Mapping		mapping;
-			ArrayRow	row;
-			char*		splits;
+				Mapping		mapping;
+				ArrayRow	row;
+				char*		splits;
 
 
-	};
+		};
+	}
 }
 
 #endif

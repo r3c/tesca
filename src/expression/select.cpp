@@ -2,13 +2,14 @@
 #include "select.hpp"
 
 using namespace std;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {
 	namespace	Expression
 	{
 		Select::Select () :
-			accessor (0)
+			condition (0)
 		{
 		}
 
@@ -17,9 +18,9 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		const Accessor*	Select::getAccessor () const
+		const Accessor*	Select::getCondition () const
 		{
-			return this->accessor;
+			return this->condition;
 		}
 
 		string	Select::getMessage () const
@@ -33,7 +34,7 @@ namespace	Tesca
 
 			this->parser.skip (lexer);
 
-			if (!this->parser.parseExpression (lexer, lookup, &this->accessor))
+			if (!this->parser.parseExpression (lexer, lookup, &this->condition))
 				return false;
 
 			return true;
@@ -41,7 +42,7 @@ namespace	Tesca
 
 		void	Select::reset ()
 		{
-			this->accessor = 0;
+			this->condition = 0;
 			this->parser.reset ();
 		}
 	}

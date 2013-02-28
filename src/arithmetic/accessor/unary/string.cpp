@@ -3,6 +3,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {
@@ -14,10 +15,10 @@ namespace	Tesca
 
 	Variant	StringUnaryAccessor::evaluate (const Variant& argument) const
 	{
-		string	str;
+		string	value;
 
-		if (argument.toString (&str))
-			return this->callback (str);
+		if (argument.toString (&value))
+			return this->callback (value);
 
 		return Variant::empty;
 	}

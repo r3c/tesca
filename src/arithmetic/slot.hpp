@@ -15,9 +15,9 @@ namespace	Tesca
 
 			Slot&	operator = (const Slot&);
 
-			virtual Variant	current () const = 0;
-			virtual bool	push (const Variant&) = 0;
-			virtual void	reset () = 0;
+			virtual Stream::Variant	current () const = 0;
+			virtual bool			push (const Stream::Variant&) = 0;
+			virtual void			reset () = 0;
 	};
 }
 

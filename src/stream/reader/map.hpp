@@ -10,31 +10,34 @@
 
 namespace	Tesca
 {
-	class	MapReader : public Reader
+	namespace	Stream
 	{
-		public:
-			typedef std::map<std::string, Glay::Int32u>	Fields;
+		class	MapReader : public Reader
+		{
+			public:
+				typedef std::map<std::string, Glay::Int32u>	Fields;
 
-					MapReader (const MapReader&);
-					MapReader (const Fields*);
-			virtual	~MapReader ();
+						MapReader (const MapReader&);
+						MapReader (const Fields*);
+				virtual	~MapReader ();
 
-			MapReader&	operator = (const MapReader&);
+				MapReader&	operator = (const MapReader&);
 
-			bool				assign (const std::string&, const Variant&);
-			virtual const Row&	current () const;
-			virtual bool		next ();
-			void				push ();
+				bool				assign (const std::string&, const Variant&);
+				virtual const Row&	current () const;
+				virtual bool		next ();
+				void				push ();
 
-		private:
-			typedef std::list<Variant*>	Lines;
+			private:
+				typedef std::list<Variant*>	Lines;
 
-			const Fields*	fields;
-			Lines			lines;
-			ArrayRow		row;
+				const Fields*	fields;
+				Lines			lines;
+				ArrayRow		row;
 
 
-	};
+		};
+	}
 }
 
 #endif

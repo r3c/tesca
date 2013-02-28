@@ -2,6 +2,7 @@
 #include "column.hpp"
 
 using namespace std;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {

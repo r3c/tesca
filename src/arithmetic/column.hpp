@@ -23,7 +23,7 @@ namespace	Tesca
 
 			virtual Slot*	create () const = 0;
 			virtual bool	group () const = 0;
-			Variant			read (const Row&) const;
+			Stream::Variant	read (const Stream::Row&) const;
 
 		private:
 			const Accessor*	accessor;

@@ -1,6 +1,8 @@
 
 #include "logical.hpp"
 
+using namespace Tesca::Stream;
+
 namespace	Tesca
 {
 	LogicalAccessor::LogicalAccessor (const Accessor* lhs, const Accessor* rhs) :

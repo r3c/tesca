@@ -14,7 +14,7 @@ namespace	Tesca
 			FieldAccessor (Glay::Int32u);
 
 		protected:
-			virtual Variant	read (const Row&) const;
+			virtual Stream::Variant	read (const Stream::Row&) const;
 
 		private:
 			Glay::Int32u	key;

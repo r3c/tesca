@@ -2,6 +2,7 @@
 #include "count.hpp"
 
 using namespace Glay;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {

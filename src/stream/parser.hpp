@@ -5,22 +5,25 @@
 #include <functional>
 #include <map>
 #include <string>
-#include "../arithmetic/lookup.hpp"
 #include "../glay/glay.hpp"
+#include "lookup.hpp"
 #include "reader.hpp"
 
 namespace	Tesca
 {
-	struct	Parser
+	namespace	Stream
 	{
-		typedef std::map<std::string, std::string>	Config;
-		typedef std::function<Reader* (Glay::Pipe::IStream*, const Lookup&, const Config&)>	Builder;
+		struct	Parser
+		{
+			typedef std::map<std::string, std::string>	Config;
+			typedef std::function<Reader* (Glay::Pipe::IStream*, const Lookup&, const Config&)>	Builder;
 
-		static const Parser	parsers[];
+			static const Parser	parsers[];
 
-		const char*	name;
-		Builder		builder;
-	};
+			const char*	name;
+			Builder		builder;
+		};
+	}
 }
 
 #endif

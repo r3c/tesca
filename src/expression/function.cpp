@@ -16,6 +16,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {
@@ -78,11 +79,13 @@ namespace	Tesca
 			}},
 			{"lcase",	1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
-				return new StringUnaryAccessor (arguments[0], [] (string& argument)
+				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
 				{
-					transform (argument.begin (), argument.end (), argument.begin (), ::tolower);
+					string	lower (argument);
 
-					return Variant (argument).keep ();
+					transform (lower.begin (), lower.end (), lower.begin (), ::tolower);
+
+					return Variant (lower).keep ();
 				});
 			}},
 			{"le",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
@@ -90,6 +93,13 @@ namespace	Tesca
 				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
 				{
 					return Variant (a <= b);
+				});
+			}},
+			{"length",	1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+			{
+				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
+				{
+					return Variant (argument.length ());
 				});
 			}},
 			{"lt",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
@@ -179,6 +189,33 @@ namespace	Tesca
 			{
 				return new OrLogicalAccessor (arguments[0], arguments[1]);
 			}},
+			{"slice",	2,	3,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+			{
+				return new CallbackVectorAccessor (arguments, [] (const Variant* values, Int32u length)
+				{
+					Float64	count;
+					string	source;
+					Float64	number;
+					Int32u	offset;
+
+					if (!values[0].toString (&source) || !values[1].toNumber (&number))
+						return Variant::empty;
+
+					offset = std::min ((Int32u)number, source.length ());
+
+					if (length > 2)
+					{
+						if (!values[2].toNumber (&number))
+							return Variant::empty;
+
+						count = std::min ((Int32u)number, source.length () - offset);
+					}
+					else
+						count = source.length () - offset;
+
+					return Variant (source.substr (offset, count)).keep ();
+				});
+			}},
 			{"sub",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
@@ -188,11 +225,13 @@ namespace	Tesca
 			}},
 			{"ucase",	1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
-				return new StringUnaryAccessor (arguments[0], [] (string& argument)
+				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
 				{
-					transform (argument.begin (), argument.end (), argument.begin (), ::toupper);
+					string	upper (argument);
 
-					return Variant (argument).keep ();
+					transform (upper.begin (), upper.end (), upper.begin (), ::toupper);
+
+					return Variant (upper).keep ();
 				});
 			}},
 			{0, 0, 0, 0}

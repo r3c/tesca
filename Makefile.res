@@ -25,7 +25,6 @@ SOURCE	= \
 	arithmetic/bucket.cpp \
 	arithmetic/column/value.cpp \
 	arithmetic/column.cpp \
-	arithmetic/lookup.cpp \
 	arithmetic/slot/average.cpp \
 	arithmetic/slot/count.cpp \
 	arithmetic/slot/last.cpp \
@@ -54,6 +53,7 @@ SOURCE	= \
 	glay/system/endian.cpp \
 	glay/system/stopwatch.cpp \
 	stream/format.cpp \
+	stream/lookup.cpp \
 	stream/parser.cpp \
 	stream/reader/line/csv.cpp \
 	stream/reader/line.cpp \

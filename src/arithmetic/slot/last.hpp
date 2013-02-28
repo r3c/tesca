@@ -10,12 +10,12 @@ namespace	Tesca
 	class	LastSlot : public Slot
 	{
 		public:
-			virtual Variant	current () const;
-			virtual bool	push (const Variant&);
-			virtual void	reset ();
+			virtual Stream::Variant	current () const;
+			virtual bool			push (const Stream::Variant&);
+			virtual void			reset ();
 
 		private:
-			Variant	last;
+			Stream::Variant	last;
 	};
 }
 

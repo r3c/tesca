@@ -10,6 +10,7 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Glay::System;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {
@@ -31,8 +32,8 @@ namespace	Tesca
 
 		bool	Parser::fail (const Lexer& lexer, const string& error)
 		{
-			this->message.str (error);
-			this->message << " at index " << lexer.getIndex ();
+			this->message.str ("");
+			this->message << error << " at index " << lexer.getIndex ();
 
 			return false;
 		}

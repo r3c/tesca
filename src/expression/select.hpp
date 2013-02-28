@@ -3,9 +3,6 @@
 #define __TESCA_EXPRESSION_SELECT_HPP
 
 #include <string>
-#include "../arithmetic/lookup.hpp"
-#include "function.hpp"
-#include "lexer.hpp"
 #include "parser.hpp"
 
 namespace	Tesca
@@ -21,14 +18,14 @@ namespace	Tesca
 
 				Select&	operator = (const Select&);
 
-				const Accessor*			getAccessor () const;
-				std::string				getMessage () const;
+				const Accessor*	getCondition () const;
+				std::string		getMessage () const;
 
-				bool	parse (Lookup&, const char*);
+				bool	parse (Stream::Lookup&, const char*);
 				void	reset ();
 
 			private:
-				const Accessor*	accessor;
+				const Accessor*	condition;
 				Parser			parser;
 
 		};

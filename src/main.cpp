@@ -1,51 +1,18 @@
 
 #include <iostream>
 #include <vector>
-#include "arithmetic/lookup.hpp"
 #include "arithmetic/table.hpp"
 #include "expression/formula.hpp"
 #include "expression/select.hpp"
+#include "stream/lookup.hpp"
 #include "stream/format.hpp"
 
 using namespace std;
 using namespace Glay;
+using namespace Glay::Pipe;
 using namespace Tesca;
 
-#include "stream/reader/line.hpp"
-#include "stream/row/array.hpp"
-
-class	MyLineReader : public LineReader
-{
-	public:
-		MyLineReader (Pipe::IStream* stream) :
-			LineReader (stream),
-			count (0),
-			row (0)
-		{
-		}
-
-		Int32u	getCount () const
-		{
-			return this->count;
-		}
-
-		virtual const Row&	current () const
-		{
-			return this->row;
-		}
-
-	protected:
-		virtual void	parse (const char*, Int32u)
-		{
-			++this->count;
-		}
-
-	private:
-		Int32u		count;
-		ArrayRow	row;
-};
-
-ostream&	operator << (ostream& stream, const Variant& value)
+ostream&	operator << (ostream& stream, const Stream::Variant& value)
 {
 	string	buffer;
 
@@ -77,63 +44,120 @@ void	debug_print (const Table& table)
 	}
 }
 
-bool	debug_read (Table& table, const Format& format, const Lookup& lookup, Pipe::IStream* stream)
+int	debug_run (const char* formatString, const char* condition, const char* aggregation, char* paths[], int length)
 {
-	Reader*	reader;
+	Stream::Format		format;
+	Expression::Formula	formula;
+	int					index;
+	Stream::Lookup		lookup;
+	Stream::Reader*		reader;
+	Expression::Select	select;
+	FileIStream*		stream;
+	Table				table;
 
-	reader = format.create (stream, lookup);
+	if (!format.parse (formatString))
+	{
+		cerr << "error: invalid input format" << endl;
 
-	if (!reader)
-		return false;
+		return 1;
+	}
 
-	while (reader->next ())
-		table.push (reader->current ());
+	if (!formula.parse (lookup, aggregation))
+	{
+		cerr << "error: invalid aggregation expression (" << formula.getMessage () << ")" << endl;
 
-	delete reader;
+		return 1;
+	}
 
-	return true;
+	if (!select.parse (lookup, condition))
+	{
+		cerr << "error: invalid condition expression (" << select.getMessage () << ")" << endl;
+
+		return 1;
+	}
+
+	table.reset (select.getCondition (), formula.getColumns ());
+
+	for (index = 0; index < length || index == 0; ++index)
+	{
+		if (index < length)
+			stream = new FileIStream (paths[index]);
+		else
+			stream = new FileIStream (stdin);
+
+		if (*stream)
+		{
+			reader = format.create (stream, lookup);
+
+			if (reader)
+			{
+				while (reader->next ())
+					table.push (reader->current ());
+
+				delete reader;
+			}
+			else
+				cerr << "error: cannot create reader" << endl;
+		}
+		else if (index < length)
+			cerr << "error: cannot open file '" << paths[index] << "' for reading" << endl;
+		else
+			cerr << "error: cannot open standard input for reading" << endl;
+
+		delete stream;
+	}
+
+	debug_print (table);
+
+	return 0;
 }
 
 int	main (int argc, char* argv[])
 {
-	Format				format;
-	const char*			formatString;
-	Expression::Formula	formula;
-	const char*			formulaString;
-	int					index;
-	Lookup				lookup;
-//	const char*			outputString;
-	Expression::Select	select;
-	const char*			selectString;
-	Pipe::FileIStream*	stream;
-	Table				table;
+	const char*	aggregation;
+	const char*	condition;
+	const char*	format;
+	int			index;
+//	const char*	output;
 
-	formatString = "csv";
-	formulaString = "nb_lines:count";
-	selectString = "1";
+	aggregation = "nb_lines:count";
+	condition = "1";
+	format = "csv";
 
 	for (index = 1; index < argc && argv[index][0] == '-'; ++index)
 	{
 		switch (argv[index][1])
 		{
-			case 'f':
+			case 'a':
 				if (++index >= argc)
 				{
-					cerr << "error: missing formula expression argument" << endl;
+					cerr << "error: missing aggregation argument" << endl;
 
 					return 1;
 				}
 
-				formulaString = argv[index];
+				aggregation = argv[index];
+
+				break;
+
+			case 'c':
+				if (++index >= argc)
+				{
+					cerr << "error: missing condition argument" << endl;
+
+					return 1;
+				}
+
+				condition = argv[index];
 
 				break;
 
 			case 'h':
-				cout << "usage: " << argv[0] << " [-i <format>] [-f <formula>] [<file> [<file>...]]" << endl;
-				cout << "  -f: result formula, e.g. 'name = $0, duration = $1:sum'" << endl;
+				cout << "usage: " << argv[0] << " [-i <format>] [-c <condition>] [-a <aggregation>] [<file> [<file>...]]" << endl;
+				cout << "  -a: aggregation expression, e.g. 'name = $0, duration = $1:sum'" << endl;
+				cout << "  -c: filter condition, e.g. 'ge(len($0), 4)'" << endl;
 				cout << "  -i: input format, e.g. 'csv'" << endl;
 //				cout << "  -o: output format, e.g. 'FIXME'" << endl;
-				cout << "  -s: selection filter, e.g. 'ge(len($0), 4)'" << endl;
 
 				return 0;
 
@@ -145,19 +169,7 @@ int	main (int argc, char* argv[])
 					return 1;
 				}
 
-				formatString = argv[index];
-
-				break;
-
-			case 's':
-				if (++index >= argc)
-				{
-					cerr << "error: missing select filter argument" << endl;
-
-					return 1;
-				}
-
-				selectString = argv[index];
+				format = argv[index];
 
 				break;
 
@@ -168,46 +180,5 @@ int	main (int argc, char* argv[])
 		}
 	}
 
-	if (!format.parse (formatString))
-	{
-		cerr << "error: invalid input format" << endl;
-
-		return 1;
-	}
-
-	if (!formula.parse (lookup, formulaString))
-	{
-		cerr << "error: invalid formula expression (" << formula.getMessage () << ")" << endl;
-
-		return 1;
-	}
-
-	if (!select.parse (lookup, selectString))
-	{
-		cerr << "error: invalid select expression (" << select.getMessage () << ")" << endl;
-
-		return 1;
-	}
-
-	table.reset (select.getAccessor (), formula.getColumns ());
-
-	do
-	{
-		if (index < argc)
-			stream = new Pipe::FileIStream (argv[index]);
-		else
-			stream = new Pipe::FileIStream (stdin);
-
-		if (*stream)
-			debug_read (table, format, lookup, stream);
-		else if (index < argc)
-			cerr << "error: cannot open file '" << argv[index] << "' for reading" << endl;
-		else
-			cerr << "error: cannot open standard input for reading" << endl;
-
-		delete stream;
-	}
-	while (++index < argc);
-
-	debug_print (table);
+	return debug_run (format, condition, aggregation, argv + index, argc - index);
 }

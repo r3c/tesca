@@ -8,12 +8,15 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	const Parser	Parser::parsers[] =
+	namespace	Stream
 	{
-		{"csv",		[] (Pipe::IStream* stream, const Lookup& lookup, const Config& config) -> Reader*
+		const Parser	Parser::parsers[] =
 		{
-			return new CSVLineReader (stream, lookup, config);
-		}},
-		{0, 0}
-	};
+			{"csv",		[] (Pipe::IStream* stream, const Lookup& lookup, const Config& config) -> Reader*
+			{
+				return new CSVLineReader (stream, lookup, config);
+			}},
+			{0, 0}
+		};
+	}
 }

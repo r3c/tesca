@@ -3,6 +3,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {

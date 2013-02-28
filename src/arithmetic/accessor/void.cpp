@@ -1,6 +1,8 @@
 
 #include "void.hpp"
 
+using namespace Tesca::Stream;
+
 namespace	Tesca
 {
 	const VoidAccessor	VoidAccessor::instance = VoidAccessor ();

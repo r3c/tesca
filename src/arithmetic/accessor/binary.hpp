@@ -11,8 +11,8 @@ namespace	Tesca
 		public:
 			BinaryAccessor (const Accessor*, const Accessor*);
 
-			virtual Variant	evaluate (const Variant&, const Variant&) const = 0;
-			virtual Variant	read (const Row&) const;
+			virtual Stream::Variant	evaluate (const Stream::Variant&, const Stream::Variant&) const = 0;
+			virtual Stream::Variant	read (const Stream::Row&) const;
 
 		private:
 			const Accessor*	lhs;

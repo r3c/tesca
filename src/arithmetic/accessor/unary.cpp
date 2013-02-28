@@ -1,6 +1,8 @@
 
 #include "unary.hpp"
 
+using namespace Tesca::Stream;
+
 namespace	Tesca
 {
 	UnaryAccessor::UnaryAccessor (const Accessor* source) :

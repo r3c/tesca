@@ -2,10 +2,11 @@
 #include "number.hpp"
 
 using namespace Glay;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {
-	NumberBinaryAccessor::NumberBinaryAccessor (const Accessor* lhs, const Accessor* rhs, const Callback* callback) :
+	NumberBinaryAccessor::NumberBinaryAccessor (const Accessor* lhs, const Accessor* rhs, Callback callback) :
 		BinaryAccessor (lhs, rhs),
 		callback (callback)
 	{
@@ -17,7 +18,7 @@ namespace	Tesca
 		Float64	b;
 
 		if (lhs.toNumber (&a) && rhs.toNumber (&b))
-			return (*this->callback) (a, b);
+			return this->callback (a, b);
 
 		return Variant::empty;
 	}

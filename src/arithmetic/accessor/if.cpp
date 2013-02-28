@@ -3,6 +3,8 @@
 
 #include "void.hpp"
 
+using namespace Tesca::Stream;
+
 namespace	Tesca
 {
 	IfAccessor::IfAccessor (const Accessor* condition, const Accessor* onTrue, const Accessor* onFalse) :

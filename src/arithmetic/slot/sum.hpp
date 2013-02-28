@@ -12,9 +12,9 @@ namespace	Tesca
 		public:
 			SumSlot ();
 
-			virtual Variant	current () const;
-			virtual bool	push (const Variant&);
-			virtual void	reset ();
+			virtual Stream::Variant	current () const;
+			virtual bool			push (const Stream::Variant&);
+			virtual void			reset ();
 
 		private:
 			Glay::Float64	sum;

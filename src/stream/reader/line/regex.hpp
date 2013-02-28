@@ -4,34 +4,37 @@
 
 #include <map>
 #include <regex>
-#include "../../../arithmetic/lookup.hpp"
 #include "../../row/array.hpp"
+#include "../../lookup.hpp"
 #include "../line.hpp"
 
 namespace	Tesca
 {
-	class	RegexLineReader : public LineReader
+	namespace	Stream
 	{
-		public:
-			RegexLineReader (const RegexLineReader&);
-			RegexLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
+		class	RegexLineReader : public LineReader
+		{
+			public:
+				RegexLineReader (const RegexLineReader&);
+				RegexLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
 
-			RegexLineReader&	operator = (const RegexLineReader&);
+				RegexLineReader&	operator = (const RegexLineReader&);
 
-			virtual const Row&	current () const;
+				virtual const Row&	current () const;
 
-		protected:
-			virtual void	parse (const std::string&);
+			protected:
+				virtual void	parse (const std::string&);
 
-		private:
-			typedef std::map<Glay::Int32u, Glay::Int32u>	Lookup;
+			private:
+				typedef std::map<Glay::Int32u, Glay::Int32u>	Lookup;
 
-			Lookup		lookup;
-			std::regex	regex;
-			ArrayRow	row;
+				Lookup		lookup;
+				std::regex	regex;
+				ArrayRow	row;
 
 
-	};
+		};
+	}
 }
 
 #endif

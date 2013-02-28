@@ -4,6 +4,7 @@
 #include "accessor/void.hpp"
 
 using namespace Glay;
+using namespace Tesca::Stream;
 
 namespace	Tesca
 {

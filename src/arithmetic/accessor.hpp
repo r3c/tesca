@@ -12,7 +12,7 @@ namespace	Tesca
 		public:
 			virtual	~Accessor ();
 
-			virtual Variant	read (const Row&) const = 0;
+			virtual Stream::Variant	read (const Stream::Row&) const = 0;
 	};
 }
 

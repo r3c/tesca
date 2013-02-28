@@ -14,8 +14,8 @@ namespace	Tesca
 					VectorAccessor (const std::vector<const Accessor*>&);
 			virtual	~VectorAccessor ();
 
-			virtual Variant	evaluate (const Variant*, Glay::Int32u) const = 0;
-			virtual Variant	read (const Row&) const;
+			virtual Stream::Variant	evaluate (const Stream::Variant*, Glay::Int32u) const = 0;
+			virtual Stream::Variant	read (const Stream::Row&) const;
 
 		private:
 			const Accessor**	accessors;
