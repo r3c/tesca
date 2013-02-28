@@ -220,7 +220,9 @@ namespace	Tesca
 					memcpy (target, this->content.string.buffer, length * sizeof (*target));
 
 					this->content.string.buffer = target;
-					this->share = static_cast <Int32u*> (malloc (sizeof (*this->share)));
+					this->share = static_cast<Int32u*> (malloc (sizeof (*this->share)));
+
+					*this->share = 1;
 
 					break;
 
@@ -236,7 +238,7 @@ namespace	Tesca
 			switch (this->type)
 			{
 				case Variant::STRING:
-					if (this->share != 0 && --*this->share < 1)
+					if (this->share != 0 && --*this->share == 0)
 					{
 						free (const_cast<char*> (this->content.string.buffer));
 						free (this->share);

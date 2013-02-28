@@ -81,11 +81,19 @@ namespace	Tesca
 			{
 				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
 				{
-					string	lower (argument);
+					char*	buffer;
+					Variant	lower;
 
-					transform (lower.begin (), lower.end (), lower.begin (), ::tolower);
+					buffer = new char[argument.length ()];
 
-					return Variant (lower).keep ();
+					for (auto i = argument.length (); i-- > 0; )
+						buffer[i] = tolower (argument[i]);
+
+					lower = Variant (buffer, argument.length ()).keep ();
+
+					delete [] buffer;
+
+					return lower;
 				});
 			}},
 			{"le",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
@@ -227,11 +235,19 @@ namespace	Tesca
 			{
 				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
 				{
-					string	upper (argument);
+					char*	buffer;
+					Variant	upper;
 
-					transform (upper.begin (), upper.end (), upper.begin (), ::toupper);
+					buffer = new char[argument.length ()];
 
-					return Variant (upper).keep ();
+					for (auto i = argument.length (); i-- > 0; )
+						buffer[i] = toupper (argument[i]);
+
+					upper = Variant (buffer, argument.length ()).keep ();
+
+					delete [] buffer;
+
+					return upper;
 				});
 			}},
 			{0, 0, 0, 0}
