@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include "../glay/glay.hpp"
+#include "config.hpp"
 #include "lookup.hpp"
 #include "parser.hpp"
 #include "reader.hpp"
@@ -26,7 +27,7 @@ namespace	Tesca
 				bool	parse (const char*);
 
 			private:
-				Reader::Config	config;
+				Config			config;
 				const Parser*	parser;
 		};
 	}

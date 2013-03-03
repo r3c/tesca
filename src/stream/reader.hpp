@@ -13,8 +13,6 @@ namespace	Tesca
 		class	Reader
 		{
 			public:
-				typedef std::map<std::string, std::string>	Config;
-
 						Reader (const Reader&);
 						Reader ();
 				virtual	~Reader ();

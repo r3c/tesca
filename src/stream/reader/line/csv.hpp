@@ -6,6 +6,7 @@
 #include <functional>
 #include <map>
 #include "../../row/array.hpp"
+#include "../../config.hpp"
 #include "../../lookup.hpp"
 #include "../line.hpp"
 

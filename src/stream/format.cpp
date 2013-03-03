@@ -56,7 +56,7 @@ namespace	Tesca
 				// Read configuration key
 				buffer.str ("");
 
-				for (++stop; *stop != '\0' && *stop != '='; ++stop)
+				for (++stop; *stop != '\0' && *stop != '=' && *stop != ';'; ++stop)
 				{
 					if (*stop == '\\' && *(stop + 1) != '\0')
 						++stop;
@@ -72,15 +72,18 @@ namespace	Tesca
 				// Read and store configuration pair
 				buffer.str ("");
 
-				for (++stop; *stop != '\0' && *stop != ';'; ++stop)
+				if (*stop == '=')
 				{
-					if (*stop == '\\' && *(stop + 1) != '\0')
-						++stop;
+					for (++stop; *stop != '\0' && *stop != ';'; ++stop)
+					{
+						if (*stop == '\\' && *(stop + 1) != '\0')
+							++stop;
 
-					buffer.put (*stop);
+						buffer.put (*stop);
+					}
 				}
 
-				this->config[key] = buffer.str ();
+				this->config.set (key, buffer.str ());
 			}
 
 			return this->parser != 0;

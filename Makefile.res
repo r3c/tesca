@@ -52,6 +52,7 @@ SOURCE	= \
 	glay/system/convert.cpp \
 	glay/system/endian.cpp \
 	glay/system/stopwatch.cpp \
+	stream/config.cpp \
 	stream/format.cpp \
 	stream/lookup.cpp \
 	stream/parser.cpp \

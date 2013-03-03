@@ -14,14 +14,30 @@ namespace	Tesca
 			row (lookup.count ())
 		{
 			const char*	buffer;
+			string		headers;
 			Int32u		index;
 			Int32u		length;
 
-			// Read headers or use numbered default
-			auto	headers = config.find ("headers");
+			// Read split characters from configuration
+			this->splits = static_cast<char*> (calloc (1 << (sizeof (*this->splits) * 8), sizeof (*this->splits)));
 
-			if (headers != config.end () && this->fetch (&buffer, &length))
+			for (buffer = config.get ("splits", ",").c_str (); *buffer; )
+				this->splits[(Int32u)*buffer++] = 1;
+
+			// Read headers from configuration or file or default
+			if (config.get ("headers", &headers))
 			{
+				if (headers.length () > 0)
+				{
+					buffer = headers.c_str ();
+					length = headers.length ();
+				}
+				else if (!this->fetch (&buffer, &length))
+				{
+					buffer = 0;
+					length = 0;
+				}
+
 				this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 				{
 					Int32u	target;
@@ -38,19 +54,6 @@ namespace	Tesca
 						this->mapping[index] = i->second;
 				}
 			}
-
-			// Read split characters from configuration
-			auto	splits = config.find ("splits");
-
-			this->splits = static_cast<char*> (calloc (1 << (sizeof (*this->splits) * 8), sizeof (*this->splits)));
-
-			if (splits != config.end ())
-				buffer = splits->second.c_str ();
-			else
-				buffer = ",";
-
-			while (*buffer)
-				this->splits[(Int32u)*buffer++] = 1;
 		}
 
 		const Row&	CSVLineReader::current () const

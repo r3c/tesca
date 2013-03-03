@@ -9,7 +9,7 @@ namespace	Tesca
 {
 	namespace	Stream
 	{
-		RegexLineReader::RegexLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
+		RegexLineReader::RegexLineReader (Pipe::IStream* input, const Lookup& lookup, const Config&) :
 			LineReader (input),
 			regex ("FIXME"),
 			row (lookup.count ())
