@@ -6,7 +6,7 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		MapReader::MapReader (const Fields* fields) :
 			fields (fields),
@@ -22,14 +22,19 @@ namespace	Tesca
 
 		bool	MapReader::assign (const string& identifier, const Variant& value)
 		{
-			auto		field = this->fields->find (identifier);
+			Variant		copy;
 			Variant*	line;
+
+			auto	field = this->fields->find (identifier);
 
 			if (field == this->fields->end () || this->lines.empty ())
 				return false;
 
+			copy = value;
+			copy.keep ();
+
 			line = this->lines.back ();
-			line[field->second] = value;
+			line[field->second] = copy;
 
 			return true;
 		}

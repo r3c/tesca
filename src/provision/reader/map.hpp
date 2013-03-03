@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_STREAM_READER_MAP_HPP
-#define __TESCA_STREAM_READER_MAP_HPP
+#ifndef __TESCA_PROVISION_READER_MAP_HPP
+#define __TESCA_PROVISION_READER_MAP_HPP
 
 #include <list>
 #include <map>
@@ -10,7 +10,7 @@
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	MapReader : public Reader
 		{
@@ -34,8 +34,6 @@ namespace	Tesca
 				const Fields*	fields;
 				Lines			lines;
 				ArrayRow		row;
-
-
 		};
 	}
 }

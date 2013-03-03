@@ -12,8 +12,8 @@ namespace	Tesca
 		public:
 			CountSlot ();
 
-			virtual Stream::Variant	current () const;
-			virtual bool			push (const Stream::Variant&);
+			virtual Provision::Variant	current () const;
+			virtual bool			push (const Provision::Variant&);
 			virtual void			reset ();
 
 		private:

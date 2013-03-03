@@ -6,7 +6,7 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		LineReader::LineReader (Pipe::IStream* input) :
 			buffer (0),

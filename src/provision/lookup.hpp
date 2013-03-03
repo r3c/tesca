@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_STREAM_LOOKUP_HPP
-#define __TESCA_STREAM_LOOKUP_HPP
+#ifndef __TESCA_PROVISION_LOOKUP_HPP
+#define __TESCA_PROVISION_LOOKUP_HPP
 
 #include <map>
 #include <string>
@@ -8,7 +8,7 @@
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	Lookup
 		{

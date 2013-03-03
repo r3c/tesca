@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_STREAM_READER_LINE_REGEX_HPP
-#define __TESCA_STREAM_READER_LINE_REGEX_HPP
+#ifndef __TESCA_PROVISION_READER_LINE_REGEX_HPP
+#define __TESCA_PROVISION_READER_LINE_REGEX_HPP
 
 #include <map>
 #include <regex>
@@ -11,7 +11,7 @@
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	RegexLineReader : public LineReader
 		{

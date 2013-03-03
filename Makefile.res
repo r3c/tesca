@@ -52,15 +52,15 @@ SOURCE	= \
 	glay/system/convert.cpp \
 	glay/system/endian.cpp \
 	glay/system/stopwatch.cpp \
-	stream/config.cpp \
-	stream/format.cpp \
-	stream/lookup.cpp \
-	stream/parser.cpp \
-	stream/reader/line/csv.cpp \
-	stream/reader/line.cpp \
-	stream/reader/map.cpp \
-	stream/reader.cpp \
-	stream/row/array.cpp \
-	stream/row.cpp \
-	stream/variant.cpp \
+	provision/config.cpp \
+	provision/format.cpp \
+	provision/lookup.cpp \
+	provision/parser.cpp \
+	provision/reader/line/csv.cpp \
+	provision/reader/line.cpp \
+	provision/reader/map.cpp \
+	provision/reader.cpp \
+	provision/row/array.cpp \
+	provision/row.cpp \
+	provision/variant.cpp \
 	main.cpp

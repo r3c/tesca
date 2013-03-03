@@ -4,15 +4,15 @@
 #include "arithmetic/table.hpp"
 #include "expression/formula.hpp"
 #include "expression/select.hpp"
-#include "stream/lookup.hpp"
-#include "stream/format.hpp"
+#include "provision/lookup.hpp"
+#include "provision/format.hpp"
 
 using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Tesca;
 
-ostream&	operator << (ostream& stream, const Stream::Variant& value)
+ostream&	operator << (ostream& stream, const Provision::Variant& value)
 {
 	string	buffer;
 
@@ -46,11 +46,11 @@ void	debug_print (const Table& table)
 
 int	debug_run (const char* formatString, const char* condition, const char* aggregation, char* paths[], int length)
 {
-	Stream::Format		format;
+	Provision::Format	format;
 	Expression::Formula	formula;
 	int					index;
-	Stream::Lookup		lookup;
-	Stream::Reader*		reader;
+	Provision::Lookup	lookup;
+	Provision::Reader*	reader;
 	Expression::Select	select;
 	FileIStream*		stream;
 	Table				table;

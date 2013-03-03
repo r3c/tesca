@@ -8,7 +8,7 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		const Parser	Parser::parsers[] =
 		{

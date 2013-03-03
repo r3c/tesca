@@ -7,7 +7,7 @@ using namespace Glay::System;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		RegexLineReader::RegexLineReader (Pipe::IStream* input, const Lookup& lookup, const Config&) :
 			LineReader (input),

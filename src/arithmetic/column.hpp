@@ -3,8 +3,8 @@
 #define __TESCA_ARITHMETIC_COLUMN_HPP
 
 #include <string>
-#include "../stream/row.hpp"
-#include "../stream/variant.hpp"
+#include "../provision/row.hpp"
+#include "../provision/variant.hpp"
 #include "accessor.hpp"
 #include "slot.hpp"
 
@@ -23,7 +23,7 @@ namespace	Tesca
 
 			virtual Slot*	create () const = 0;
 			virtual bool	group () const = 0;
-			Stream::Variant	read (const Stream::Row&) const;
+			Provision::Variant	read (const Provision::Row&) const;
 
 		private:
 			const Accessor*	accessor;

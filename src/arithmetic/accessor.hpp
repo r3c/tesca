@@ -2,8 +2,8 @@
 #ifndef __TESCA_ARITHMETIC_ACCESSOR_HPP
 #define __TESCA_ARITHMETIC_ACCESSOR_HPP
 
-#include "../stream/row.hpp"
-#include "../stream/variant.hpp"
+#include "../provision/row.hpp"
+#include "../provision/variant.hpp"
 
 namespace	Tesca
 {
@@ -12,7 +12,7 @@ namespace	Tesca
 		public:
 			virtual	~Accessor ();
 
-			virtual Stream::Variant	read (const Stream::Row&) const = 0;
+			virtual Provision::Variant	read (const Provision::Row&) const = 0;
 	};
 }
 

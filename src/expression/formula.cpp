@@ -2,7 +2,7 @@
 #include "formula.hpp"
 
 using namespace std;
-using namespace Tesca::Stream;
+using namespace Tesca::Provision;
 
 namespace	Tesca
 {

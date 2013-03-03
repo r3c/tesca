@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_STREAM_READER_HPP
-#define __TESCA_STREAM_READER_HPP
+#ifndef __TESCA_PROVISION_READER_HPP
+#define __TESCA_PROVISION_READER_HPP
 
 #include <map>
 #include "../glay/glay.hpp"
@@ -8,7 +8,7 @@
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	Reader
 		{

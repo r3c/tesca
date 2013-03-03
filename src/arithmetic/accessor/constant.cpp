@@ -1,7 +1,7 @@
 
 #include "constant.hpp"
 
-using namespace Tesca::Stream;
+using namespace Tesca::Provision;
 
 namespace	Tesca
 {

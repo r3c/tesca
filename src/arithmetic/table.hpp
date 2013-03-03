@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 #include "../glay/glay.hpp"
-#include "../stream/row.hpp"
+#include "../provision/row.hpp"
 #include "bucket.hpp"
 #include "column.hpp"
 #include "slot.hpp"
@@ -33,7 +33,7 @@ namespace	Tesca
 			iterator	end () const;
 
 			void	clear ();
-			void	push (const Stream::Row&);
+			void	push (const Provision::Row&);
 			void	reset (const Accessor*, const Columns&);
 
 		private:

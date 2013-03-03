@@ -9,7 +9,7 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		Format::Format () :
 			parser (0)

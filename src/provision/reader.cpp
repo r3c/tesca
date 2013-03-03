@@ -3,7 +3,7 @@
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		Reader::Reader ()
 		{

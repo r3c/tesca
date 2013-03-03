@@ -5,7 +5,7 @@ using namespace std;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		Config::Config ()
 		{

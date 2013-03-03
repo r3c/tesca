@@ -7,7 +7,7 @@ using namespace Glay::System;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		CSVLineReader::CSVLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
 			LineReader (input),

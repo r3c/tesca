@@ -1,13 +1,13 @@
 
-#ifndef __TESCA_STREAM_READER_LINE_HPP
-#define __TESCA_STREAM_READER_LINE_HPP
+#ifndef __TESCA_PROVISION_READER_LINE_HPP
+#define __TESCA_PROVISION_READER_LINE_HPP
 
 #include "../../glay/glay.hpp"
 #include "../reader.hpp"
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	LineReader : public Reader
 		{

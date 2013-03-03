@@ -1,13 +1,13 @@
 
-#ifndef __TESCA_STREAM_CONFIG_HPP
-#define __TESCA_STREAM_CONFIG_HPP
+#ifndef __TESCA_PROVISION_CONFIG_HPP
+#define __TESCA_PROVISION_CONFIG_HPP
 
 #include <map>
 #include <string>
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	Config
 		{

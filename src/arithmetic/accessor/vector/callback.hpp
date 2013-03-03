@@ -10,11 +10,11 @@ namespace	Tesca
 	class	CallbackVectorAccessor : public VectorAccessor
 	{
 		public:
-			typedef	std::function<Stream::Variant (const Stream::Variant*, Glay::Int32u)>	Callback;
+			typedef	std::function<Provision::Variant (const Provision::Variant*, Glay::Int32u)>	Callback;
 
 			CallbackVectorAccessor (const std::vector<const Accessor*>&, Callback);
 
-			virtual Stream::Variant	evaluate (const Stream::Variant*, Glay::Int32u) const;
+			virtual Provision::Variant	evaluate (const Provision::Variant*, Glay::Int32u) const;
 
 		private:
 			Callback	callback;

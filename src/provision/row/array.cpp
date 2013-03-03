@@ -5,7 +5,7 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		ArrayRow::ArrayRow (Int32u length) :
 			length (length),

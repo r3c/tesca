@@ -21,7 +21,7 @@ namespace	Tesca
 				const Accessor*	getCondition () const;
 				std::string		getMessage () const;
 
-				bool	parse (Stream::Lookup&, const char*);
+				bool	parse (Provision::Lookup&, const char*);
 				void	reset ();
 
 			private:

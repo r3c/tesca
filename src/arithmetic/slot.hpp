@@ -2,7 +2,7 @@
 #ifndef __TESCA_ARITHMETIC_SLOT_HPP
 #define __TESCA_ARITHMETIC_SLOT_HPP
 
-#include "../stream/variant.hpp"
+#include "../provision/variant.hpp"
 
 namespace	Tesca
 {
@@ -15,8 +15,8 @@ namespace	Tesca
 
 			Slot&	operator = (const Slot&);
 
-			virtual Stream::Variant	current () const = 0;
-			virtual bool			push (const Stream::Variant&) = 0;
+			virtual Provision::Variant	current () const = 0;
+			virtual bool			push (const Provision::Variant&) = 0;
 			virtual void			reset () = 0;
 	};
 }

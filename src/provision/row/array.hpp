@@ -1,13 +1,13 @@
 
-#ifndef __TESCA_STREAM_ROW_ARRAY_HPP
-#define __TESCA_STREAM_ROW_ARRAY_HPP
+#ifndef __TESCA_PROVISION_ROW_ARRAY_HPP
+#define __TESCA_PROVISION_ROW_ARRAY_HPP
 
 #include <array>
 #include "../row.hpp"
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	ArrayRow : public Row
 		{

@@ -10,7 +10,7 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Glay::System;
-using namespace Tesca::Stream;
+using namespace Tesca::Provision;
 
 namespace	Tesca
 {

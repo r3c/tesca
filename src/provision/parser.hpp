@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_STREAM_PARSER_HPP
-#define __TESCA_STREAM_PARSER_HPP
+#ifndef __TESCA_PROVISION_PARSER_HPP
+#define __TESCA_PROVISION_PARSER_HPP
 
 #include <functional>
 #include <map>
@@ -12,7 +12,7 @@
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		struct	Parser
 		{

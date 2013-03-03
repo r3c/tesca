@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include "../glay/glay.hpp"
-#include "../stream/lookup.hpp"
+#include "../provision/lookup.hpp"
 #include "aggregator.hpp"
 #include "function.hpp"
 #include "lexer.hpp"
@@ -30,10 +30,10 @@ namespace	Tesca
 
 				bool	parseAggregator (Lexer&, const Aggregator**);
 				bool	parseCharacter (Lexer&, char);
-				bool	parseExpression (Lexer&, Stream::Lookup&, const Accessor**);
+				bool	parseExpression (Lexer&, Provision::Lookup&, const Accessor**);
 				bool	parseIdentifier (Lexer&, std::string*);
-				bool	parseStatement (Lexer&, Stream::Lookup&, Column**);
-				bool	parseValue (Lexer&, Stream::Lookup&, const Accessor**);
+				bool	parseStatement (Lexer&, Provision::Lookup&, Column**);
+				bool	parseValue (Lexer&, Provision::Lookup&, const Accessor**);
 				bool	skip (Lexer&);
 
 				void	reset ();

@@ -1,13 +1,13 @@
 
-#ifndef __TESCA_STREAM_ROW_HPP
-#define __TESCA_STREAM_ROW_HPP
+#ifndef __TESCA_PROVISION_ROW_HPP
+#define __TESCA_PROVISION_ROW_HPP
 
 #include "../glay/glay.hpp"
 #include "variant.hpp"
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	Row
 		{

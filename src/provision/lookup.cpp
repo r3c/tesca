@@ -6,7 +6,7 @@ using namespace Glay;
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		Lookup::Lookup ()
 		{

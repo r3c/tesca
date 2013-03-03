@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_STREAM_READER_LINE_CSV_HPP
-#define __TESCA_STREAM_READER_LINE_CSV_HPP
+#ifndef __TESCA_PROVISION_READER_LINE_CSV_HPP
+#define __TESCA_PROVISION_READER_LINE_CSV_HPP
 
 #include <cstdlib>
 #include <functional>
@@ -12,7 +12,7 @@
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		class	CSVLineReader : public LineReader
 		{

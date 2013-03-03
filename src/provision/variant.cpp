@@ -23,7 +23,7 @@ namespace
 
 namespace	Tesca
 {
-	namespace	Stream
+	namespace	Provision
 	{
 		const Variant	Variant::empty = Variant ();
 
