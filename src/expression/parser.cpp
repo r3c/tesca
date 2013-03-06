@@ -108,7 +108,8 @@ namespace	Tesca
 				 ((lexer.getCurrent () >= '0' && lexer.getCurrent () <= '9') ||
 				  (lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
 				  (lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
-				  (lexer.getCurrent () == '_')); lexer.next ())
+				  (lexer.getCurrent () == '_') ||
+				  (lexer.getCurrent () == '.')); lexer.next ())
 				buffer.put (lexer.getCurrent ());
 
 			if (buffer.tellp () <= 0)

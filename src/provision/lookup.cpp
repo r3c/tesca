@@ -8,6 +8,11 @@ namespace	Tesca
 {
 	namespace	Provision
 	{
+		Lookup::Lookup (const Lookup& other) :
+			indices (other.indices)
+		{
+		}
+
 		Lookup::Lookup ()
 		{
 		}

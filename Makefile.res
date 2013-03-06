@@ -57,6 +57,7 @@ SOURCE	= \
 	provision/lookup.cpp \
 	provision/parser.cpp \
 	provision/reader/line/csv.cpp \
+	provision/reader/line/json.cpp \
 	provision/reader/line.cpp \
 	provision/reader/map.cpp \
 	provision/reader.cpp \

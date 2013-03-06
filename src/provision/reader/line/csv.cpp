@@ -5,6 +5,12 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::System;
 
+namespace
+{
+	static const char	TYPE_QUOTE = 1;
+	static const char	TYPE_SPLIT = 2;
+}
+
 namespace	Tesca
 {
 	namespace	Provision
@@ -18,11 +24,14 @@ namespace	Tesca
 			Int32u		index;
 			Int32u		length;
 
-			// Read split characters from configuration
-			this->splits = static_cast<char*> (calloc (1 << (sizeof (*this->splits) * 8), sizeof (*this->splits)));
+			// Read special character types from configuration
+			this->types = static_cast<char*> (calloc (1 << (sizeof (*this->types) * 8), sizeof (*this->types)));
+
+			for (buffer = config.get ("quotes", "\"").c_str (); *buffer; )
+				this->types[(Int32u)*buffer++] = TYPE_QUOTE;
 
 			for (buffer = config.get ("splits", ",").c_str (); *buffer; )
-				this->splits[(Int32u)*buffer++] = 1;
+				this->types[(Int32u)*buffer++] = TYPE_SPLIT;
 
 			// Read headers from configuration or file or default
 			if (config.get ("headers", &headers))
@@ -86,11 +95,17 @@ namespace	Tesca
 
 			while (length-- > 0)
 			{
-				if (this->splits[(Int32u)*stop])
+				switch (this->types[(Int32u)*stop])
 				{
-					callback (index++, start, stop - start);
+//					case TYPE_QUOTE:
+//						break;
 
-					start = stop + 1;
+					case TYPE_SPLIT:
+						callback (index++, start, stop - start);
+
+						start = stop + 1;
+
+						break;
 				}
 
 				++stop;

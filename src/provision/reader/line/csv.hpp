@@ -31,13 +31,11 @@ namespace	Tesca
 				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
 				typedef std::map<Glay::Int32u, Glay::Int32u>							Mapping;
 
-				virtual void	split (const char*, Glay::Int32u, Callback);
+				void	split (const char*, Glay::Int32u, Callback);
 
 				Mapping		mapping;
 				ArrayRow	row;
-				char*		splits;
-
-
+				char*		types;
 		};
 	}
 }
