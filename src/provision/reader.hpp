@@ -19,8 +19,13 @@ namespace	Tesca
 
 				Reader&	operator = (const Reader&);
 
+				Glay::Int32u	getErrors () const;
+
 				virtual const Row&	current () const = 0;
 				virtual bool		next () = 0;
+
+			protected:
+				Glay::Int32u	errors;
 		};
 	}
 }

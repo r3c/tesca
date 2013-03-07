@@ -9,16 +9,17 @@ namespace
 {
 	struct	Literal
 	{
-		const char*					lexem;
+		const char*					name;
+		Glay::Int32u				length;
 		Tesca::Provision::Variant	value;
 	};
 
 	static Literal	literals[] =
 	{
-		{"false",	Tesca::Provision::Variant (false)},
-		{"null",	Tesca::Provision::Variant::empty},
-		{"true",	Tesca::Provision::Variant (true)},
-		{0, 		Tesca::Provision::Variant::empty}
+		{"false",	5,	Tesca::Provision::Variant (false)},
+		{"null",	4,	Tesca::Provision::Variant::empty},
+		{"true",	4,	Tesca::Provision::Variant (true)},
+		{0, 		0,	Tesca::Provision::Variant::empty}
 	};
 }
 
@@ -39,18 +40,18 @@ namespace	Tesca
 			return this->row;
 		}
 
-		void	JSONLineReader::parse (const char* line, Int32u length)
+		bool	JSONLineReader::parse (const char* line, Int32u length)
 		{
 			Cursor	cursor;
 
-			this->prefix.str ("");
+			this->prefix.seekp (0);
 			this->prefix << this->root;
 			this->row.clear ();			
 
 			cursor.buffer = line;
 			cursor.length = length;
 
-			this->readValue (&cursor, this->prefix);
+			return this->readValue (&cursor, this->prefix);
 		}
 
 		bool	JSONLineReader::readCharacter (Cursor* cursor, char expected)
@@ -75,6 +76,7 @@ namespace	Tesca
 			bool		comma;
 			Int32u		index;
 			Int32u		key;
+			Int32u		length;
 			Float64		number;
 			const char*	start;
 			streampos	tip;
@@ -205,7 +207,18 @@ namespace	Tesca
 						--cursor->length;
 					}
 
-					// FIXME
+					length = cursor->buffer - start;
+
+					for (Literal* literal = literals; literal->name != 0; ++literal)
+					{
+						if (literal->length == length && memcmp (literal->name, start, length * sizeof (*literal->name)) == 0)
+						{
+							if (this->lookup.find (prefix.str (), &key))
+								this->row.set (key, literal->value);
+
+							return true;
+						}
+					}
 
 					return false;
 

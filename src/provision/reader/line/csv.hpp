@@ -25,7 +25,7 @@ namespace	Tesca
 				virtual const Row&	current () const;
 
 			protected:
-				virtual void	parse (const char*, Glay::Int32u);
+				virtual bool	parse (const char*, Glay::Int32u);
 
 			private:
 				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;

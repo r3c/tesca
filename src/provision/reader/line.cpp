@@ -75,7 +75,8 @@ namespace	Tesca
 			if (!this->fetch (&buffer, &length))
 				return false;
 
-			this->parse (buffer, length);
+			if (!this->parse (buffer, length))
+				++this->errors;
 
 			return true;
 		}

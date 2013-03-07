@@ -22,7 +22,7 @@ namespace	Tesca
 
 			protected:
 				bool			fetch (const char**, Glay::Int32u*);
-				virtual void	parse (const char*, Glay::Int32u) = 0;
+				virtual bool	parse (const char*, Glay::Int32u) = 0;
 
 			private:
 				bool	read ();

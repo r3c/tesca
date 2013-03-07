@@ -70,7 +70,7 @@ namespace	Tesca
 			return this->row;
 		}
 
-		void	CSVLineReader::parse (const char* line, Int32u length)
+		bool	CSVLineReader::parse (const char* line, Int32u length)
 		{
 			this->row.clear ();
 
@@ -81,6 +81,8 @@ namespace	Tesca
 				if (field != this->mapping.end ())
 					this->row.set (field->second, Variant (buffer, length));
 			});
+
+			return true;
 		}
 
 		void	CSVLineReader::split (const char* line, Int32u length, Callback callback)

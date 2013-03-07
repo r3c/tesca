@@ -24,7 +24,7 @@ namespace	Tesca
 				virtual const Row&	current () const;
 
 			protected:
-				virtual void	parse (const std::string&);
+				virtual bool	parse (const std::string&);
 
 			private:
 				typedef std::map<Glay::Int32u, Glay::Int32u>	Lookup;

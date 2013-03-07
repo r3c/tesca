@@ -26,7 +26,7 @@ namespace	Tesca
 				virtual const Row&	current () const;
 
 			protected:
-				virtual void	parse (const char*, Glay::Int32u);
+				virtual bool	parse (const char*, Glay::Int32u);
 
 			private:
 				struct	Cursor

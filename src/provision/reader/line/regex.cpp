@@ -30,20 +30,22 @@ namespace	Tesca
 			return this->row;
 		}
 
-		void	RegexLineReader::parse (const std::string& line)
+		bool	RegexLineReader::parse (const std::string& line)
 		{
 			smatch	match;
 
 			this->row.clear ();
 
-			if (regex_match (line, match, this->regex))
+			if (!regex_match (line, match, this->regex))
+				return false;
+
+			for (auto i = this->lookup.begin (); i != this->lookup.end (); ++i)
 			{
-				for (auto i = this->lookup.begin (); i != this->lookup.end (); ++i)
-				{
-					if (i->first < match.size ())
-						this->row.set (i->second, Variant (match[i->first]));
-				}
+				if (i->first < match.size ())
+					this->row.set (i->second, Variant (match[i->first]));
 			}
+
+			return true;
 		}
 	}
 }

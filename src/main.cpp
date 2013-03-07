@@ -94,6 +94,9 @@ int	debug_run (const char* formatString, const char* condition, const char* aggr
 				while (reader->next ())
 					table.push (reader->current ());
 
+				if (reader->getErrors () > 0)
+					cerr << "warning: found " << reader->getErrors () << " invalid line(s) in file" << endl;
+
 				delete reader;
 			}
 			else
