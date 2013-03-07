@@ -14,6 +14,7 @@ namespace	Tesca
 		{
 			public:
 				typedef std::vector<const Column*>	Columns;
+				typedef Parser::ErrorEvent			ErrorEvent;
 
 				Formula (const Formula&);
 				Formula ();
@@ -21,8 +22,9 @@ namespace	Tesca
 
 				Formula&	operator = (const Formula&);
 
-				const Columns&	getColumns () const;
-				std::string		getMessage () const;
+				const Columns&		getColumns () const;
+				const ErrorEvent&	getError () const;
+				ErrorEvent&			getError ();
 
 				bool	parse (Provision::Lookup&, const char*);
 				void	reset ();

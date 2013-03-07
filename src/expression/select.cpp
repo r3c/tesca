@@ -23,9 +23,14 @@ namespace	Tesca
 			return this->condition;
 		}
 
-		string	Select::getMessage () const
+		const Select::ErrorEvent&	Select::getError () const
 		{
-			return this->parser.getMessage ();
+			return this->parser.getError ();
+		}
+
+		Select::ErrorEvent&	Select::getError ()
+		{
+			return this->parser.getError ();
 		}
 
 		bool	Select::parse (Lookup& lookup, const char* input)

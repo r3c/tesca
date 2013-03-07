@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <map>
-#include <sstream>
 #include <string>
 #include <vector>
 #include "../glay/glay.hpp"
@@ -20,13 +19,16 @@ namespace	Tesca
 		class	Parser
 		{
 			public:
+				typedef Glay::Design::Event<const std::string&>	ErrorEvent;
+
 				Parser (const Parser&);
 				Parser ();
 				~Parser ();
 
 				Parser&	operator = (const Parser&);
 
-				std::string		getMessage () const;
+				const ErrorEvent&	getError () const;
+				ErrorEvent&			getError ();
 
 				bool	parseAggregator (Lexer&, const Aggregator**);
 				bool	parseCharacter (Lexer&, char);
@@ -44,9 +46,9 @@ namespace	Tesca
 
 				bool	fail (const Lexer&, const std::string&);
 
-				Accessors			accessors;
-				Columns				columns;
-				std::stringstream	message;
+				Accessors	accessors;
+				Columns		columns;
+				ErrorEvent	error;
 		};
 	}
 }

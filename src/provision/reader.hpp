@@ -13,19 +13,22 @@ namespace	Tesca
 		class	Reader
 		{
 			public:
+				typedef Glay::Design::Event<const std::string&>	ErrorEvent;
+
 						Reader (const Reader&);
 						Reader ();
 				virtual	~Reader ();
 
 				Reader&	operator = (const Reader&);
 
-				Glay::Int32u	getErrors () const;
+				const ErrorEvent&	getError () const;
+				ErrorEvent&			getError ();
 
 				virtual const Row&	current () const = 0;
 				virtual bool		next () = 0;
 
 			protected:
-				Glay::Int32u	errors;
+				ErrorEvent	error;
 		};
 	}
 }

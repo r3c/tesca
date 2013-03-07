@@ -1,6 +1,8 @@
 
 #include "line.hpp"
 
+#include <sstream>
+
 using namespace std;
 using namespace Glay;
 
@@ -13,6 +15,7 @@ namespace	Tesca
 			eof (false),
 			input (*input),
 			length (0),
+			line (0),
 			size (0),
 			start (0),
 			stop (0)
@@ -46,6 +49,8 @@ namespace	Tesca
 			// Store captured string length
 			*length = this->stop - this->start;
 
+			++this->line;
+
 			// Ignore repeated line break characters
 			while (true)
 			{
@@ -69,14 +74,19 @@ namespace	Tesca
 
 		bool	LineReader::next ()
 		{
-			const char*	buffer;
-			Int32u		length;
+			const char*		buffer;
+			Int32u			length;
+			stringstream	stream;
 
 			if (!this->fetch (&buffer, &length))
 				return false;
 
 			if (!this->parse (buffer, length))
-				++this->errors;
+			{
+				stream << "could not parse invalid line #" << this->line;
+
+				this->error.fire (stream.str ());
+			}
 
 			return true;
 		}

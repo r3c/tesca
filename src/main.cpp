@@ -54,7 +54,12 @@ int	debug_run (const char* formatString, const char* condition, const char* aggr
 	Expression::Select	select;
 	FileIStream*		stream;
 	Table				table;
-
+/*
+	format.getError ().bind ([] (const string& message)
+	{
+		cerr << "error: invalid input format (" << message << ")" << endl;
+	});
+*/
 	if (!format.parse (formatString))
 	{
 		cerr << "error: invalid input format" << endl;
@@ -62,19 +67,21 @@ int	debug_run (const char* formatString, const char* condition, const char* aggr
 		return 1;
 	}
 
-	if (!formula.parse (lookup, aggregation))
+	formula.getError ().bind ([] (const string& message)
 	{
-		cerr << "error: invalid aggregation expression (" << formula.getMessage () << ")" << endl;
+		cerr << "error: invalid aggregation expression (" << message << ")" << endl;
+	});
 
+	if (!formula.parse (lookup, aggregation))
 		return 1;
-	}
+
+	select.getError ().bind ([] (const string& message)
+	{
+		cerr << "error: invalid condition expression (" << message << ")" << endl;
+	});
 
 	if (!select.parse (lookup, condition))
-	{
-		cerr << "error: invalid condition expression (" << select.getMessage () << ")" << endl;
-
 		return 1;
-	}
 
 	table.reset (select.getCondition (), formula.getColumns ());
 
@@ -91,11 +98,13 @@ int	debug_run (const char* formatString, const char* condition, const char* aggr
 
 			if (reader)
 			{
+				reader->getError ().bind ([] (const string& error)
+				{
+					cerr << "warning: reader error (" << error << ")" << endl;
+				});
+
 				while (reader->next ())
 					table.push (reader->current ());
-
-				if (reader->getErrors () > 0)
-					cerr << "warning: found " << reader->getErrors () << " invalid line(s) in file" << endl;
 
 				delete reader;
 			}

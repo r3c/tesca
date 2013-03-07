@@ -22,9 +22,14 @@ namespace	Tesca
 			return this->columns;
 		}
 
-		string	Formula::getMessage () const
+		const Formula::ErrorEvent&	Formula::getError () const
 		{
-			return this->parser.getMessage ();
+			return this->parser.getError ();
+		}
+
+		Formula::ErrorEvent&	Formula::getError ()
+		{
+			return this->parser.getError ();
 		}
 
 		bool	Formula::parse (Lookup& lookup, const char* input)

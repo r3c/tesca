@@ -31,6 +31,7 @@ namespace	Tesca
 				bool					eof;
 				Glay::Pipe::IStream&	input;
 				Glay::Int32u			length;
+				Glay::Int32u			line;
 				Glay::Int32u			size;
 				Glay::Int32u			start;
 				Glay::Int32u			stop;

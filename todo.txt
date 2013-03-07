@@ -7,4 +7,4 @@ X Move lookup to stream
 - Implement JSON reader
 - Implement output formatting
 - Implement chained aggregations
-- Quotes in CSV format
+- Handle quotes in CSV format

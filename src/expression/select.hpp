@@ -12,14 +12,17 @@ namespace	Tesca
 		class	Select
 		{
 			public:
+				typedef Parser::ErrorEvent	ErrorEvent;
+
 				Select (const Select&);
 				Select ();
 				~Select ();
 
 				Select&	operator = (const Select&);
 
-				const Accessor*	getCondition () const;
-				std::string		getMessage () const;
+				const Accessor*		getCondition () const;
+				const ErrorEvent&	getError () const;
+				ErrorEvent&			getError ();
 
 				bool	parse (Provision::Lookup&, const char*);
 				void	reset ();

@@ -1,6 +1,7 @@
 
 #include "parser.hpp"
 
+#include <sstream>
 #include "../arithmetic/accessor/constant.hpp"
 #include "../arithmetic/accessor/field.hpp"
 #include "../arithmetic/accessor/void.hpp"
@@ -25,15 +26,23 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		string	Parser::getMessage () const
+		const Parser::ErrorEvent&	Parser::getError () const
 		{
-			return this->message.str ();
+			return this->error;
+		}
+
+		Parser::ErrorEvent&	Parser::getError ()
+		{
+			return this->error;
 		}
 
 		bool	Parser::fail (const Lexer& lexer, const string& error)
 		{
-			this->message.str ("");
-			this->message << error << " at index " << lexer.getIndex ();
+			stringstream	stream;
+
+			stream << error << " at index " << lexer.getIndex ();
+
+			this->error.fire (stream.str ());
 
 			return false;
 		}
@@ -239,17 +248,7 @@ namespace	Tesca
 				}
 
 				if (arguments.size () < function->min || (function->max > 0 && arguments.size () > function->max))
-				{
 					return this->fail (lexer, "wrong number of arguments");
-	/*
-					if (function->max == 0)
-						return this->fail (lexer, string ("function requires at least ") + function->min + " argument(s)");
-					else if (function->max == function->min)
-						return this->fail (lexer, string ("function requires between ") + function->min + " and " + function->max + " argument(s)");
-					else
-						return this->fail (lexer, string ("function requires ") + function->min + " argument(s)");
-	*/
-				}
 
 				*output = function->builder (arguments);
 

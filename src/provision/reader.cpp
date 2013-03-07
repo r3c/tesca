@@ -1,14 +1,13 @@
 
 #include "reader.hpp"
 
-using namespace Glay;
+using namespace Glay::Design;
 
 namespace	Tesca
 {
 	namespace	Provision
 	{
-		Reader::Reader () :
-			errors (0)
+		Reader::Reader ()
 		{
 		}
 
@@ -16,9 +15,14 @@ namespace	Tesca
 		{
 		}
 
-		Int32u	Reader::getErrors () const
+		const Reader::ErrorEvent&	Reader::getError () const
 		{
-			return this->errors;
+			return this->error;
+		}
+
+		Reader::ErrorEvent&	Reader::getError ()
+		{
+			return this->error;
 		}
 	}
 }
