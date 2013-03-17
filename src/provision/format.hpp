@@ -4,7 +4,7 @@
 
 #include <map>
 #include <string>
-#include "../glay/glay.hpp"
+#include "../../lib/glay/src/glay.hpp"
 #include "config.hpp"
 #include "lookup.hpp"
 #include "parser.hpp"

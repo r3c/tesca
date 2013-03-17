@@ -2,7 +2,7 @@
 #ifndef __TESCA_EXPRESSION_LEXER_HPP
 #define __TESCA_EXPRESSION_LEXER_HPP
 
-#include "../glay/glay.hpp"
+#include "../../lib/glay/src/glay.hpp"
 
 namespace	Tesca
 {

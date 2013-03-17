@@ -2,7 +2,7 @@
 #ifndef __TESCA_PROVISION_READER_LINE_HPP
 #define __TESCA_PROVISION_READER_LINE_HPP
 
-#include "../../glay/glay.hpp"
+#include "../../../lib/glay/src/glay.hpp"
 #include "../reader.hpp"
 
 namespace	Tesca

@@ -5,8 +5,8 @@
 #include <cmath>
 #include <functional>
 #include <vector>
+#include "../../lib/glay/src/glay.hpp"
 #include "../arithmetic/accessor.hpp"
-#include "../glay/glay.hpp"
 
 namespace	Tesca
 {

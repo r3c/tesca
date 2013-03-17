@@ -2,7 +2,7 @@
 #ifndef __TESCA_SLOT_AVERAGE_HPP
 #define __TESCA_SLOT_AVERAGE_HPP
 
-#include "../../glay/glay.hpp"
+#include "../../../lib/glay/src/glay.hpp"
 #include "../slot.hpp"
 
 namespace	Tesca

@@ -3,7 +3,7 @@
 #define __TESCA_PROVISION_VARIANT_HPP
 
 #include <string>
-#include "../glay/glay.hpp"
+#include "../../lib/glay/src/glay.hpp"
 
 namespace	Tesca
 {

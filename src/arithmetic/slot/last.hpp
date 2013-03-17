@@ -2,7 +2,7 @@
 #ifndef __TESCA_SLOT_LAST_HPP
 #define __TESCA_SLOT_LAST_HPP
 
-#include "../../glay/glay.hpp"
+#include "../../../lib/glay/src/glay.hpp"
 #include "../slot.hpp"
 
 namespace	Tesca

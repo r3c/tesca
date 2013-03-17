@@ -4,7 +4,7 @@
 
 #include <map>
 #include <string>
-#include "../glay/glay.hpp"
+#include "../../lib/glay/src/glay.hpp"
 
 namespace	Tesca
 {

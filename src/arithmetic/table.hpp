@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <map>
 #include <vector>
-#include "../glay/glay.hpp"
+#include "../../lib/glay/src/glay.hpp"
 #include "../provision/row.hpp"
 #include "bucket.hpp"
 #include "column.hpp"

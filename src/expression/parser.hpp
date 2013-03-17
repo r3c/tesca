@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "../glay/glay.hpp"
+#include "../../lib/glay/src/glay.hpp"
 #include "../provision/lookup.hpp"
 #include "aggregator.hpp"
 #include "function.hpp"
