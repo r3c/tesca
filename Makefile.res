@@ -47,6 +47,7 @@ SOURCE	= \
 	src/arithmetic/slot.cpp \
 	src/arithmetic/table.cpp \
 	src/expression/aggregator.cpp \
+	src/expression/constant.cpp \
 	src/expression/formula.cpp \
 	src/expression/function.cpp \
 	src/expression/lexer.cpp \

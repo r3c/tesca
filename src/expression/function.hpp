@@ -2,7 +2,6 @@
 #ifndef __TESCA_EXPRESSION_FUNCTION_HPP
 #define __TESCA_EXPRESSION_FUNCTION_HPP
 
-#include <cmath>
 #include <functional>
 #include <vector>
 #include "../../lib/glay/src/glay.hpp"

@@ -9,7 +9,6 @@
 #include "../../lib/glay/src/glay.hpp"
 #include "../provision/lookup.hpp"
 #include "aggregator.hpp"
-#include "function.hpp"
 #include "lexer.hpp"
 
 namespace	Tesca

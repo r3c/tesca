@@ -6,6 +6,8 @@
 #include "../arithmetic/accessor/field.hpp"
 #include "../arithmetic/accessor/void.hpp"
 #include "../arithmetic/column/value.hpp"
+#include "constant.hpp"
+#include "function.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -181,11 +183,12 @@ namespace	Tesca
 			const Accessor*	accessor;
 			Accessors		arguments;
 			stringstream	buffer;
+			const Constant*	constant;
 			const Function*	function;
 			string			identifier;
 			Float64			number;
 
-			// Parse function call
+			// Parse function call or constant
 			for (; !lexer.eof () &&
 				   ((lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
 					(lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
@@ -194,63 +197,74 @@ namespace	Tesca
 
 			if (buffer.tellp () > 0)
 			{
-				if (!this->skip (lexer))
-					return this->fail (lexer, "unfinished function call");
-
-				function = 0;
-
-				for (Int32u i = 0; Function::functions[i].name; ++i)
+				if (this->skip (lexer) && lexer.getCurrent () == '(')
 				{
-					if (buffer.str () == Function::functions[i].name)
+					if (!this->parseCharacter (lexer, '('))
+						return false;
+
+					function = 0;
+
+					for (Int32u i = 0; Function::functions[i].name; ++i)
 					{
-						function = &Function::functions[i];
-
-						break;
-					}
-				}
-
-				if (!function)
-					return this->fail (lexer, "unknown function name");
-
-				if (!this->parseCharacter (lexer, '('))
-					return false;
-
-				if (!this->skip (lexer))
-					this->fail (lexer, "expected function arguments");
-
-				if (lexer.getCurrent () == ')')
-					lexer.next ();
-				else
-				{
-					while (true)
-					{
-						if (!this->parseValue (lexer, lookup, &accessor))
-							return false;
-
-						arguments.push_back (accessor);
-
-						if (!this->skip (lexer))
-							this->fail (lexer, "expected arguments separator or end of arguments");
-
-						if (lexer.getCurrent () == ')')
+						if (buffer.str () == Function::functions[i].name)
 						{
-							lexer.next ();
+							function = &Function::functions[i];
 
 							break;
 						}
+					}
 
-						if (!this->parseCharacter (lexer, ','))
+					if (!function)
+						return this->fail (lexer, "unknown function name");
+
+					if (!this->skip (lexer))
+						this->fail (lexer, "expected function arguments");
+
+					while (lexer.getCurrent () != ')')
+					{
+						if (arguments.size () > 0)
+						{
+							if (!this->parseCharacter (lexer, ','))
+								return false;
+
+							this->skip (lexer);
+						}
+
+						if (!this->parseValue (lexer, lookup, &accessor))
 							return false;
 
 						if (!this->skip (lexer))
-							this->fail (lexer, "expected function argument");
+							this->fail (lexer, "expected next argument or ')'");
+
+						arguments.push_back (accessor);
 					}
+
+					lexer.next ();
+
+					if (arguments.size () < function->min || (function->max > 0 && arguments.size () > function->max))
+						return this->fail (lexer, "wrong number of arguments");
+
+					*output = function->builder (arguments);
 				}
+				else
+				{
+					constant = 0;
 
-				if (arguments.size () < function->min || (function->max > 0 && arguments.size () > function->max))
-					return this->fail (lexer, "wrong number of arguments");
+					for (Int32u i = 0; Constant::constants[i].name; ++i)
+					{
+						if (buffer.str () == Constant::constants[i].name)
+						{
+							constant = &Constant::constants[i];
 
-				*output = function->builder (arguments);
+							break;
+						}
+					}
+
+					if (!constant)
+						return this->fail (lexer, "unknown constant name");
+
+					*output = new ConstantAccessor (constant->builder ());
+				}
 
 				this->accessors.push_back (*output);
 
@@ -317,7 +331,7 @@ namespace	Tesca
 				return true;
 			}
 
-			return this->fail (lexer, "invalid character");
+			return this->fail (lexer, "expected value");
 		}
 
 		void	Parser::reset ()
