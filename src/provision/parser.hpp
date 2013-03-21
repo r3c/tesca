@@ -5,7 +5,7 @@
 #include <functional>
 #include <map>
 #include <string>
-#include "../../lib/glay/src/glay.hpp"
+#include "../../lib/glay/src/include.hpp"
 #include "config.hpp"
 #include "lookup.hpp"
 #include "reader.hpp"

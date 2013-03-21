@@ -3,7 +3,7 @@
 #define __TESCA_ARITHMETIC_ACCESSOR_VECTOR_HPP
 
 #include <vector>
-#include "../../../lib/glay/src/glay.hpp"
+#include "../../../lib/glay/src/include.hpp"
 #include "../accessor.hpp"
 
 namespace	Tesca

@@ -4,7 +4,7 @@
 
 #include <functional>
 #include <vector>
-#include "../../lib/glay/src/glay.hpp"
+#include "../../lib/glay/src/include.hpp"
 #include "../arithmetic/accessor.hpp"
 
 namespace	Tesca

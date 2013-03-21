@@ -3,7 +3,7 @@
 #define __TESCA_PROVISION_READER_HPP
 
 #include <map>
-#include "../../lib/glay/src/glay.hpp"
+#include "../../lib/glay/src/include.hpp"
 #include "row.hpp"
 
 namespace	Tesca
