@@ -15,7 +15,7 @@ namespace	Tesca
 				IfAccessor (const Accessor*, const Accessor*);
 
 			protected:
-				virtual Provision::Variant	read (const Provision::Row&) const;
+				virtual Storage::Variant	read (const Provision::Row&) const;
 
 			private:
 				const Accessor*	condition;

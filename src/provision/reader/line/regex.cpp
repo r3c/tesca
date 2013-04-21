@@ -4,6 +4,7 @@
 using namespace std;
 using namespace Glay;
 using namespace Glay::System;
+using namespace Tesca::Storage;
 
 namespace	Tesca
 {

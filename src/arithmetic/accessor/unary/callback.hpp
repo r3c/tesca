@@ -12,11 +12,11 @@ namespace	Tesca
 		class	CallbackUnaryAccessor : public UnaryAccessor
 		{
 			public:
-				typedef	std::function<Provision::Variant (const Provision::Variant&)>	Callback;
+				typedef	std::function<Storage::Variant (const Storage::Variant&)>	Callback;
 
 				CallbackUnaryAccessor (const Accessor*, Callback);
 
-				virtual Provision::Variant	evaluate (const Provision::Variant&) const;
+				virtual Storage::Variant	evaluate (const Storage::Variant&) const;
 
 			private:
 				Callback	callback;

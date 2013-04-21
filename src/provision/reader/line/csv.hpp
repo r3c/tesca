@@ -5,8 +5,8 @@
 #include <cstdlib>
 #include <functional>
 #include <map>
+#include "../../../storage/config.hpp"
 #include "../../row/array.hpp"
-#include "../../config.hpp"
 #include "../../lookup.hpp"
 #include "../line.hpp"
 
@@ -18,7 +18,7 @@ namespace	Tesca
 		{
 			public:
 				CSVLineReader (const CSVLineReader&);
-				CSVLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
+				CSVLineReader (Glay::Pipe::IStream*, const Lookup&, const Storage::Config&);
 
 				CSVLineReader&	operator = (const CSVLineReader&);
 

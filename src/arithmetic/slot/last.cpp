@@ -2,7 +2,7 @@
 #include "last.hpp"
 
 using namespace Glay;
-using namespace Tesca::Provision;
+using namespace Tesca::Storage;
 
 namespace	Tesca
 {

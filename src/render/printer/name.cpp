@@ -7,12 +7,13 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Tesca::Arithmetic;
+using namespace Tesca::Storage;
 
 namespace	Tesca
 {
 	namespace	Render
 	{
-		NamePrinter::NamePrinter ()
+		NamePrinter::NamePrinter (const Config&)
 		{
 		}
 
@@ -30,14 +31,14 @@ namespace	Tesca
 
 				for (Int32u i = 0; i < table.getWidth (); ++i)
 				{
-					const Arithmetic::Slot&	slot = *slots[i];
+					const Arithmetic::Slot*	slot = slots[i];
 
 					if (i > 0)
 						stream.write (", ", 2); // FIXME
 
 					auto id = table.getColumns ()[i]->getIdentifier ();
 
-					if (!slot.current ().toString (&value))
+					if (!slot->current ().toString (&value))
 						value = "<void>";
 
 					stream.write (id.c_str (), id.length ());

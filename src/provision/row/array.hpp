@@ -16,17 +16,17 @@ namespace	Tesca
 						ArrayRow (Glay::Int32u);
 				virtual	~ArrayRow ();
 
-				ArrayRow&				operator = (const ArrayRow&);
-				virtual const Variant&	operator [] (Glay::Int32u) const;
+				ArrayRow&						operator = (const ArrayRow&);
+				virtual const Storage::Variant&	operator [] (Glay::Int32u) const;
 
 				virtual Glay::Int32u	getLength () const;
 
 				void	clear ();
-				bool	set (Glay::Int32u, const Variant&);
+				bool	set (Glay::Int32u, const Storage::Variant&);
 
 			private:
-				Glay::Int32u	length;
-				Variant*		values;
+				Glay::Int32u		length;
+				Storage::Variant*	values;
 		};
 	}
 }

@@ -2,7 +2,6 @@
 #include "output.hpp"
 
 #include <cstring>
-#include <sstream>
 
 using namespace std;
 using namespace Glay;
@@ -33,25 +32,24 @@ namespace	Tesca
 		Printer*	Output::create () const
 		{
 			if (this->format != 0)
-				return this->format->builder (/*this->config*/);
+				return this->format->builder (this->config);
 
 			return 0;
 		}
 
 		bool	Output::parse (const char* expression)
 		{
-			stringstream	buffer;
-			string			key;
-			const char*		stop;
+			const char*	begin;
+			string		key;
 
-			for (stop = expression; *stop != '\0' && *stop != ':'; )
-				++stop;
+			for (begin = expression; *expression != '\0' && *expression != ':'; )
+				++expression;
 
 			this->format = 0;
 
 			for (auto current = Format::formats; current->name; ++current)
 			{
-				if (strncmp (current->name, expression, stop - expression) == 0)
+				if (strncmp (current->name, begin, expression - begin) == 0)
 				{
 					this->format = current;
 
@@ -61,50 +59,15 @@ namespace	Tesca
 
 			if (!this->format)
 			{
-				this->error.fire (string ("unknown format \"") + string (expression, stop - expression) + "\"");
+				this->error.fire (string ("unknown format \"") + string (begin, expression - begin) + "\"");
 
 				return false;
 			}
 
 			// Read configuration
-/*
-			this->config.clear ();
+			if (*expression == ':')
+				return this->config.parse (++expression);
 
-			while (*stop != '\0')
-			{
-				// Read configuration key
-				buffer.str ("");
-
-				for (++stop; *stop != '\0' && *stop != '=' && *stop != ';'; ++stop)
-				{
-					if (*stop == '\\' && *(stop + 1) != '\0')
-						++stop;
-
-					buffer.put (*stop);
-				}
-
-				if (*stop == '\0')
-					break;
-
-				key = buffer.str ();
-
-				// Read and store configuration pair
-				buffer.str ("");
-
-				if (*stop == '=')
-				{
-					for (++stop; *stop != '\0' && *stop != ';'; ++stop)
-					{
-						if (*stop == '\\' && *(stop + 1) != '\0')
-							++stop;
-
-						buffer.put (*stop);
-					}
-				}
-
-				this->config.set (key, buffer.str ());
-			}
-*/
 			return true;
 		}
 	}

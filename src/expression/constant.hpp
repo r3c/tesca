@@ -3,7 +3,7 @@
 #define __TESCA_EXPRESSION_CONSTANT_HPP
 
 #include <functional>
-#include "../provision/variant.hpp"
+#include "../storage/variant.hpp"
 
 namespace	Tesca
 {
@@ -11,7 +11,7 @@ namespace	Tesca
 	{
 		struct	Constant
 		{
-			typedef std::function<Provision::Variant ()>	Builder;
+			typedef std::function<Storage::Variant ()>	Builder;
 
 			static const Constant	constants[];
 

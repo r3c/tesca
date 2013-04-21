@@ -13,11 +13,11 @@ namespace	Tesca
 		class	NumberBinaryAccessor : public BinaryAccessor
 		{
 			public:
-				typedef	std::function<Provision::Variant (Glay::Float64, Glay::Float64)>	Callback;
+				typedef	std::function<Storage::Variant (Glay::Float64, Glay::Float64)>	Callback;
 
 				NumberBinaryAccessor (const Accessor*, const Accessor*, Callback);
 
-				virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const;
+				virtual Storage::Variant	evaluate (const Storage::Variant&, const Storage::Variant&) const;
 
 			private:
 				Callback	callback;

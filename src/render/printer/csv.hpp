@@ -3,6 +3,7 @@
 #define __TESCA_RENDER_PRINTER_CSV_HPP
 
 #include "../../../lib/glay/src/include.hpp"
+#include "../../storage/config.hpp"
 #include "../printer.hpp"
 
 namespace	Tesca
@@ -13,12 +14,15 @@ namespace	Tesca
 		{
 			public:
 						CSVPrinter (const CSVPrinter&);
-						CSVPrinter ();
+						CSVPrinter (const Storage::Config&);
 				virtual	~CSVPrinter ();
 
 				CSVPrinter&	operator = (const CSVPrinter&);
 
 				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&);
+
+			private:
+				bool	headers;
 		};
 	}
 }

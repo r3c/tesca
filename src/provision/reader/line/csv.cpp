@@ -4,6 +4,7 @@
 using namespace std;
 using namespace Glay;
 using namespace Glay::System;
+using namespace Tesca::Storage;
 
 namespace
 {
@@ -33,7 +34,7 @@ namespace	Tesca
 			for (buffer = config.get ("splits", ",").c_str (); *buffer; )
 				this->types[(Int32u)*buffer++] = TYPE_SPLIT;
 
-			// Read headers from configuration or file or default
+			// Read headers from configuration or use default
 			if (config.get ("headers", &headers))
 			{
 				if (headers.length () > 0)

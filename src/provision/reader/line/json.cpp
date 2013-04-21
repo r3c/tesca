@@ -4,6 +4,7 @@
 using namespace std;
 using namespace Glay;
 using namespace Glay::System;
+using namespace Tesca::Storage;
 
 namespace
 {
@@ -11,15 +12,15 @@ namespace
 	{
 		const char*					name;
 		Glay::Int32u				length;
-		Tesca::Provision::Variant	value;
+		Tesca::Storage::Variant	value;
 	};
 
 	static Literal	literals[] =
 	{
-		{"false",	5,	Tesca::Provision::Variant (false)},
-		{"null",	4,	Tesca::Provision::Variant::empty},
-		{"true",	4,	Tesca::Provision::Variant (true)},
-		{0, 		0,	Tesca::Provision::Variant::empty}
+		{"false",	5,	Tesca::Storage::Variant (false)},
+		{"null",	4,	Tesca::Storage::Variant::empty},
+		{"true",	4,	Tesca::Storage::Variant (true)},
+		{0, 		0,	Tesca::Storage::Variant::empty}
 	};
 }
 

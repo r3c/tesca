@@ -3,6 +3,7 @@
 #define __TESCA_RENDER_PRINTER_NAME_HPP
 
 #include "../../../lib/glay/src/include.hpp"
+#include "../../storage/config.hpp"
 #include "../printer.hpp"
 
 namespace	Tesca
@@ -13,7 +14,7 @@ namespace	Tesca
 		{
 			public:
 						NamePrinter (const NamePrinter&);
-						NamePrinter ();
+						NamePrinter (const Storage::Config&);
 				virtual	~NamePrinter ();
 
 				NamePrinter&	operator = (const NamePrinter&);

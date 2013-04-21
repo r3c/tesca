@@ -53,7 +53,6 @@ SOURCE	= \
 	src/expression/function.cpp \
 	src/expression/lexer.cpp \
 	src/expression/parser.cpp \
-	src/provision/config.cpp \
 	src/provision/format.cpp \
 	src/provision/input.cpp \
 	src/provision/lookup.cpp \
@@ -64,7 +63,8 @@ SOURCE	= \
 	src/provision/reader.cpp \
 	src/provision/row/array.cpp \
 	src/provision/row.cpp \
-	src/provision/variant.cpp \
+	src/storage/config.cpp \
+	src/storage/variant.cpp \
 	src/render/printer/csv.cpp \
 	src/render/printer/name.cpp \
 	src/render/format.cpp \

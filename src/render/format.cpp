@@ -5,6 +5,7 @@
 #include "printer/name.hpp"
 
 using namespace Glay;
+using namespace Tesca::Storage;
 
 namespace	Tesca
 {
@@ -12,13 +13,13 @@ namespace	Tesca
 	{
 		const Format	Format::formats[] =
 		{
-			{"csv",		[] (/*const Config& config*/) -> Printer*
+			{"csv",		[] (const Config& config) -> Printer*
 			{
-				return new CSVPrinter (/*config*/);
+				return new CSVPrinter (config);
 			}},
-			{"name",	[] (/*const Config& config*/) -> Printer*
+			{"name",	[] (const Config& config) -> Printer*
 			{
-				return new NamePrinter (/*config*/);
+				return new NamePrinter (config);
 			}},
 			{0, 0}
 		};

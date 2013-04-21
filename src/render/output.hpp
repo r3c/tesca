@@ -4,7 +4,7 @@
 
 #include <string>
 #include "../../lib/glay/src/include.hpp"
-//#include "config.hpp"
+#include "../storage/config.hpp"
 #include "format.hpp"
 #include "printer.hpp"
 
@@ -30,7 +30,7 @@ namespace	Tesca
 				bool		parse (const char*);
 
 			private:
-//				Config			config;
+				Storage::Config	config;
 				Error			error;
 				const Format*	format;
 		};

@@ -12,12 +12,12 @@ namespace	Tesca
 		class	LastSlot : public Slot
 		{
 			public:
-				virtual Provision::Variant	current () const;
-				virtual bool				push (const Provision::Variant&);
+				virtual Storage::Variant	current () const;
+				virtual bool				push (const Storage::Variant&);
 				virtual void				reset ();
 
 			private:
-				Provision::Variant	last;
+				Storage::Variant	last;
 		};
 	}
 }

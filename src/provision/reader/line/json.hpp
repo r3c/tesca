@@ -6,8 +6,8 @@
 #include <functional>
 #include <map>
 #include <sstream>
+#include "../../../storage/config.hpp"
 #include "../../row/array.hpp"
-#include "../../config.hpp"
 #include "../../lookup.hpp"
 #include "../line.hpp"
 
@@ -19,7 +19,7 @@ namespace	Tesca
 		{
 			public:
 				JSONLineReader (const JSONLineReader&);
-				JSONLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
+				JSONLineReader (Glay::Pipe::IStream*, const Lookup&, const Storage::Config&);
 
 				JSONLineReader&	operator = (const JSONLineReader&);
 

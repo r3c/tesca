@@ -12,11 +12,11 @@ namespace	Tesca
 		class	CallbackVectorAccessor : public VectorAccessor
 		{
 			public:
-				typedef	std::function<Provision::Variant (const Provision::Variant*, Glay::Int32u)>	Callback;
+				typedef	std::function<Storage::Variant (const Storage::Variant*, Glay::Int32u)>	Callback;
 
 				CallbackVectorAccessor (const std::vector<const Accessor*>&, Callback);
 
-				virtual Provision::Variant	evaluate (const Provision::Variant*, Glay::Int32u) const;
+				virtual Storage::Variant	evaluate (const Storage::Variant*, Glay::Int32u) const;
 
 			private:
 				Callback	callback;

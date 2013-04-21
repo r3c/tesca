@@ -3,7 +3,7 @@
 #define __TESCA_ARITHMETIC_BUCKET_HPP
 
 #include "../../lib/glay/src/include.hpp"
-#include "../provision/variant.hpp"
+#include "../storage/variant.hpp"
 
 namespace	Tesca
 {
@@ -17,16 +17,16 @@ namespace	Tesca
 				~Bucket ();
 
 				Bucket&					operator = (const Bucket&);
-				const Provision::Variant&	operator [] (Glay::Int32u) const;
+				const Storage::Variant&	operator [] (Glay::Int32u) const;
 
 				Glay::Int32u	getLength () const;
 
 				Glay::Int16s	compare (const Bucket&) const;
 				Bucket&			keep ();
-				void			set (Glay::Int32u, const Provision::Variant&);
+				void			set (Glay::Int32u, const Storage::Variant&);
 
 			private:
-				Provision::Variant*	buffer;
+				Storage::Variant*	buffer;
 				Glay::Int32u		length;
 		};
 

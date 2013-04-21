@@ -4,8 +4,8 @@
 
 #include <map>
 #include <regex>
+#include "../../../storage/config.hpp"
 #include "../../row/array.hpp"
-#include "../../config.hpp"
 #include "../../lookup.hpp"
 #include "../line.hpp"
 
@@ -17,7 +17,7 @@ namespace	Tesca
 		{
 			public:
 				RegexLineReader (const RegexLineReader&);
-				RegexLineReader (Glay::Pipe::IStream*, const Lookup&, const Config&);
+				RegexLineReader (Glay::Pipe::IStream*, const Lookup&, const Storage::Config&);
 
 				RegexLineReader&	operator = (const RegexLineReader&);
 

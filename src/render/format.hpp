@@ -4,7 +4,7 @@
 
 #include <functional>
 #include "../../lib/glay/src/include.hpp"
-//#include "config.hpp"
+#include "../storage/config.hpp"
 #include "printer.hpp"
 
 namespace	Tesca
@@ -13,7 +13,7 @@ namespace	Tesca
 	{
 		struct	Format
 		{
-			typedef std::function<Printer* (/*const Config&*/)>	Builder;
+			typedef std::function<Printer* (const Storage::Config&)>	Builder;
 
 			static const Format	formats[];
 

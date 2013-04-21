@@ -3,7 +3,7 @@
 #define __TESCA_ARITHMETIC_ACCESSOR_HPP
 
 #include "../provision/row.hpp"
-#include "../provision/variant.hpp"
+#include "../storage/variant.hpp"
 
 namespace	Tesca
 {
@@ -14,7 +14,7 @@ namespace	Tesca
 			public:
 				virtual	~Accessor ();
 
-				virtual Provision::Variant	read (const Provision::Row&) const = 0;
+				virtual Storage::Variant	read (const Provision::Row&) const = 0;
 		};
 	}
 }

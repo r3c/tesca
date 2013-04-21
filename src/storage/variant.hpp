@@ -1,13 +1,13 @@
 
-#ifndef __TESCA_PROVISION_VARIANT_HPP
-#define __TESCA_PROVISION_VARIANT_HPP
+#ifndef __TESCA_STORAGE_VARIANT_HPP
+#define __TESCA_STORAGE_VARIANT_HPP
 
 #include <string>
 #include "../../lib/glay/src/include.hpp"
 
 namespace	Tesca
 {
-	namespace	Provision
+	namespace	Storage
 	{
 		class	Variant
 		{

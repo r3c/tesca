@@ -4,7 +4,7 @@
 
 #include <string>
 #include "../provision/row.hpp"
-#include "../provision/variant.hpp"
+#include "../storage/variant.hpp"
 #include "accessor.hpp"
 #include "slot.hpp"
 
@@ -25,7 +25,7 @@ namespace	Tesca
 
 				virtual Slot*		create () const = 0;
 				virtual bool		group () const = 0;
-				Provision::Variant	read (const Provision::Row&) const;
+				Storage::Variant	read (const Provision::Row&) const;
 
 			private:
 				const Accessor*	accessor;

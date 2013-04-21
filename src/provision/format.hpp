@@ -4,7 +4,7 @@
 
 #include <functional>
 #include "../../lib/glay/src/include.hpp"
-#include "config.hpp"
+#include "../storage/config.hpp"
 #include "lookup.hpp"
 #include "reader.hpp"
 
@@ -14,7 +14,7 @@ namespace	Tesca
 	{
 		struct	Format
 		{
-			typedef std::function<Reader* (Glay::Pipe::IStream*, const Lookup&, const Config&)>	Builder;
+			typedef std::function<Reader* (Glay::Pipe::IStream*, const Lookup&, const Storage::Config&)>	Builder;
 
 			static const Format	formats[];
 

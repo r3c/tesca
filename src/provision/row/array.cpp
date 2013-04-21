@@ -2,6 +2,7 @@
 #include "array.hpp"
 
 using namespace Glay;
+using namespace Tesca::Storage;
 
 namespace	Tesca
 {

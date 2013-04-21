@@ -1,13 +1,13 @@
 
-#ifndef __TESCA_PROVISION_CONFIG_HPP
-#define __TESCA_PROVISION_CONFIG_HPP
+#ifndef __TESCA_STORAGE_CONFIG_HPP
+#define __TESCA_STORAGE_CONFIG_HPP
 
 #include <map>
 #include <string>
 
 namespace	Tesca
 {
-	namespace	Provision
+	namespace	Storage
 	{
 		class	Config
 		{
@@ -20,7 +20,7 @@ namespace	Tesca
 				void				clear ();
 				const std::string&	get (const std::string&, const std::string&) const;
 				bool				get (const std::string&, std::string*) const;
-				void				set (const std::string&, const std::string&);
+				bool				parse (const std::string&);
 
 			private:
 				std::map<std::string, std::string>	values;

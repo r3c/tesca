@@ -15,6 +15,7 @@ using namespace Glay::Pipe;
 using namespace Glay::System;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
+using namespace Tesca::Storage;
 
 namespace	Tesca
 {

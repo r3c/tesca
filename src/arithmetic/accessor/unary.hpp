@@ -13,8 +13,8 @@ namespace	Tesca
 			public:
 				UnaryAccessor (const Accessor*);
 
-				virtual Provision::Variant	evaluate (const Provision::Variant&) const = 0;
-				virtual Provision::Variant	read (const Provision::Row&) const;
+				virtual Storage::Variant	evaluate (const Storage::Variant&) const = 0;
+				virtual Storage::Variant	read (const Provision::Row&) const;
 
 			private:
 				const Accessor*	source;

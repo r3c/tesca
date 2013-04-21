@@ -14,8 +14,8 @@ namespace	Tesca
 			public:
 				CountSlot ();
 
-				virtual Provision::Variant	current () const;
-				virtual bool				push (const Provision::Variant&);
+				virtual Storage::Variant	current () const;
+				virtual bool				push (const Storage::Variant&);
 				virtual void				reset ();
 
 			private:

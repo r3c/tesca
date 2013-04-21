@@ -12,11 +12,11 @@ namespace	Tesca
 		class	CallbackBinaryAccessor : public BinaryAccessor
 		{
 			public:
-				typedef	std::function<Provision::Variant (const Provision::Variant&, const Provision::Variant&)>	Callback;
+				typedef	std::function<Storage::Variant (const Storage::Variant&, const Storage::Variant&)>	Callback;
 
 				CallbackBinaryAccessor (const Accessor*, const Accessor*, Callback);
 
-				virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const;
+				virtual Storage::Variant	evaluate (const Storage::Variant&, const Storage::Variant&) const;
 
 			private:
 				Callback	callback;

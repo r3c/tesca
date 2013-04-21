@@ -23,13 +23,13 @@ namespace	Tesca
 
 				MapReader&	operator = (const MapReader&);
 
-				bool				assign (const std::string&, const Variant&);
+				bool				assign (const std::string&, const Storage::Variant&);
 				virtual const Row&	current () const;
 				virtual bool		next ();
 				void				push ();
 
 			private:
-				typedef std::list<Variant*>	Lines;
+				typedef std::list<Storage::Variant*>	Lines;
 
 				const Fields*	fields;
 				Lines			lines;
