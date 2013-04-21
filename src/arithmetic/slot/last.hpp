@@ -7,16 +7,19 @@
 
 namespace	Tesca
 {
-	class	LastSlot : public Slot
+	namespace	Arithmetic
 	{
-		public:
-			virtual Provision::Variant	current () const;
-			virtual bool			push (const Provision::Variant&);
-			virtual void			reset ();
+		class	LastSlot : public Slot
+		{
+			public:
+				virtual Provision::Variant	current () const;
+				virtual bool				push (const Provision::Variant&);
+				virtual void				reset ();
 
-		private:
-			Provision::Variant	last;
-	};
+			private:
+				Provision::Variant	last;
+		};
+	}
 }
 
 #endif

@@ -13,6 +13,7 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Glay::System;
+using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 
 namespace	Tesca
@@ -28,12 +29,12 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		const Parser::ErrorEvent&	Parser::getError () const
+		const Parser::Error&	Parser::getError () const
 		{
 			return this->error;
 		}
 
-		Parser::ErrorEvent&	Parser::getError ()
+		Parser::Error&	Parser::getError ()
 		{
 			return this->error;
 		}
@@ -62,11 +63,11 @@ namespace	Tesca
 
 			aggregator = 0;
 
-			for (Int32u i = 0; Aggregator::aggregators[i].name; ++i)
+			for (auto current = Aggregator::aggregators; current->name; ++current)
 			{
-				if (buffer.str () == Aggregator::aggregators[i].name)
+				if (buffer.str () == current->name)
 				{
-					aggregator = &Aggregator::aggregators[i];
+					aggregator = current;
 
 					break;
 				}

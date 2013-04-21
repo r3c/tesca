@@ -6,14 +6,17 @@
 
 namespace	Tesca
 {
-	class	VoidAccessor : public Accessor
+	namespace	Arithmetic
 	{
-		public:
-			static const VoidAccessor	instance;
+		class	VoidAccessor : public Accessor
+		{
+			public:
+				static const VoidAccessor	instance;
 
-		protected:
-			virtual Provision::Variant	read (const Provision::Row&) const;
-	};
+			protected:
+				virtual Provision::Variant	read (const Provision::Row&) const;
+		};
+	}
 }
 
 #endif

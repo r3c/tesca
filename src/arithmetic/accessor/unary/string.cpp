@@ -7,19 +7,22 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	StringUnaryAccessor::StringUnaryAccessor (const Accessor* source, Callback callback) :
-		UnaryAccessor (source),
-		callback (callback)
+	namespace	Arithmetic
 	{
-	}
+		StringUnaryAccessor::StringUnaryAccessor (const Accessor* source, Callback callback) :
+			UnaryAccessor (source),
+			callback (callback)
+		{
+		}
 
-	Variant	StringUnaryAccessor::evaluate (const Variant& argument) const
-	{
-		string	value;
+		Variant	StringUnaryAccessor::evaluate (const Variant& argument) const
+		{
+			string	value;
 
-		if (argument.toString (&value))
-			return this->callback (value);
+			if (argument.toString (&value))
+				return this->callback (value);
 
-		return Variant::empty;
+			return Variant::empty;
+		}
 	}
 }

@@ -3,7 +3,10 @@
 
 namespace	Tesca
 {
-	Accessor::~Accessor ()
+	namespace	Arithmetic
 	{
+		Accessor::~Accessor ()
+		{
+		}
 	}
 }

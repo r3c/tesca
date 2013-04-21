@@ -8,18 +8,21 @@
 
 namespace	Tesca
 {
-	class	NumberBinaryAccessor : public BinaryAccessor
+	namespace	Arithmetic
 	{
-		public:
-			typedef	std::function<Provision::Variant (Glay::Float64, Glay::Float64)>	Callback;
+		class	NumberBinaryAccessor : public BinaryAccessor
+		{
+			public:
+				typedef	std::function<Provision::Variant (Glay::Float64, Glay::Float64)>	Callback;
 
-			NumberBinaryAccessor (const Accessor*, const Accessor*, Callback);
+				NumberBinaryAccessor (const Accessor*, const Accessor*, Callback);
 
-			virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const;
+				virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const;
 
-		private:
-			Callback	callback;
-	};
+			private:
+				Callback	callback;
+		};
+	}
 }
 
 #endif

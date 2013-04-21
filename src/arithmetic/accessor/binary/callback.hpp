@@ -7,18 +7,21 @@
 
 namespace	Tesca
 {
-	class	CallbackBinaryAccessor : public BinaryAccessor
+	namespace	Arithmetic
 	{
-		public:
-			typedef	std::function<Provision::Variant (const Provision::Variant&, const Provision::Variant&)>	Callback;
+		class	CallbackBinaryAccessor : public BinaryAccessor
+		{
+			public:
+				typedef	std::function<Provision::Variant (const Provision::Variant&, const Provision::Variant&)>	Callback;
 
-			CallbackBinaryAccessor (const Accessor*, const Accessor*, Callback);
+				CallbackBinaryAccessor (const Accessor*, const Accessor*, Callback);
 
-			virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const;
+				virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const;
 
-		private:
-			Callback	callback;
-	};
+			private:
+				Callback	callback;
+		};
+	}
 }
 
 #endif

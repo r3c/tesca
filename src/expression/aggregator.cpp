@@ -9,6 +9,8 @@
 #include "../arithmetic/slot/sum.hpp"
 #include "../arithmetic/slot/variance.hpp"
 
+using namespace Tesca::Arithmetic;
+
 namespace	Tesca
 {
 	namespace	Expression

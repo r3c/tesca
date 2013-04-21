@@ -10,25 +10,28 @@
 
 namespace	Tesca
 {
-	class	Column
+	namespace	Arithmetic
 	{
-		public:
-					Column (const Column&);
-					Column (const std::string&, const Accessor*);
-			virtual	~Column ();
+		class	Column
+		{
+			public:
+						Column (const Column&);
+						Column (const std::string&, const Accessor*);
+				virtual	~Column ();
 
-			Column&	operator = (const Column&);
+				Column&	operator = (const Column&);
 
-			const std::string&	getIdentifier () const;
+				const std::string&	getIdentifier () const;
 
-			virtual Slot*	create () const = 0;
-			virtual bool	group () const = 0;
-			Provision::Variant	read (const Provision::Row&) const;
+				virtual Slot*		create () const = 0;
+				virtual bool		group () const = 0;
+				Provision::Variant	read (const Provision::Row&) const;
 
-		private:
-			const Accessor*	accessor;
-			std::string		identifier;
-	};
+			private:
+				const Accessor*	accessor;
+				std::string		identifier;
+		};
+	}
 }
 
 #endif

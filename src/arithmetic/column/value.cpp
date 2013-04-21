@@ -7,18 +7,21 @@ using namespace std;
 
 namespace	Tesca
 {
-	ValueColumn::ValueColumn (const string& identifier, const Accessor* accessor) :
-		Column (identifier, accessor)
+	namespace	Arithmetic
 	{
-	}
+		ValueColumn::ValueColumn (const string& identifier, const Accessor* accessor) :
+			Column (identifier, accessor)
+		{
+		}
 
-	Slot*	ValueColumn::create () const
-	{
-		return new LastSlot ();
-	}
+		Slot*	ValueColumn::create () const
+		{
+			return new LastSlot ();
+		}
 
-	bool	ValueColumn::group () const
-	{
-		return true;
+		bool	ValueColumn::group () const
+		{
+			return true;
+		}
 	}
 }

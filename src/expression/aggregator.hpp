@@ -13,7 +13,7 @@ namespace	Tesca
 	{
 		struct	Aggregator
 		{
-			typedef std::function<Column* (const std::string&, const Accessor*)>	Builder;
+			typedef std::function<Arithmetic::Column* (const std::string&, const Arithmetic::Accessor*)>	Builder;
 
 			static const Aggregator	aggregators[];
 

@@ -6,15 +6,18 @@
 
 namespace	Tesca
 {
-	template<typename T>
-	class GroupColumn : public Column
+	namespace	Arithmetic
 	{
-		public:
-			GroupColumn (const std::string&, const Accessor*);
+		template<typename T>
+		class GroupColumn : public Column
+		{
+			public:
+				GroupColumn (const std::string&, const Accessor*);
 
-			virtual Slot*	create () const;
-			virtual bool	group () const;
-	};
+				virtual Slot*	create () const;
+				virtual bool	group () const;
+		};
+	}
 }
 
 #include "group.hxx"

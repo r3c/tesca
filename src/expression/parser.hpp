@@ -18,7 +18,7 @@ namespace	Tesca
 		class	Parser
 		{
 			public:
-				typedef Glay::Design::Event<const std::string&>	ErrorEvent;
+				typedef Glay::Design::Event<const std::string&>	Error;
 
 				Parser (const Parser&);
 				Parser ();
@@ -26,28 +26,28 @@ namespace	Tesca
 
 				Parser&	operator = (const Parser&);
 
-				const ErrorEvent&	getError () const;
-				ErrorEvent&			getError ();
+				const Error&	getError () const;
+				Error&			getError ();
 
 				bool	parseAggregator (Lexer&, const Aggregator**);
 				bool	parseCharacter (Lexer&, char);
-				bool	parseExpression (Lexer&, Provision::Lookup&, const Accessor**);
+				bool	parseExpression (Lexer&, Provision::Lookup&, const Arithmetic::Accessor**);
 				bool	parseIdentifier (Lexer&, std::string*);
-				bool	parseStatement (Lexer&, Provision::Lookup&, Column**);
-				bool	parseValue (Lexer&, Provision::Lookup&, const Accessor**);
+				bool	parseStatement (Lexer&, Provision::Lookup&, Arithmetic::Column**);
+				bool	parseValue (Lexer&, Provision::Lookup&, const Arithmetic::Accessor**);
 				bool	skip (Lexer&);
 
 				void	reset ();
 
 			private:
-				typedef std::vector<const Accessor*>	Accessors;
-				typedef std::vector<const Column*>		Columns;
+				typedef std::vector<const Arithmetic::Accessor*>	Accessors;
+				typedef std::vector<const Arithmetic::Column*>		Columns;
 
 				bool	fail (const Lexer&, const std::string&);
 
 				Accessors	accessors;
 				Columns		columns;
-				ErrorEvent	error;
+				Error		error;
 		};
 	}
 }

@@ -6,19 +6,22 @@
 
 namespace	Tesca
 {
-	class	LogicalAccessor : public Accessor
+	namespace	Arithmetic
 	{
-		public:
-			LogicalAccessor (const Accessor*, const Accessor*);
+		class	LogicalAccessor : public Accessor
+		{
+			public:
+				LogicalAccessor (const Accessor*, const Accessor*);
 
-		protected:
-			bool	testLHS (const Provision::Row&) const;
-			bool	testRHS (const Provision::Row&) const;
+			protected:
+				bool	testLHS (const Provision::Row&) const;
+				bool	testRHS (const Provision::Row&) const;
 
-		private:
-			const Accessor*	lhs;
-			const Accessor*	rhs;
-	};
+			private:
+				const Accessor*	lhs;
+				const Accessor*	rhs;
+		};
+	}
 }
 
 #endif

@@ -1,11 +1,12 @@
-Tesca: Text Stream Calculator
-=============================
+Tesca README file
+=================
 
 Overview
 --------
 
-Tesca is a small utility intended to compute simple aggregations (sums,
-averages, etc) on big (gigabytes or more) text files.
+Tesca (TExt Stream CAlculator) is a small utility intended to compute simple
+aggregations (sums, averages, etc) on big (gigabytes or more) text files using
+a simple query syntax.
 
 Text files should contain structured data, one row per line, and use a
 supported format (currently CSV, JSON, and anything that can be matched
@@ -19,8 +20,6 @@ Example:
 
 No documentation yet, sorry!
 
-
-
 Installation
 ------------
 
@@ -29,15 +28,11 @@ Currently only builds on Windows.
 Grab a C++ compiler compatible with basic C++11 features (mainly lambda
 expressions) such as GCC, update the Makefile.conf if needed and run make.
 
-
-
 Licence
 -------
 
 This project is open-source, released under BSD licence. See "LICENSE" file for
 more information. Any contribution would be of course highly welcomed!
-
-
 
 Author
 ------

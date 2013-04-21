@@ -6,23 +6,26 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	Column::Column (const string& identifier, const Accessor* accessor) :
-		accessor (accessor),
-		identifier (identifier)
+	namespace	Arithmetic
 	{
-	}
+		Column::Column (const string& identifier, const Accessor* accessor) :
+			accessor (accessor),
+			identifier (identifier)
+		{
+		}
 
-	Column::~Column ()
-	{
-	}
+		Column::~Column ()
+		{
+		}
 
-	const string&	Column::getIdentifier () const
-	{
-		return this->identifier;
-	}
+		const string&	Column::getIdentifier () const
+		{
+			return this->identifier;
+		}
 
-	Variant	Column::read (const Row& row) const
-	{
-		return this->accessor->read (row);
+		Variant	Column::read (const Row& row) const
+		{
+			return this->accessor->read (row);
+		}
 	}
 }

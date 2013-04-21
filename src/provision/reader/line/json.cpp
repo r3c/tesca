@@ -209,12 +209,12 @@ namespace	Tesca
 
 					length = cursor->buffer - start;
 
-					for (Literal* literal = literals; literal->name != 0; ++literal)
+					for (auto current = literals; current->name != 0; ++current)
 					{
-						if (literal->length == length && memcmp (literal->name, start, length * sizeof (*literal->name)) == 0)
+						if (current->length == length && memcmp (current->name, start, length * sizeof (*current->name)) == 0)
 						{
 							if (this->lookup.find (prefix.str (), &key))
-								this->row.set (key, literal->value);
+								this->row.set (key, current->value);
 
 							return true;
 						}

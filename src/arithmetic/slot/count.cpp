@@ -6,25 +6,28 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	CountSlot::CountSlot ()
+	namespace	Arithmetic
 	{
-		this->reset ();
-	}
+		CountSlot::CountSlot ()
+		{
+			this->reset ();
+		}
 
-	Variant	CountSlot::current () const
-	{
-		return Variant (this->count);
-	}
+		Variant	CountSlot::current () const
+		{
+			return Variant (this->count);
+		}
 
-	bool	CountSlot::push (const Variant&)
-	{
-		++this->count;
+		bool	CountSlot::push (const Variant&)
+		{
+			++this->count;
 
-		return true;
-	}
+			return true;
+		}
 
-	void	CountSlot::reset ()
-	{
-		this->count = 0;
+		void	CountSlot::reset ()
+		{
+			this->count = 0;
+		}
 	}
 }

@@ -1,3 +1,6 @@
+Tesca LICENSE file
+==================
+
 Copyright (c) 2013 Remi Caput, http://remi.caput.fr/
 
 Permission is hereby granted, free of charge, to any person obtaining

@@ -7,18 +7,21 @@
 
 namespace	Tesca
 {
-	class	CountSlot : public Slot
+	namespace	Arithmetic
 	{
-		public:
-			CountSlot ();
+		class	CountSlot : public Slot
+		{
+			public:
+				CountSlot ();
 
-			virtual Provision::Variant	current () const;
-			virtual bool			push (const Provision::Variant&);
-			virtual void			reset ();
+				virtual Provision::Variant	current () const;
+				virtual bool				push (const Provision::Variant&);
+				virtual void				reset ();
 
-		private:
-			Glay::Int32u	count;
-	};
+			private:
+				Glay::Int32u	count;
+		};
+	}
 }
 
 #endif

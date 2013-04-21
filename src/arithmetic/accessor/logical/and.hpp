@@ -6,13 +6,16 @@
 
 namespace	Tesca
 {
-	class	AndLogicalAccessor : public LogicalAccessor
+	namespace	Arithmetic
 	{
-		public:
-			AndLogicalAccessor (const Accessor*, const Accessor*);
+		class	AndLogicalAccessor : public LogicalAccessor
+		{
+			public:
+				AndLogicalAccessor (const Accessor*, const Accessor*);
 
-			virtual Provision::Variant	read (const Provision::Row&) const;
-	};
+				virtual Provision::Variant	read (const Provision::Row&) const;
+		};
+	}
 }
 
 #endif

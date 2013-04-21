@@ -6,21 +6,24 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	Variant	LastSlot::current () const
+	namespace	Arithmetic
 	{
-		return this->last;
-	}
+		Variant	LastSlot::current () const
+		{
+			return this->last;
+		}
 
-	bool	LastSlot::push (const Variant& value)
-	{
-		this->last = value;
-		this->last.keep ();
+		bool	LastSlot::push (const Variant& value)
+		{
+			this->last = value;
+			this->last.keep ();
 
-		return true;
-	}
+			return true;
+		}
 
-	void	LastSlot::reset ()
-	{
-		this->last = Variant::empty;
+		void	LastSlot::reset ()
+		{
+			this->last = Variant::empty;
+		}
 	}
 }

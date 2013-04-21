@@ -13,7 +13,7 @@ namespace	Tesca
 	{
 		struct	Function
 		{
-			typedef std::function<Accessor* (const std::vector<const Accessor*>&)>	Builder;
+			typedef std::function<Arithmetic::Accessor* (const std::vector<const Arithmetic::Accessor*>&)>	Builder;
 
 			static const Function	functions[];
 

@@ -1,39 +1,40 @@
 
-#include "select.hpp"
+#include "filter.hpp"
 
 using namespace std;
+using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 
 namespace	Tesca
 {
 	namespace	Expression
 	{
-		Select::Select () :
+		Filter::Filter () :
 			condition (0)
 		{
 		}
 
-		Select::~Select ()
+		Filter::~Filter ()
 		{
 			this->reset ();
 		}
 
-		const Accessor*	Select::getCondition () const
+		const Accessor*	Filter::getCondition () const
 		{
 			return this->condition;
 		}
 
-		const Select::ErrorEvent&	Select::getError () const
+		const Filter::Error&	Filter::getError () const
 		{
 			return this->parser.getError ();
 		}
 
-		Select::ErrorEvent&	Select::getError ()
+		Filter::Error&	Filter::getError ()
 		{
 			return this->parser.getError ();
 		}
 
-		bool	Select::parse (Lookup& lookup, const char* input)
+		bool	Filter::parse (Lookup& lookup, const char* input)
 		{
 			Lexer	lexer (input);
 
@@ -45,7 +46,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	Select::reset ()
+		void	Filter::reset ()
 		{
 			this->condition = 0;
 			this->parser.reset ();

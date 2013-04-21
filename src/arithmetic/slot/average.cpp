@@ -6,36 +6,39 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	AverageSlot::AverageSlot ()
+	namespace	Arithmetic
 	{
-		this->reset ();
-	}
+		AverageSlot::AverageSlot ()
+		{
+			this->reset ();
+		}
 
-	Variant	AverageSlot::current () const
-	{
-		if (this->count > 0)
-			return Variant (this->sum / this->count);
+		Variant	AverageSlot::current () const
+		{
+			if (this->count > 0)
+				return Variant (this->sum / this->count);
 
-		return Variant::empty;
-	}
+			return Variant::empty;
+		}
 
-	bool	AverageSlot::push (const Variant& value)
-	{
-		Float64	number;
+		bool	AverageSlot::push (const Variant& value)
+		{
+			Float64	number;
 
-		if (!value.toNumber (&number))
-			return false;
+			if (!value.toNumber (&number))
+				return false;
 
-		this->sum += number;
+			this->sum += number;
 
-		++this->count;
+			++this->count;
 
-		return true;
-	}
+			return true;
+		}
 
-	void	AverageSlot::reset ()
-	{
-		this->count = 0;
-		this->sum = 0;
+		void	AverageSlot::reset ()
+		{
+			this->count = 0;
+			this->sum = 0;
+		}
 	}
 }

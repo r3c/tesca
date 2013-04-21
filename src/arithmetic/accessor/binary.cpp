@@ -5,14 +5,17 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	BinaryAccessor::BinaryAccessor (const Accessor* lhs, const Accessor* rhs) :
-		lhs (lhs),
-		rhs (rhs)
+	namespace	Arithmetic
 	{
-	}
+		BinaryAccessor::BinaryAccessor (const Accessor* lhs, const Accessor* rhs) :
+			lhs (lhs),
+			rhs (rhs)
+		{
+		}
 
-	Variant	BinaryAccessor::read (const Row& row) const
-	{
-		return this->evaluate (this->lhs->read (row), this->rhs->read (row));
+		Variant	BinaryAccessor::read (const Row& row) const
+		{
+			return this->evaluate (this->lhs->read (row), this->rhs->read (row));
+		}
 	}
 }

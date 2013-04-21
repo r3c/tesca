@@ -13,39 +13,42 @@
 
 namespace	Tesca
 {
-	class	Table
+	namespace	Arithmetic
 	{
-		public:
-			typedef std::vector<const Column*>	Columns;
-			typedef std::map<Bucket, Slot**>	Groups;
-			typedef Groups::const_iterator		iterator;
+		class	Table
+		{
+			public:
+				typedef std::vector<const Column*>	Columns;
+				typedef std::map<Bucket, Slot**>	Groups;
+				typedef Groups::const_iterator		iterator;
 
-			Table (const Table&);
-			Table ();
-			~Table ();
+				Table (const Table&);
+				Table ();
+				~Table ();
 
-			Table&	operator = (const Table&);
+				Table&	operator = (const Table&);
 
-			const Columns&	getColumns () const;
-			Glay::Int32u	getWidth () const;
+				const Columns&	getColumns () const;
+				Glay::Int32u	getWidth () const;
 
-			iterator	begin () const;
-			iterator	end () const;
+				iterator	begin () const;
+				iterator	end () const;
 
-			void	clear ();
-			void	push (const Provision::Row&);
-			void	reset (const Accessor*, const Columns&);
+				void	clear ();
+				void	push (const Provision::Row&);
+				void	reset (const Accessor*, const Columns&);
 
-		private:
-			typedef std::vector<Glay::Int32u>	Indices;
-			typedef std::vector<Slot*>			Slots;
+			private:
+				typedef std::vector<Glay::Int32u>	Indices;
+				typedef std::vector<Slot*>			Slots;
 
-			Columns			columns;
-			Indices			indices;
-			Groups			groups;
-			const Accessor*	select;
-			Slots			slots;
-	};
+				Columns			columns;
+				Indices			indices;
+				Groups			groups;
+				const Accessor*	select;
+				Slots			slots;
+		};
+	}
 }
 
 #endif

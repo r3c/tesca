@@ -1,38 +1,39 @@
 
-#include "formula.hpp"
+#include "calculator.hpp"
 
 using namespace std;
+using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 
 namespace	Tesca
 {
 	namespace	Expression
 	{
-		Formula::Formula ()
+		Calculator::Calculator ()
 		{
 		}
 
-		Formula::~Formula ()
+		Calculator::~Calculator ()
 		{
 			this->reset ();
 		}
 
-		const Formula::Columns&	Formula::getColumns () const
+		const Calculator::Columns&	Calculator::getColumns () const
 		{
 			return this->columns;
 		}
 
-		const Formula::ErrorEvent&	Formula::getError () const
+		const Calculator::Error&	Calculator::getError () const
 		{
 			return this->parser.getError ();
 		}
 
-		Formula::ErrorEvent&	Formula::getError ()
+		Calculator::Error&	Calculator::getError ()
 		{
 			return this->parser.getError ();
 		}
 
-		bool	Formula::parse (Lookup& lookup, const char* input)
+		bool	Calculator::parse (Lookup& lookup, const char* input)
 		{
 			Column*	column;
 			Lexer	lexer (input);
@@ -59,7 +60,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	Formula::reset ()
+		void	Calculator::reset ()
 		{
 			this->columns.clear ();	
 			this->parser.reset ();

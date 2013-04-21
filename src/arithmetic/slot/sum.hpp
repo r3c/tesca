@@ -7,18 +7,21 @@
 
 namespace	Tesca
 {
-	class	SumSlot : public Slot
+	namespace	Arithmetic
 	{
-		public:
-			SumSlot ();
+		class	SumSlot : public Slot
+		{
+			public:
+				SumSlot ();
 
-			virtual Provision::Variant	current () const;
-			virtual bool			push (const Provision::Variant&);
-			virtual void			reset ();
+				virtual Provision::Variant	current () const;
+				virtual bool				push (const Provision::Variant&);
+				virtual void				reset ();
 
-		private:
-			Glay::Float64	sum;
-	};
+			private:
+				Glay::Float64	sum;
+		};
+	}
 }
 
 #endif

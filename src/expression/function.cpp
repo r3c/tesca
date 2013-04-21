@@ -16,6 +16,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 
 namespace	Tesca
@@ -77,6 +78,23 @@ namespace	Tesca
 				else
 					return new IfAccessor (arguments[0], arguments[1]);
 			}},
+			{"in",		1,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+			{
+				return new CallbackVectorAccessor (arguments, [] (const Variant* values, Int32u length)
+				{
+					const Variant*	search;
+
+					search = values++;
+
+					for (; length-- > 1; ++values)
+					{
+						if (search->compare (*values) == 0)
+							return Variant (true);
+					}
+
+					return Variant (false);
+				});
+			}},
 			{"lcase",	1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
@@ -103,7 +121,7 @@ namespace	Tesca
 					return Variant (a <= b);
 				});
 			}},
-			{"length",	1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+			{"len",		1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
 				{
@@ -117,7 +135,7 @@ namespace	Tesca
 					return Variant (a < b);
 				});
 			}},
-			{"max",		1,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+			{"max",		0,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new CallbackVectorAccessor (arguments, [] (const Variant* values, Int32u length)
 				{
@@ -140,7 +158,7 @@ namespace	Tesca
 					return defined ? Variant (result) : Variant::empty;
 				});
 			}},
-			{"min",		1,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
+			{"min",		0,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new CallbackVectorAccessor (arguments, [] (const Variant* values, Int32u length)
 				{

@@ -6,20 +6,23 @@
 
 namespace	Tesca
 {
-	class	IfAccessor : public Accessor
+	namespace	Arithmetic
 	{
-		public:
-			IfAccessor (const Accessor*, const Accessor*, const Accessor*);
-			IfAccessor (const Accessor*, const Accessor*);
+		class	IfAccessor : public Accessor
+		{
+			public:
+				IfAccessor (const Accessor*, const Accessor*, const Accessor*);
+				IfAccessor (const Accessor*, const Accessor*);
 
-		protected:
-			virtual Provision::Variant	read (const Provision::Row&) const;
+			protected:
+				virtual Provision::Variant	read (const Provision::Row&) const;
 
-		private:
-			const Accessor*	condition;
-			const Accessor*	onFalse;
-			const Accessor*	onTrue;
-	};
+			private:
+				const Accessor*	condition;
+				const Accessor*	onFalse;
+				const Accessor*	onTrue;
+		};
+	}
 }
 
 #endif

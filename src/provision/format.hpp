@@ -2,33 +2,24 @@
 #ifndef __TESCA_PROVISION_FORMAT_HPP
 #define __TESCA_PROVISION_FORMAT_HPP
 
-#include <map>
-#include <string>
+#include <functional>
 #include "../../lib/glay/src/include.hpp"
 #include "config.hpp"
 #include "lookup.hpp"
-#include "parser.hpp"
 #include "reader.hpp"
 
 namespace	Tesca
 {
 	namespace	Provision
 	{
-		class	Format
+		struct	Format
 		{
-			public:
-						Format (const Format&);
-						Format ();
-				virtual	~Format ();
+			typedef std::function<Reader* (Glay::Pipe::IStream*, const Lookup&, const Config&)>	Builder;
 
-				Format&	operator = (const Format&);
+			static const Format	formats[];
 
-				Reader*	create (Glay::Pipe::IStream*, const Lookup&) const;
-				bool	parse (const char*);
-
-			private:
-				Config			config;
-				const Parser*	parser;
+			const char*	name;
+			Builder		builder;
 		};
 	}
 }

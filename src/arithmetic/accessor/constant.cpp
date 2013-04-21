@@ -5,14 +5,17 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	ConstantAccessor::ConstantAccessor (const Variant& constant) :
-		constant (constant)
+	namespace	Arithmetic
 	{
-		this->constant.keep ();
-	}
+		ConstantAccessor::ConstantAccessor (const Variant& constant) :
+			constant (constant)
+		{
+			this->constant.keep ();
+		}
 
-	Variant	ConstantAccessor::read (const Row&) const
-	{
-		return this->constant;
+		Variant	ConstantAccessor::read (const Row&) const
+		{
+			return this->constant;
+		}
 	}
 }

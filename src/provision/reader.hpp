@@ -2,7 +2,6 @@
 #ifndef __TESCA_PROVISION_READER_HPP
 #define __TESCA_PROVISION_READER_HPP
 
-#include <map>
 #include "../../lib/glay/src/include.hpp"
 #include "row.hpp"
 
@@ -13,7 +12,7 @@ namespace	Tesca
 		class	Reader
 		{
 			public:
-				typedef Glay::Design::Event<const std::string&>	ErrorEvent;
+				typedef Glay::Design::Event<const std::string&>	Error;
 
 						Reader (const Reader&);
 						Reader ();
@@ -21,14 +20,14 @@ namespace	Tesca
 
 				Reader&	operator = (const Reader&);
 
-				const ErrorEvent&	getError () const;
-				ErrorEvent&			getError ();
+				const Error&	getError () const;
+				Error&			getError ();
 
 				virtual const Row&	current () const = 0;
 				virtual bool		next () = 0;
 
 			protected:
-				ErrorEvent	error;
+				Error	error;
 		};
 	}
 }

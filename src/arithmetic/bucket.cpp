@@ -6,76 +6,79 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	Bucket::Bucket (const Bucket& other) :
-		length (other.length)
+	namespace	Arithmetic
 	{
-		Variant*	buffer;
-
-		buffer = new Variant[other.length];
-
-		for (Int32u i = other.length; i-- > 0; )
-			buffer[i] = other.buffer[i];
-
-		this->buffer = buffer;
-	}
-
-	Bucket::Bucket (Int32u length) :
-		length (length)
-	{
-		this->buffer = new Variant[length];
-	}
-
-	Bucket::~Bucket ()
-	{
-		delete [] this->buffer;
-	}
-
-	const Variant&	Bucket::operator [] (Int32u index) const
-	{
-		return this->buffer[index];
-	}
-
-	Int32u	Bucket::getLength () const
-	{
-		return this->length;
-	}
-
-	Int16s	Bucket::compare (const Bucket& other) const
-	{
-		if (this->length < other.length)
-			return -1;
-		else if (this->length > other.length)
-			return 1;
-
-		for (Int32u index = 0; index < this->length; ++index)
+		Bucket::Bucket (const Bucket& other) :
+			length (other.length)
 		{
-			const Variant&	lhs = this->buffer[index];
-			const Variant&	rhs = other.buffer[index];
+			Variant*	buffer;
 
-			if (lhs < rhs)
-				return -1;
-			else if (rhs < lhs)
-				return 1;
+			buffer = new Variant[other.length];
+
+			for (Int32u i = other.length; i-- > 0; )
+				buffer[i] = other.buffer[i];
+
+			this->buffer = buffer;
 		}
 
-		return 0;
-	}
+		Bucket::Bucket (Int32u length) :
+			length (length)
+		{
+			this->buffer = new Variant[length];
+		}
 
-	Bucket&	Bucket::keep ()
-	{
-		for (Int32u index = this->length; index-- > 0; )
-			this->buffer[index].keep ();
+		Bucket::~Bucket ()
+		{
+			delete [] this->buffer;
+		}
 
-		return *this;
-	}
+		const Variant&	Bucket::operator [] (Int32u index) const
+		{
+			return this->buffer[index];
+		}
 
-	void	Bucket::set (Int32u index, const Variant& value)
-	{
-		this->buffer[index] = value;
-	}
+		Int32u	Bucket::getLength () const
+		{
+			return this->length;
+		}
 
-	bool	operator < (const Bucket& lhs, const Bucket& rhs)
-	{
-		return lhs.compare (rhs) < 0;
+		Int16s	Bucket::compare (const Bucket& other) const
+		{
+			if (this->length < other.length)
+				return -1;
+			else if (this->length > other.length)
+				return 1;
+
+			for (Int32u index = 0; index < this->length; ++index)
+			{
+				const Variant&	lhs = this->buffer[index];
+				const Variant&	rhs = other.buffer[index];
+
+				if (lhs < rhs)
+					return -1;
+				else if (rhs < lhs)
+					return 1;
+			}
+
+			return 0;
+		}
+
+		Bucket&	Bucket::keep ()
+		{
+			for (Int32u index = this->length; index-- > 0; )
+				this->buffer[index].keep ();
+
+			return *this;
+		}
+
+		void	Bucket::set (Int32u index, const Variant& value)
+		{
+			this->buffer[index] = value;
+		}
+
+		bool	operator < (const Bucket& lhs, const Bucket& rhs)
+		{
+			return lhs.compare (rhs) < 0;
+		}
 	}
 }

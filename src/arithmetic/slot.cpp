@@ -3,11 +3,14 @@
 
 namespace	Tesca
 {
-	Slot::Slot ()
+	namespace	Arithmetic
 	{
-	}
+		Slot::Slot ()
+		{
+		}
 
-	Slot::~Slot ()
-	{
+		Slot::~Slot ()
+		{
+		}
 	}
 }

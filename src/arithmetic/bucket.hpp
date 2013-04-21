@@ -7,28 +7,31 @@
 
 namespace	Tesca
 {
-	class	Bucket
+	namespace	Arithmetic
 	{
-		public:
-			Bucket (const Bucket&);
-			Bucket (Glay::Int32u);
-			~Bucket ();
+		class	Bucket
+		{
+			public:
+				Bucket (const Bucket&);
+				Bucket (Glay::Int32u);
+				~Bucket ();
 
-			Bucket&					operator = (const Bucket&);
-			const Provision::Variant&	operator [] (Glay::Int32u) const;
+				Bucket&					operator = (const Bucket&);
+				const Provision::Variant&	operator [] (Glay::Int32u) const;
 
-			Glay::Int32u	getLength () const;
+				Glay::Int32u	getLength () const;
 
-			Glay::Int16s	compare (const Bucket&) const;
-			Bucket&			keep ();
-			void			set (Glay::Int32u, const Provision::Variant&);
+				Glay::Int16s	compare (const Bucket&) const;
+				Bucket&			keep ();
+				void			set (Glay::Int32u, const Provision::Variant&);
 
-		private:
-			Provision::Variant*	buffer;
-			Glay::Int32u		length;
-	};
+			private:
+				Provision::Variant*	buffer;
+				Glay::Int32u		length;
+		};
 
-	bool	operator < (const Bucket&, const Bucket&);
+		bool	operator < (const Bucket&, const Bucket&);
+	}
 }
 
 #endif

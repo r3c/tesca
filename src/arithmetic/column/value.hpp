@@ -6,14 +6,17 @@
 
 namespace	Tesca
 {
-	class	ValueColumn : public Column
+	namespace	Arithmetic
 	{
-		public:
-			ValueColumn (const std::string&, const Accessor*);
+		class	ValueColumn : public Column
+		{
+			public:
+				ValueColumn (const std::string&, const Accessor*);
 
-			virtual Slot*	create () const;
-			virtual bool	group () const;
-	};
+				virtual Slot*	create () const;
+				virtual bool	group () const;
+		};
+	}
 }
 
 #endif

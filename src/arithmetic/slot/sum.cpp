@@ -6,30 +6,33 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	SumSlot::SumSlot ()
+	namespace	Arithmetic
 	{
-		this->reset ();
-	}
+		SumSlot::SumSlot ()
+		{
+			this->reset ();
+		}
 
-	Variant	SumSlot::current () const
-	{
-		return Variant (this->sum);
-	}
+		Variant	SumSlot::current () const
+		{
+			return Variant (this->sum);
+		}
 
-	bool	SumSlot::push (const Variant& value)
-	{
-		Float64	number;
+		bool	SumSlot::push (const Variant& value)
+		{
+			Float64	number;
 
-		if (!value.toNumber (&number))
-			return false;
+			if (!value.toNumber (&number))
+				return false;
 
-		this->sum += number;
+			this->sum += number;
 
-		return true;
-	}
+			return true;
+		}
 
-	void	SumSlot::reset ()
-	{
-		this->sum = 0;
+		void	SumSlot::reset ()
+		{
+			this->sum = 0;
+		}
 	}
 }

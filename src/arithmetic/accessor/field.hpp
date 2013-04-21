@@ -8,17 +8,20 @@
 
 namespace	Tesca
 {
-	class	FieldAccessor : public Accessor
+	namespace	Arithmetic
 	{
-		public:
-			FieldAccessor (Glay::Int32u);
+		class	FieldAccessor : public Accessor
+		{
+			public:
+				FieldAccessor (Glay::Int32u);
 
-		protected:
-			virtual Provision::Variant	read (const Provision::Row&) const;
+			protected:
+				virtual Provision::Variant	read (const Provision::Row&) const;
 
-		private:
-			Glay::Int32u	key;
-	};
+			private:
+				Glay::Int32u	key;
+		};
+	}
 }
 
 #endif

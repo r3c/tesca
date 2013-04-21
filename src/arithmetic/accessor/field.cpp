@@ -7,13 +7,16 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	FieldAccessor::FieldAccessor (Int32u key) :
-		key (key)
+	namespace	Arithmetic
 	{
-	}
+		FieldAccessor::FieldAccessor (Int32u key) :
+			key (key)
+		{
+		}
 
-	Variant	FieldAccessor::read (const Row& row) const
-	{
-		return row[this->key];
+		Variant	FieldAccessor::read (const Row& row) const
+		{
+			return row[this->key];
+		}
 	}
 }

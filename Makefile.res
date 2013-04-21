@@ -47,16 +47,16 @@ SOURCE	= \
 	src/arithmetic/slot.cpp \
 	src/arithmetic/table.cpp \
 	src/expression/aggregator.cpp \
+	src/expression/calculator.cpp \
 	src/expression/constant.cpp \
-	src/expression/formula.cpp \
+	src/expression/filter.cpp \
 	src/expression/function.cpp \
 	src/expression/lexer.cpp \
 	src/expression/parser.cpp \
-	src/expression/select.cpp \
 	src/provision/config.cpp \
 	src/provision/format.cpp \
+	src/provision/input.cpp \
 	src/provision/lookup.cpp \
-	src/provision/parser.cpp \
 	src/provision/reader/line/csv.cpp \
 	src/provision/reader/line/json.cpp \
 	src/provision/reader/line.cpp \
@@ -65,4 +65,9 @@ SOURCE	= \
 	src/provision/row/array.cpp \
 	src/provision/row.cpp \
 	src/provision/variant.cpp \
+	src/render/printer/csv.cpp \
+	src/render/printer/name.cpp \
+	src/render/format.cpp \
+	src/render/output.cpp \
+	src/render/printer.cpp \
 	src/main.cpp

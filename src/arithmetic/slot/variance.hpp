@@ -7,20 +7,23 @@
 
 namespace	Tesca
 {
-	class	VarianceSlot : public Slot
+	namespace	Arithmetic
 	{
-		public:
-			VarianceSlot ();
+		class	VarianceSlot : public Slot
+		{
+			public:
+				VarianceSlot ();
 
-			virtual Provision::Variant	current () const;
-			virtual bool			push (const Provision::Variant&);
-			virtual void			reset ();
+				virtual Provision::Variant	current () const;
+				virtual bool				push (const Provision::Variant&);
+				virtual void				reset ();
 
-		private:
-			Glay::Int32u	count;
-			Glay::Float64	mean;
-			Glay::Float64	sum;
-	};
+			private:
+				Glay::Int32u	count;
+				Glay::Float64	mean;
+				Glay::Float64	sum;
+		};
+	}
 }
 
 #endif

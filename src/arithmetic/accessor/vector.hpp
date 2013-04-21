@@ -8,19 +8,22 @@
 
 namespace	Tesca
 {
-	class	VectorAccessor : public Accessor
+	namespace	Arithmetic
 	{
-		public:
-					VectorAccessor (const std::vector<const Accessor*>&);
-			virtual	~VectorAccessor ();
+		class	VectorAccessor : public Accessor
+		{
+			public:
+						VectorAccessor (const std::vector<const Accessor*>&);
+				virtual	~VectorAccessor ();
 
-			virtual Provision::Variant	evaluate (const Provision::Variant*, Glay::Int32u) const = 0;
-			virtual Provision::Variant	read (const Provision::Row&) const;
+				virtual Provision::Variant	evaluate (const Provision::Variant*, Glay::Int32u) const = 0;
+				virtual Provision::Variant	read (const Provision::Row&) const;
 
-		private:
-			const Accessor**	accessors;
-			Glay::Int32u		length;
-	};
+			private:
+				const Accessor**	accessors;
+				Glay::Int32u		length;
+		};
+	}
 }
 
 #endif

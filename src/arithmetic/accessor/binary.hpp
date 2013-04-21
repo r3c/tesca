@@ -6,18 +6,21 @@
 
 namespace	Tesca
 {
-	class	BinaryAccessor : public Accessor
+	namespace	Arithmetic
 	{
-		public:
-			BinaryAccessor (const Accessor*, const Accessor*);
+		class	BinaryAccessor : public Accessor
+		{
+			public:
+				BinaryAccessor (const Accessor*, const Accessor*);
 
-			virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const = 0;
-			virtual Provision::Variant	read (const Provision::Row&) const;
+				virtual Provision::Variant	evaluate (const Provision::Variant&, const Provision::Variant&) const = 0;
+				virtual Provision::Variant	read (const Provision::Row&) const;
 
-		private:
-			const Accessor*	lhs;
-			const Accessor*	rhs;
-	};
+			private:
+				const Accessor*	lhs;
+				const Accessor*	rhs;
+		};
+	}
 }
 
 #endif

@@ -7,14 +7,17 @@ using namespace Tesca::Provision;
 
 namespace	Tesca
 {
-	CallbackVectorAccessor::CallbackVectorAccessor (const vector<const Accessor*>& accessors, Callback callback) :
-		VectorAccessor (accessors),
-		callback (callback)
+	namespace	Arithmetic
 	{
-	}
+		CallbackVectorAccessor::CallbackVectorAccessor (const vector<const Accessor*>& accessors, Callback callback) :
+			VectorAccessor (accessors),
+			callback (callback)
+		{
+		}
 
-	Variant	CallbackVectorAccessor::evaluate (const Variant* values, Int32u length) const
-	{
-		return this->callback (values, length);
+		Variant	CallbackVectorAccessor::evaluate (const Variant* values, Int32u length) const
+		{
+			return this->callback (values, length);
+		}
 	}
 }

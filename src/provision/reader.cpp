@@ -15,12 +15,12 @@ namespace	Tesca
 		{
 		}
 
-		const Reader::ErrorEvent&	Reader::getError () const
+		const Reader::Error&	Reader::getError () const
 		{
 			return this->error;
 		}
 
-		Reader::ErrorEvent&	Reader::getError ()
+		Reader::Error&	Reader::getError ()
 		{
 			return this->error;
 		}
