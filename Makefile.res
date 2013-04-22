@@ -62,6 +62,7 @@ SOURCE	= \
 	src/provision/reader/line/csv.cpp \
 	src/provision/reader/line/json.cpp \
 	src/provision/reader/line.cpp \
+	src/provision/reader/constant.cpp \
 	src/provision/reader/map.cpp \
 	src/provision/reader.cpp \
 	src/provision/row/array.cpp \
