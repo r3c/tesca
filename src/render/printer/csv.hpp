@@ -2,6 +2,7 @@
 #ifndef __TESCA_RENDER_PRINTER_CSV_HPP
 #define __TESCA_RENDER_PRINTER_CSV_HPP
 
+#include <string>
 #include "../../../lib/glay/src/include.hpp"
 #include "../../storage/config.hpp"
 #include "../printer.hpp"
@@ -22,7 +23,9 @@ namespace	Tesca
 				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&);
 
 			private:
-				bool	headers;
+				bool		headers;
+				std::string	quote;
+				std::string	split;
 		};
 	}
 }

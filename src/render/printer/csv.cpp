@@ -16,6 +16,8 @@ namespace	Tesca
 		CSVPrinter::CSVPrinter (const Config& config)
 		{
 			this->headers = config.get ("headers", 0);
+			this->quote = config.get ("quote", "");
+			this->split = config.get ("split", ",");
 		}
 
 		CSVPrinter::~CSVPrinter ()
@@ -24,8 +26,9 @@ namespace	Tesca
 
 		void	CSVPrinter::print (OStream& stream, const Table& table)
 		{
-			string	value;
-			Int32u	width;
+			string			value;
+			Int32u			width;
+			StringWriter	writer (stream);
 
 			if (this->headers)
 			{
@@ -34,12 +37,14 @@ namespace	Tesca
 				for (Int32u i = 0; i < columns.size (); ++i)
 				{
 					if (i > 0)
-						stream.write (",", 1); // FIXME
+						writer.writeString (this->split);
 
-					stream.write (columns[i]->getIdentifier ().c_str (), columns[i]->getIdentifier ().length ());
+					writer.writeString (this->quote);
+					writer.writeString (columns[i]->getIdentifier ());
+					writer.writeString (this->quote);
 				}
 
-				stream.write ("\n", 1); // FIXME
+				writer.writeString ("\n");
 			}
 
 			width = table.getWidth ();
@@ -51,15 +56,19 @@ namespace	Tesca
 				for (Int32u i = 0; i < width; ++i)
 				{
 					if (i > 0)
-						stream.write (",", 1); // FIXME
+						writer.writeString (this->split);
 
 					if ((*slot)->current ().toString (&value))
-						stream.write (value.c_str (), value.length ());
+					{
+						writer.writeString (this->quote);
+						writer.writeString (value);
+						writer.writeString (this->quote);
+					}
 
 					++slot;
 				}
 
-				stream.write ("\n", 1); // FIXME
+				writer.writeString ("\n");
 			}
 		}
 	}
