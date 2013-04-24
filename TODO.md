@@ -8,6 +8,7 @@ TODO
 - Implement a cleaner error messages system
 - Implement JSON reader
 - Handle escaped quotes in CSV format
+- Split expression parser into lexer/parser classes
 
 DONE
 ----

@@ -103,8 +103,21 @@ namespace	Tesca
 
 			while (true)
 			{
-				if (!this->parseValue (lexer, lookup, &value))
-					return false;
+				if (lexer.getCurrent () == '(')
+				{
+					if (!this->parseCharacter (lexer, '(') || !this->parseExpression (lexer, lookup, &value))
+						return false;
+
+					this->skip (lexer);
+
+					if (!this->parseCharacter (lexer, ')'))
+						return false;
+				}
+				else
+				{
+					if (!this->parseValue (lexer, lookup, &value))
+						return false;
+				}
 
 				operands.push (value);
 
