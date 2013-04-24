@@ -6,8 +6,7 @@ TODO
 
 - Implement a cleaner error messages system
 - Implement JSON reader
-- Handle quotes in CSV format
-- Fix "end of stdin" bug
+- Handle escaped quotes in CSV format
 
 DONE
 ----
@@ -22,3 +21,4 @@ DONE
 - Allow options in printer expressions
 - Move Variant & Config classes to common namespace
 - Implement CSV printer
+- Handle quotes in CSV format

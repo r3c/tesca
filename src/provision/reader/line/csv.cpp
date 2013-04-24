@@ -8,8 +8,9 @@ using namespace Tesca::Storage;
 
 namespace
 {
-	static const char	TYPE_QUOTE = 1;
-	static const char	TYPE_SPLIT = 2;
+	static const char	TYPE_BLANK = 1;
+	static const char	TYPE_QUOTE = 2;
+	static const char	TYPE_SPLIT = 3;
 }
 
 namespace	Tesca
@@ -27,6 +28,9 @@ namespace	Tesca
 
 			// Read special character types from configuration
 			this->types = static_cast<char*> (calloc (1 << (sizeof (*this->types) * 8), sizeof (*this->types)));
+
+			for (buffer = config.get ("blanks", "\n\r\t ").c_str (); *buffer; )
+				this->types[(Int32u)*buffer++] = TYPE_BLANK;
 
 			for (buffer = config.get ("quotes", "\"").c_str (); *buffer; )
 				this->types[(Int32u)*buffer++] = TYPE_QUOTE;
@@ -89,32 +93,84 @@ namespace	Tesca
 		void	CSVLineReader::split (const char* line, Int32u length, Callback callback)
 		{
 			Int32u		index;
+			const char*	skip;
 			const char*	start;
 			const char*	stop;
 
-			index = 0;
 			start = line;
-			stop = line;
 
-			while (length-- > 0)
+			for (index = 0; ; ++index)
 			{
-				switch (this->types[(Int32u)*stop])
+				// Skip leading characters to ignore
+				while (length > 0 && this->types[(Int32u)*start] == TYPE_BLANK)
 				{
-//					case TYPE_QUOTE:
-//						break;
-
-					case TYPE_SPLIT:
-						callback (index++, start, stop - start);
-
-						start = stop + 1;
-
-						break;
+					--length;
+					++start;
 				}
 
-				++stop;
-			}
+				// Field is enclosed between quotes
+				if (length > 0 && this->types[(Int32u)*start] == TYPE_QUOTE)
+				{
+					--length;
+					++start;
 
-			callback (index, start, stop - start);
+					stop = start;
+
+					while (true)
+					{
+						while (length > 0 && this->types[(Int32u)*stop] != TYPE_QUOTE)
+						{
+							--length;
+							++stop;
+						}
+
+						// FIXME: resolve escaped quotes
+						if (length < 2 || this->types[(Int32u)*(stop + 1)] != TYPE_QUOTE)
+							break;
+
+						length -= 2;
+						stop += 2;
+					}
+
+					callback (index, start, stop - start);
+
+					while (length > 0 && this->types[(Int32u)*stop] != TYPE_SPLIT)
+					{
+						--length;
+						++stop;
+					}
+
+					start = stop;
+				}
+
+				// Field is a simple unescaped string
+				else
+				{
+					skip = start;
+
+					for (stop = start; length > 0; stop = skip)
+					{
+						for (skip = stop; length > 0 && this->types[(Int32u)*skip] == TYPE_BLANK; ++skip)
+							--length;
+
+						if (length == 0 || this->types[(Int32u)*skip] == TYPE_SPLIT)
+							break;
+
+						--length;
+						++skip;						
+					}
+
+					callback (index, start, stop - start);
+
+					start = skip;
+				}
+
+				if (length == 0)
+					break;
+
+				--length;
+				++start;
+			}
 		}
 	}
 }
