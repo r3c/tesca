@@ -4,6 +4,7 @@ Tesca TODO list
 TODO
 ----
 
+- Allow common binary & unary operators in expressions
 - Implement a cleaner error messages system
 - Implement JSON reader
 - Handle escaped quotes in CSV format

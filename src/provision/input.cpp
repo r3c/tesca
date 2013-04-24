@@ -13,7 +13,6 @@ namespace	Tesca
 		Input::Input () :
 			format (0)
 		{
-		
 		}
 
 		Input::~Input ()

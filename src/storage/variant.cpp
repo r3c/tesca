@@ -205,7 +205,6 @@ namespace	Tesca
 			switch (this->type)
 			{
 				case Variant::STRING:
-
 					if (this->share != 0)
 					{
 						if (*this->share <= 1)
