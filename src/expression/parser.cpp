@@ -2,6 +2,8 @@
 #include "parser.hpp"
 
 #include <sstream>
+#include <stack>
+#include "../arithmetic/accessor/binary/number.hpp"
 #include "../arithmetic/accessor/constant.hpp"
 #include "../arithmetic/accessor/field.hpp"
 #include "../arithmetic/accessor/void.hpp"
@@ -94,23 +96,58 @@ namespace	Tesca
 
 		bool	Parser::parseExpression (Lexer& lexer, Lookup& lookup, const Accessor** output)
 		{
+			BinaryOp				binaryOp;
+			stack<BinaryOp>			binaryOps;
+			stack<const Accessor*>	operands;
+			const Accessor*			value;
+
 			while (true)
 			{
-				if (!this->parseValue (lexer, lookup, output))
+				if (!this->parseValue (lexer, lookup, &value))
 					return false;
 
-				if (!this->skip (lexer))
-					return true;
+				operands.push (value);
 
-				switch (lexer.getCurrent ())
+				if (!this->skip (lexer) || !this->parseOperator (lexer, &binaryOp))
+					break;
+
+				if (!lexer.next () || !this->skip (lexer))
+					return this->fail (lexer, "expected operand");
+
+				for (; !binaryOps.empty () && binaryOps.top ().first >= binaryOp.first; binaryOps.pop ())
 				{
-					case '+':
-						break;
+					value = operands.top ();
 
-					default:
-						return true;
+					operands.pop ();
+
+					value = binaryOps.top ().second (operands.top (), value);
+
+					operands.pop ();
+					operands.push (value);
+
+					this->accessors.push_back (value);
 				}
+
+				binaryOps.push (binaryOp);
 			}
+
+			for (; !binaryOps.empty (); binaryOps.pop ())
+			{
+				value = operands.top ();
+
+				operands.pop ();
+
+				value = binaryOps.top ().second (operands.top (), value);
+
+				operands.pop ();
+				operands.push (value);
+
+				this->accessors.push_back (value);
+			}
+
+			*output = operands.top ();
+
+			return true;
 		}
 
 		bool	Parser::parseIdentifier (Lexer& lexer, string* output)
@@ -131,6 +168,70 @@ namespace	Tesca
 			buffer >> *output;
 
 			return true;
+		}
+
+		bool	Parser::parseOperator (Lexer& lexer, BinaryOp* output)
+		{
+			switch (lexer.getCurrent ())
+			{
+				case '+':
+					*output = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+					{
+						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+						{
+							return Variant (a + b);
+						});
+					});
+
+					return true;
+
+				case '-':
+					*output = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+					{
+						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+						{
+							return Variant (a - b);
+						});
+					});
+
+					return true;
+
+				case '*':
+					*output = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+					{
+						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+						{
+							return Variant (a * b);
+						});
+					});
+
+					return true;
+
+				case '/':
+					*output = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+					{
+						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+						{
+							return b != 0 ? Variant (a / b) : Variant::empty;
+						});
+					});
+
+					return true;
+
+				case '%':
+					*output = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+					{
+						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+						{
+							return b != 0 ? Variant (fmod (a, b)) : Variant::empty;
+						});
+					});
+
+					return true;
+
+				default:
+					return false;
+			}
 		}
 
 		bool	Parser::parseStatement (Lexer& lexer, Lookup& lookup, Column** column)
@@ -232,7 +333,7 @@ namespace	Tesca
 							this->skip (lexer);
 						}
 
-						if (!this->parseValue (lexer, lookup, &accessor))
+						if (!this->parseExpression (lexer, lookup, &accessor))
 							return false;
 
 						if (!this->skip (lexer))

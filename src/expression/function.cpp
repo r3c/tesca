@@ -25,13 +25,6 @@ namespace	Tesca
 	{
 		const Function	Function::functions[] =
 		{
-			{"add",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
-				{
-					return Variant (a + b);
-				});
-			}},
 			{"and",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new AndLogicalAccessor (arguments[0], arguments[1]);
@@ -41,13 +34,6 @@ namespace	Tesca
 				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
 				{
 					return Variant (a.compare (b));
-				});
-			}},
-			{"div",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
-				{
-					return b != 0 ? Variant (a / b) : Variant::empty;
 				});
 			}},
 			{"eq",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
@@ -181,20 +167,6 @@ namespace	Tesca
 					return defined ? Variant (result) : Variant::empty;
 				});
 			}},
-			{"mod",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
-				{
-					return b != 0 ? Variant (fmod (a, b)) : Variant::empty;
-				});
-			}},
-			{"mul",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
-				{
-					return Variant (a * b);
-				});
-			}},
 			{"ne",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
@@ -240,13 +212,6 @@ namespace	Tesca
 						count = source.length () - offset;
 
 					return Variant (source.substr (offset, count)).keep ();
-				});
-			}},
-			{"sub",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new NumberBinaryAccessor (arguments[0], arguments[1], [] (Float64 a, Float64 b)
-				{
-					return Variant (a - b);
 				});
 			}},
 			{"ucase",	1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*

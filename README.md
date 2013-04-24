@@ -10,13 +10,14 @@ a simple query syntax.
 
 Text files should contain structured data, one row per line, and use a
 supported format (currently CSV, JSON, and anything that can be matched
-through regexps as soon as MinGW/GCC has a decent support for <regex> header).
+through regexps as soon as MinGW/GCC has a decent support for new C++11
+&lt;regex&gt; header).
 Then you have to describe what kind of data contains each row and how result
 must be computed from those data.
 
 Example:
 
-./tesca -i 'csv' -a 'name = $0, score = $1:sum, average_score = $1:avg' file.csv
+./tesca -i 'csv' -e 'name = $0, score = $1:sum, average_score = $1:avg' file.csv
 
 No documentation yet, sorry!
 
