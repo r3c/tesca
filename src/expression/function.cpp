@@ -5,11 +5,7 @@
 #include <string> 
 #include "../arithmetic/accessor/binary/callback.hpp"
 #include "../arithmetic/accessor/binary/number.hpp"
-#include "../arithmetic/accessor/constant.hpp"
-#include "../arithmetic/accessor/field.hpp"
 #include "../arithmetic/accessor/if.hpp"
-#include "../arithmetic/accessor/logical/and.hpp"
-#include "../arithmetic/accessor/logical/or.hpp"
 #include "../arithmetic/accessor/unary/callback.hpp"
 #include "../arithmetic/accessor/unary/string.hpp"
 #include "../arithmetic/accessor/vector/callback.hpp"
@@ -25,36 +21,11 @@ namespace	Tesca
 	{
 		const Function	Function::functions[] =
 		{
-			{"and",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new AndLogicalAccessor (arguments[0], arguments[1]);
-			}},
 			{"cmp",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
 				{
 					return Variant (a.compare (b));
-				});
-			}},
-			{"eq",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
-				{
-					return Variant (a == b);
-				});
-			}},
-			{"ge",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
-				{
-					return Variant (a >= b);
-				});
-			}},
-			{"gt",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
-				{
-					return Variant (a > b);
 				});
 			}},
 			{"if",		2,	3,	[] (const vector<const Accessor*>& arguments) -> Accessor*
@@ -100,25 +71,11 @@ namespace	Tesca
 					return lower;
 				});
 			}},
-			{"le",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
-				{
-					return Variant (a <= b);
-				});
-			}},
 			{"len",		1,	1,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new StringUnaryAccessor (arguments[0], [] (const string& argument)
 				{
 					return Variant (argument.length ());
-				});
-			}},
-			{"lt",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
-				{
-					return Variant (a < b);
 				});
 			}},
 			{"max",		0,	0,	[] (const vector<const Accessor*>& arguments) -> Accessor*
@@ -167,13 +124,6 @@ namespace	Tesca
 					return defined ? Variant (result) : Variant::empty;
 				});
 			}},
-			{"ne",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new CallbackBinaryAccessor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
-				{
-					return Variant (a != b);
-				});
-			}},
 			{"not",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new CallbackUnaryAccessor (arguments[0], [] (const Variant& argument)
@@ -182,10 +132,6 @@ namespace	Tesca
 
 					return Variant (!argument.toBoolean (&value) || !value);
 				});
-			}},
-			{"or",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new OrLogicalAccessor (arguments[0], arguments[1]);
 			}},
 			{"slice",	2,	3,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{

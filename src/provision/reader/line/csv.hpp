@@ -4,7 +4,7 @@
 
 #include <cstdlib>
 #include <functional>
-#include <map>
+#include <vector>
 #include "../../../storage/config.hpp"
 #include "../../row/array.hpp"
 #include "../../lookup.hpp"
@@ -29,7 +29,7 @@ namespace	Tesca
 
 			private:
 				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
-				typedef std::map<Glay::Int32u, Glay::Int32u>							Mapping;
+				typedef std::vector<Glay::Int32u>										Mapping;
 
 				void	split (const char*, Glay::Int32u, Callback);
 

@@ -3,7 +3,12 @@
 
 #include <sstream>
 #include <stack>
+#include "../arithmetic/accessor/binary/callback.hpp"
 #include "../arithmetic/accessor/binary/number.hpp"
+#include "../arithmetic/accessor/logical/and.hpp"
+#include "../arithmetic/accessor/logical/or.hpp"
+#include "../arithmetic/accessor/unary/boolean.hpp"
+#include "../arithmetic/accessor/unary/number.hpp"
 #include "../arithmetic/accessor/constant.hpp"
 #include "../arithmetic/accessor/field.hpp"
 #include "../arithmetic/accessor/void.hpp"
@@ -58,17 +63,14 @@ namespace	Tesca
 			const Aggregator*	aggregator;
 			stringstream		buffer;
 
-			for (; !lexer.eof () &&
-				   ((lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
-					(lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
-					(lexer.getCurrent () == '_')); lexer.next ())
-				buffer.put (lexer.getCurrent ());
+			if (lexer.getType () != Lexer::CONSTANT)
+				return this->fail (lexer, "expected aggregator name");
 
 			aggregator = 0;
 
 			for (auto current = Aggregator::aggregators; current->name; ++current)
 			{
-				if (buffer.str () == current->name)
+				if (lexer.getCurrent () == current->name)
 				{
 					aggregator = current;
 
@@ -80,14 +82,6 @@ namespace	Tesca
 				return this->fail (lexer, "unknown aggregator name");
 
 			*output = aggregator;
-
-			return true;
-		}
-
-		bool	Parser::parseCharacter (Lexer& lexer, char expected)
-		{
-			if (lexer.getCurrent () != expected)
-				return this->fail (lexer, string ("expected '") + expected + "' character");
 
 			lexer.next ();
 
@@ -103,29 +97,224 @@ namespace	Tesca
 
 			while (true)
 			{
-				if (lexer.getCurrent () == '(')
+				switch (lexer.getType ())
 				{
-					if (!this->parseCharacter (lexer, '(') || !this->parseExpression (lexer, lookup, &value))
-						return false;
+					case Lexer::PLUS:
+						lexer.next ();
 
-					this->skip (lexer);
+						if (!this->parseExpression (lexer, lookup, &value))
+							return false;
 
-					if (!this->parseCharacter (lexer, ')'))
-						return false;
-				}
-				else
-				{
-					if (!this->parseValue (lexer, lookup, &value))
-						return false;
+						break;
+
+					case Lexer::MINUS:
+						lexer.next ();
+
+						if (!this->parseExpression (lexer, lookup, &value))
+							return false;
+
+						value = new NumberUnaryAccessor (value, [] (Float64 number)
+						{
+							return Variant (-number);
+						});
+
+						this->accessors.push_back (value);
+
+						break;
+
+					case Lexer::NOT:
+						lexer.next ();
+
+						if (!this->parseExpression (lexer, lookup, &value))
+							return false;
+
+						value = new BooleanUnaryAccessor (value, [] (bool value)
+						{
+							return Variant (!value);
+						});
+
+						this->accessors.push_back (value);
+
+						break;
+
+					case Lexer::PARENTHESIS_BEGIN:
+						lexer.next ();
+
+						if (!this->parseExpression (lexer, lookup, &value) ||
+						    !this->parseType (lexer, Lexer::PARENTHESIS_END, "closing parenthesis"))
+							return false;
+
+						break;
+
+					default:
+						if (!this->parseValue (lexer, lookup, &value))
+							return false;
+
+						break;
 				}
 
 				operands.push (value);
 
-				if (!this->skip (lexer) || !this->parseOperator (lexer, &binaryOp))
-					break;
+				switch (lexer.getType ())
+				{
+					case Lexer::AMPERSAND:
+						binaryOp = make_pair (1, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new AndLogicalAccessor (lhs, rhs);
+						});
 
-				if (!lexer.next () || !this->skip (lexer))
-					return this->fail (lexer, "expected operand");
+						break;
+
+					case Lexer::DIFFERENT:
+						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							{
+								return Variant (a != b);
+							});
+						});
+
+						break;
+
+					case Lexer::DIVIDE:
+						binaryOp = make_pair (4, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							{
+								return b != 0 ? Variant (a / b) : Variant::empty;
+							});
+						});
+
+						break;
+
+					case Lexer::EQUAL:
+						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							{
+								return Variant (a == b);
+							});
+						});
+
+						break;
+
+					case Lexer::GREATER_EQUAL:
+						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							{
+								return Variant (a >= b);
+							});
+						});
+
+						break;
+
+					case Lexer::GREATER_THAN:
+						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							{
+								return Variant (a > b);
+							});
+						});
+
+						break;
+
+					case Lexer::LOWER_EQUAL:
+						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							{
+								return Variant (a <= b);
+							});
+						});
+
+						break;
+
+					case Lexer::LOWER_THAN:
+						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							{
+								return Variant (a < b);
+							});
+						});
+
+						break;
+
+					case Lexer::MINUS:
+						binaryOp = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							{
+								return Variant (a - b);
+							});
+						});
+
+						break;
+
+					case Lexer::MODULO:
+						binaryOp = make_pair (4, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							{
+								return b != 0 ? Variant (fmod (a, b)) : Variant::empty;
+							});
+						});
+
+						break;
+
+					case Lexer::MULTIPLY:
+						binaryOp = make_pair (4, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							{
+								return Variant (a * b);
+							});
+						});
+
+						break;
+
+					case Lexer::PIPE:
+						binaryOp = make_pair (1, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new OrLogicalAccessor (lhs, rhs);
+						});
+
+						break;
+
+					case Lexer::PLUS:
+						binaryOp = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						{
+							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							{
+								return Variant (a + b);
+							});
+						});
+
+						break;
+
+					default:
+						for (; !binaryOps.empty (); binaryOps.pop ())
+						{
+							value = operands.top ();
+
+							operands.pop ();
+
+							value = binaryOps.top ().second (operands.top (), value);
+
+							operands.pop ();
+							operands.push (value);
+
+							this->accessors.push_back (value);
+						}
+
+						*output = operands.top ();
+
+						return true;
+				}
+
+				lexer.next ();
 
 				for (; !binaryOps.empty () && binaryOps.top ().first >= binaryOp.first; binaryOps.pop ())
 				{
@@ -143,108 +332,6 @@ namespace	Tesca
 
 				binaryOps.push (binaryOp);
 			}
-
-			for (; !binaryOps.empty (); binaryOps.pop ())
-			{
-				value = operands.top ();
-
-				operands.pop ();
-
-				value = binaryOps.top ().second (operands.top (), value);
-
-				operands.pop ();
-				operands.push (value);
-
-				this->accessors.push_back (value);
-			}
-
-			*output = operands.top ();
-
-			return true;
-		}
-
-		bool	Parser::parseIdentifier (Lexer& lexer, string* output)
-		{
-			stringstream	buffer;
-
-			for (; !lexer.eof () &&
-				 ((lexer.getCurrent () >= '0' && lexer.getCurrent () <= '9') ||
-				  (lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
-				  (lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
-				  (lexer.getCurrent () == '_') ||
-				  (lexer.getCurrent () == '.')); lexer.next ())
-				buffer.put (lexer.getCurrent ());
-
-			if (buffer.tellp () <= 0)
-				return this->fail (lexer, "expected identifier");
-
-			buffer >> *output;
-
-			return true;
-		}
-
-		bool	Parser::parseOperator (Lexer& lexer, BinaryOp* output)
-		{
-			switch (lexer.getCurrent ())
-			{
-				case '+':
-					*output = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
-					{
-						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
-						{
-							return Variant (a + b);
-						});
-					});
-
-					return true;
-
-				case '-':
-					*output = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
-					{
-						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
-						{
-							return Variant (a - b);
-						});
-					});
-
-					return true;
-
-				case '*':
-					*output = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
-					{
-						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
-						{
-							return Variant (a * b);
-						});
-					});
-
-					return true;
-
-				case '/':
-					*output = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
-					{
-						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
-						{
-							return b != 0 ? Variant (a / b) : Variant::empty;
-						});
-					});
-
-					return true;
-
-				case '%':
-					*output = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
-					{
-						return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
-						{
-							return b != 0 ? Variant (fmod (a, b)) : Variant::empty;
-						});
-					});
-
-					return true;
-
-				default:
-					return false;
-			}
 		}
 
 		bool	Parser::parseStatement (Lexer& lexer, Lookup& lookup, Column** column)
@@ -254,42 +341,46 @@ namespace	Tesca
 			string				identifier;
 
 			// Read column identifier
-			if (!this->parseIdentifier (lexer, &identifier))
+			identifier = lexer.getCurrent ();
+
+			if (!this->parseType (lexer, Lexer::CONSTANT, "column identifier"))
 				return false;
 
-			this->skip (lexer);
-
 			// Read column expression
-			if (lexer.getCurrent () == '=')
+			if (lexer.getType () == Lexer::EQUAL)
 			{
-				if (!lexer.next () || !this->skip (lexer))
-					return this->fail (lexer, "expected column expression");
+				lexer.next ();
 
 				if (!this->parseExpression (lexer, lookup, &accessor))
 					return false;
-
-				this->skip (lexer);
 			}
 			else
 				accessor = &VoidAccessor::instance;
 
 			// Read column aggregator
-			if (lexer.getCurrent () == ':')
+			if (lexer.getType () == Lexer::COLON)
 			{
-				if (!lexer.next () || !this->skip (lexer))
-					return this->fail (lexer, "expected column aggregator");
+				lexer.next ();
 
 				if (!this->parseAggregator (lexer, &aggregator))
 					return false;
 
 				*column = aggregator->builder (identifier, accessor);
-
-				this->skip (lexer);
 			}
 			else
 				*column = new ValueColumn (identifier, accessor);
 
 			this->columns.push_back (*column);
+
+			return true;
+		}
+
+		bool	Parser::parseType (Lexer& lexer, Lexer::Lexem type, const char* expected)
+		{
+			if (lexer.getType () != type)
+				return this->fail (lexer, string ("expected ") + expected);
+
+			lexer.next ();
 
 			return true;
 		}
@@ -301,153 +392,108 @@ namespace	Tesca
 			stringstream	buffer;
 			const Constant*	constant;
 			const Function*	function;
-			string			identifier;
+			string			name;
 			Float64			number;
 
-			// Parse function call or constant
-			for (; !lexer.eof () &&
-				   ((lexer.getCurrent () >= 'A' && lexer.getCurrent () <= 'Z') ||
-					(lexer.getCurrent () >= 'a' && lexer.getCurrent () <= 'z') ||
-					(lexer.getCurrent () == '_')); lexer.next ())
-				buffer.put (lexer.getCurrent ());
-
-			if (buffer.tellp () > 0)
+			switch (lexer.getType ())
 			{
-				if (this->skip (lexer) && lexer.getCurrent () == '(')
-				{
-					if (!this->parseCharacter (lexer, '('))
-						return false;
-
-					function = 0;
-
-					for (Int32u i = 0; Function::functions[i].name; ++i)
-					{
-						if (buffer.str () == Function::functions[i].name)
-						{
-							function = &Function::functions[i];
-
-							break;
-						}
-					}
-
-					if (!function)
-						return this->fail (lexer, "unknown function name");
-
-					if (!this->skip (lexer))
-						this->fail (lexer, "expected function arguments");
-
-					while (lexer.getCurrent () != ')')
-					{
-						if (arguments.size () > 0)
-						{
-							if (!this->parseCharacter (lexer, ','))
-								return false;
-
-							this->skip (lexer);
-						}
-
-						if (!this->parseExpression (lexer, lookup, &accessor))
-							return false;
-
-						if (!this->skip (lexer))
-							this->fail (lexer, "expected next argument or ')'");
-
-						arguments.push_back (accessor);
-					}
+				case Lexer::CONSTANT:
+					name = lexer.getCurrent ();
 
 					lexer.next ();
 
-					if (arguments.size () < function->min || (function->max > 0 && arguments.size () > function->max))
-						return this->fail (lexer, "wrong number of arguments");
-
-					*output = function->builder (arguments);
-				}
-				else
-				{
-					constant = 0;
-
-					for (Int32u i = 0; Constant::constants[i].name; ++i)
+					if (lexer.getType () == Lexer::PARENTHESIS_BEGIN)
 					{
-						if (buffer.str () == Constant::constants[i].name)
-						{
-							constant = &Constant::constants[i];
+						function = 0;
 
-							break;
+						for (Int32u i = 0; Function::functions[i].name; ++i)
+						{
+							if (Function::functions[i].name == name)
+							{
+								function = &Function::functions[i];
+
+								break;
+							}
 						}
+
+						if (!function)
+							return this->fail (lexer, string ("unknown function name '") + lexer.getCurrent () + "'");
+
+						lexer.next ();
+
+						while (lexer.getType () != Lexer::PARENTHESIS_END)
+						{
+							if (arguments.size () > 0 && !this->parseType (lexer, Lexer::COLON, "argument separator"))
+								return false;
+
+							if (!this->parseExpression (lexer, lookup, &accessor))
+								return false;
+
+							arguments.push_back (accessor);
+						}
+
+						lexer.next ();
+
+						if (arguments.size () < function->min || (function->max > 0 && arguments.size () > function->max))
+							return this->fail (lexer, "wrong number of arguments");
+
+						*output = function->builder (arguments);
+					}
+					else
+					{
+						constant = 0;
+
+						for (Int32u i = 0; Constant::constants[i].name; ++i)
+						{
+							if (Constant::constants[i].name == name)
+							{
+								constant = &Constant::constants[i];
+
+								break;
+							}
+						}
+
+						if (!constant)
+							return this->fail (lexer, "unknown constant name");
+
+						*output = new ConstantAccessor (constant->builder ());
 					}
 
-					if (!constant)
-						return this->fail (lexer, "unknown constant name");
+					break;
 
-					*output = new ConstantAccessor (constant->builder ());
-				}
+				case Lexer::NUMBER:
+					if (!Convert::toFloat64 (&number, lexer.getCurrent ().c_str (), lexer.getCurrent ().length ()))
+						return this->fail (lexer, "invalid number");
 
-				this->accessors.push_back (*output);
+					*output = new ConstantAccessor (Variant (number));
 
-				return true;
-			}
+					lexer.next ();
 
-			// Parse constant number
-			for (; !lexer.eof () &&
-				   ((lexer.getCurrent () >= '0' && lexer.getCurrent () <= '9') ||
-					(lexer.getCurrent () == '.')); lexer.next ())
-				buffer.put (lexer.getCurrent ());
+					break;
 
-			if (buffer.tellp () > 0)
-			{
-				if (!Convert::toFloat64 (&number, buffer.str ().c_str (), buffer.str ().length ()))
-					return this->fail (lexer, "invalid number");
+				case Lexer::REFERENCE:
+					*output = new FieldAccessor (lookup.set (lexer.getCurrent ()));
 
-				*output = new ConstantAccessor (Variant (number));
+					lexer.next ();
 
-				this->accessors.push_back (*output);
+					break;
 
-				return true;
-			}
+				case Lexer::STRING:
+					*output = new ConstantAccessor (Variant (lexer.getCurrent ()));
 
-			// Parse constant string
-			if (lexer.getCurrent () == '"')
-			{
-				while (true)
-				{
-					if (!lexer.next ())
-						return this->fail (lexer, "unfinished string");
+					lexer.next ();
 
-					if (lexer.getCurrent () == '"')
-						break;
+					break;
 
-					if (lexer.getCurrent () == '\\' && !lexer.next ())
-						return this->fail (lexer, "invalid string escape sequence");
+				default:
+					this->fail (lexer, "unexpected character");
 
-					buffer.put (lexer.getCurrent ());
-				}
-
-				lexer.next ();
-
-				*output = new ConstantAccessor (Variant (buffer.str ()));
-
-				this->accessors.push_back (*output);
-
-				return true;
-			}
-
-			// Parse field reference
-			if (lexer.getCurrent () == '$')
-			{
-				if (!lexer.next ())
-					return this->fail (lexer, "unfinished field identifier");
-
-				if (!this->parseIdentifier (lexer, &identifier))
 					return false;
-
-				*output = new FieldAccessor (lookup.set (identifier));
-
-				this->accessors.push_back (*output);
-
-				return true;
 			}
 
-			return this->fail (lexer, "expected value");
+			this->accessors.push_back (*output);
+
+			return true;
 		}
 
 		void	Parser::reset ()
@@ -460,17 +506,6 @@ namespace	Tesca
 
 			this->accessors.clear ();
 			this->columns.clear ();
-		}
-
-		bool	Parser::skip (Lexer& lexer)
-		{
-			while (lexer.getCurrent () <= ' ')
-			{
-				if (!lexer.next ())
-					return false;
-			}
-
-			return true;
 		}
 	}
 }

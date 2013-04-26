@@ -39,16 +39,11 @@ namespace	Tesca
 			Lexer	lexer (input);
 			bool	next;
 
-			for (next = false; this->parser.skip (lexer); next = true)
+			for (next = false; lexer.getType () != Lexer::END; next = true)
 			{
 				// Skip columns separator after first column
-				if (next)
-				{
-					if (!this->parser.parseCharacter (lexer, ','))
-						return false;
-
-					this->parser.skip (lexer);
-				}
+				if (next && !this->parser.parseType (lexer, Lexer::COMMA, "column separator"))
+					return false;
 
 				// Parse column statement and add to list
 				if (!this->parser.parseStatement (lexer, lookup, &column))

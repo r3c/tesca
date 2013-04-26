@@ -19,9 +19,7 @@ namespace	Tesca
 		class	Parser
 		{
 			public:
-				typedef std::function<Arithmetic::Accessor* (const Arithmetic::Accessor*, const Arithmetic::Accessor*)>	Generator;
-				typedef std::pair<Glay::Int32u, Generator>																BinaryOp;
-				typedef Glay::Design::Event<const std::string&>															Error;
+				typedef Glay::Design::Event<const std::string&>	Error;
 
 				Parser (const Parser&);
 				Parser ();
@@ -33,19 +31,18 @@ namespace	Tesca
 				Error&			getError ();
 
 				bool	parseAggregator (Lexer&, const Aggregator**);
-				bool	parseCharacter (Lexer&, char);
 				bool	parseExpression (Lexer&, Provision::Lookup&, const Arithmetic::Accessor**);
-				bool	parseIdentifier (Lexer&, std::string*);
-				bool	parseOperator (Lexer&, BinaryOp*);
 				bool	parseStatement (Lexer&, Provision::Lookup&, Arithmetic::Column**);
+				bool	parseType (Lexer&, Lexer::Lexem, const char*);
 				bool	parseValue (Lexer&, Provision::Lookup&, const Arithmetic::Accessor**);
-				bool	skip (Lexer&);
 
 				void	reset ();
 
 			private:
-				typedef std::vector<const Arithmetic::Accessor*>	Accessors;
-				typedef std::vector<const Arithmetic::Column*>		Columns;
+				typedef std::vector<const Arithmetic::Accessor*>														Accessors;
+				typedef std::vector<const Arithmetic::Column*>															Columns;
+				typedef std::function<Arithmetic::Accessor* (const Arithmetic::Accessor*, const Arithmetic::Accessor*)>	Generator;
+				typedef std::pair<Glay::Int32u, Generator>																BinaryOp;
 
 				bool	fail (const Lexer&, const std::string&);
 

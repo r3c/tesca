@@ -38,8 +38,6 @@ namespace	Tesca
 		{
 			Lexer	lexer (input);
 
-			this->parser.skip (lexer);
-
 			if (!this->parser.parseExpression (lexer, lookup, &this->condition))
 				return false;
 

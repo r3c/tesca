@@ -32,7 +32,9 @@ SOURCE	= \
 	src/arithmetic/accessor/logical/and.cpp \
 	src/arithmetic/accessor/logical/or.cpp \
 	src/arithmetic/accessor/logical.cpp \
+	src/arithmetic/accessor/unary/boolean.cpp \
 	src/arithmetic/accessor/unary/callback.cpp \
+	src/arithmetic/accessor/unary/number.cpp \
 	src/arithmetic/accessor/unary/string.cpp \
 	src/arithmetic/accessor/unary.cpp \
 	src/arithmetic/accessor/vector/callback.cpp \

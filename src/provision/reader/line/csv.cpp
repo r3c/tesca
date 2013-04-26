@@ -57,7 +57,12 @@ namespace	Tesca
 					Int32u	target;
 
 					if (lookup.find (string (buffer, length), &target))
-						this->mapping[index] = target;
+					{
+						if (index >= this->mapping.size ())
+							this->mapping.resize (index + 1);
+
+						this->mapping[index] = target + 1;
+					}
 				});
 			}
 			else
@@ -65,7 +70,12 @@ namespace	Tesca
 				for (auto i = lookup.begin (); i != lookup.end (); ++i)
 				{
 					if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
-						this->mapping[index] = i->second;
+					{
+						if (index >= this->mapping.size ())
+							this->mapping.resize (index + 1);
+
+						this->mapping[index] = i->second + 1;
+					}
 				}
 			}
 		}
@@ -81,10 +91,12 @@ namespace	Tesca
 
 			this->split (line, length, [&] (Int32u index, const char* buffer, Int32u length)
 			{
-				auto	field = this->mapping.find (index);
+				Int32u	key;
 
-				if (field != this->mapping.end ())
-					this->row.set (field->second, Variant (buffer, length));
+				key = index < this->mapping.size () ? this->mapping[index] : 0;
+
+				if (key != 0)
+					this->row.set (key - 1, Variant (buffer, length));
 			});
 
 			return true;

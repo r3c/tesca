@@ -2,6 +2,8 @@
 #ifndef __TESCA_EXPRESSION_LEXER_HPP
 #define __TESCA_EXPRESSION_LEXER_HPP
 
+#include <sstream>
+#include <string>
 #include "../../lib/glay/src/include.hpp"
 
 namespace	Tesca
@@ -11,20 +13,52 @@ namespace	Tesca
 		class	Lexer
 		{
 			public:
+				enum	Lexem
+				{
+					AMPERSAND,
+					COLON,
+					COMMA,
+					CONSTANT,
+					DIFFERENT,
+					DIVIDE,
+					END,
+					EQUAL,
+					GREATER_EQUAL,
+					GREATER_THAN,
+					LOWER_EQUAL,
+					LOWER_THAN,
+					MODULO,
+					MULTIPLY,
+					MINUS,
+					NOT,
+					NUMBER,
+					PARENTHESIS_BEGIN,
+					PARENTHESIS_END,
+					PIPE,
+					PLUS,
+					REFERENCE,
+					STRING,
+					UNKNOWN
+				};
+
 				Lexer (const char*);
 
-				char			getCurrent () const;
-				Glay::Int32u	getIndex () const;
+				const std::string&	getCurrent () const;
+				Glay::Int32u		getIndex () const;
+				Lexem				getType () const;
 
-				bool	eof () const;
 				bool	next ();
 
 			private:
-				char						current;
-				bool						finished;
+				bool	read ();
+
+				char						character;
+				std::string					current;
+				bool						eof;
 				Glay::Int32u				index;
 				Glay::Pipe::TypeReader		reader;
 				Glay::Pipe::MemoryIStream	stream;
+				Lexem						type;
 		};
 	}
 }

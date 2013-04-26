@@ -4,11 +4,9 @@ Tesca TODO list
 TODO
 ----
 
-- Allow common binary & unary operators in expressions
 - Implement a cleaner error messages system
 - Implement JSON reader
 - Handle escaped quotes in CSV format
-- Split expression parser into lexer/parser classes
 
 DONE
 ----
@@ -24,3 +22,5 @@ DONE
 - Move Variant & Config classes to common namespace
 - Implement CSV printer
 - Handle quotes in CSV format
+- Allow common binary & unary operators in expressions
+- Split expression parser into lexer/parser classes
