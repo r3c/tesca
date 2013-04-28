@@ -107,7 +107,7 @@ int	main (int argc, char* argv[])
 	});
 
 	calculatorExpression = "nb_lines:count";
-	filterCondition = "1";
+	filterCondition = "true";
 	inputFormat = "csv";
 	outputFormat = "name";
 

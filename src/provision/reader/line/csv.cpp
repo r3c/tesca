@@ -18,7 +18,7 @@ namespace	Tesca
 	namespace	Provision
 	{
 		CSVLineReader::CSVLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
-			LineReader (input),
+			LineReader (input, 1024 * 10),
 			row (lookup.count ())
 		{
 			const char*	buffer;
@@ -46,7 +46,7 @@ namespace	Tesca
 					buffer = headers.c_str ();
 					length = headers.length ();
 				}
-				else if (!this->fetch (&buffer, &length))
+				else if (!this->read (&buffer, &length))
 				{
 					buffer = 0;
 					length = 0;

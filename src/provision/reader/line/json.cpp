@@ -10,8 +10,8 @@ namespace
 {
 	struct	Literal
 	{
-		const char*					name;
-		Glay::Int32u				length;
+		const char*				name;
+		Glay::Int32u			length;
 		Tesca::Storage::Variant	value;
 	};
 
@@ -29,7 +29,7 @@ namespace	Tesca
 	namespace	Provision
 	{
 		JSONLineReader::JSONLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
-			LineReader (input),
+			LineReader (input, 1024 * 10),
 			lookup (lookup),
 			root (config.get ("root", "json")),
 			row (lookup.count ())

@@ -6,6 +6,7 @@ TODO
 
 - Implement a cleaner error messages system
 - Implement JSON reader
+- Speed up JSON reader by removing stringstream
 - Handle escaped quotes in CSV format
 
 DONE

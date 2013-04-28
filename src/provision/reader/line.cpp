@@ -10,12 +10,13 @@ namespace	Tesca
 {
 	namespace	Provision
 	{
-		LineReader::LineReader (Pipe::IStream* input) :
+		LineReader::LineReader (Pipe::IStream* input, Int32u reserve) :
+			available (0),
 			buffer (0),
 			eof (false),
 			input (*input),
-			length (0),
 			line (0),
+			reserve (reserve),
 			size (0),
 			start (0),
 			stop (0)
@@ -28,61 +29,18 @@ namespace	Tesca
 				free (this->buffer);
 		}
 
-		bool	LineReader::fetch (const char** buffer, Int32u* length)
-		{
-			// Capture characters until next line break
-			while (true)
-			{
-				while (this->stop < this->length && (this->buffer[this->stop] != '\n' && this->buffer[this->stop] != '\r'))
-					++this->stop;
-
-				if (this->start == this->stop && this->eof)
-					return false;
-
-				if (this->stop < this->length || this->eof)
-					break;
-
-				if (!this->read ())
-					return false;
-			}
-
-			// Store captured string length
-			*length = this->stop - this->start;
-
-			++this->line;
-
-			// Ignore repeated line break characters
-			while (true)
-			{
-				while (this->stop < this->length && (this->buffer[this->stop] == '\n' || this->buffer[this->stop] == '\r'))
-					++this->stop;
-
-				if (this->stop < this->length || this->eof)
-					break;
-
-				if (!this->read ())
-					return false;
-			}
-
-			// Store captured string start
-			*buffer = this->buffer + this->start;
-
-			this->start = this->stop;
-
-			return true;
-		}
-
 		bool	LineReader::next ()
 		{
-			const char*		buffer;
-			Int32u			length;
-			stringstream	stream;
+			const char*	buffer;
+			Int32u		length;
 
-			if (!this->fetch (&buffer, &length))
+			if (!this->read (&buffer, &length))
 				return false;
 
 			if (!this->parse (buffer, length))
 			{
+				stringstream	stream;
+
 				stream << "could not parse invalid line #" << this->line;
 
 				this->error.fire (stream.str ());
@@ -91,25 +49,29 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	LineReader::read ()
+		bool	LineReader::fetch ()
 		{
 			Int32u	count;
 			char*	swap;
+
+			// Nothing to fetch if eof of file has already been reached last time
+			if (this->eof)
+				return false;
 
 			// Make some buffer space by moving unused content or resizing it
 			if (this->start > 0)
 			{
 				count = this->start;
 
-				memmove (this->buffer, this->buffer + count, sizeof (*this->buffer) * (this->length - count));
+				memmove (this->buffer, this->buffer + count, sizeof (*this->buffer) * (this->available - count));
 
-				this->length -= count;
+				this->available -= count;
 				this->start = 0;
 				this->stop -= count;
 			}
 			else
 			{
-				this->size = this->size * 2 + 1;
+				this->size = max (this->size * 2 + 1, this->reserve);
 
 				swap = static_cast<char*> (realloc (this->buffer, sizeof (*this->buffer) * this->size));
 
@@ -128,12 +90,66 @@ namespace	Tesca
 			}
 
 			// Read data from stream to buffer
-			count = this->input.read (this->buffer + this->length, this->size - this->length);
+			count = this->input.read (this->buffer + this->available, this->size - this->available);
 
-			if (count < this->size - this->length)
+			if (count < this->size - this->available)
 				this->eof = true;
 
-			this->length += count;
+			this->available += count;
+
+			return true;
+		}
+
+		bool	LineReader::read (const char** line, Int32u* length)
+		{
+			const char*	head;
+			const char*	tail;
+
+			// Capture characters until next line break
+			while (true)
+			{
+				head = this->buffer + this->stop;
+				tail = this->buffer + this->available;
+
+				while (head < tail && *head != '\n' && *head != '\r')
+					++head;
+
+				this->stop = head - this->buffer;
+
+				if (this->stop < this->available || this->eof)
+					break;
+
+				if (!this->fetch ())
+					return false;
+			}
+
+			// Store captured string length
+			*length = this->stop - this->start;
+
+			++this->line;
+
+			// Ignore repeated line break characters
+			if (this->stop < this->available)
+			{
+				++this->stop;
+
+				if (this->stop < this->available || (this->fetch () && this->stop < this->available))
+				{
+					head = this->buffer + this->stop - 1;
+					tail = head + 1;
+
+					if ((*tail == '\n' || *tail == '\r') && *head != *tail)
+						++this->stop;
+				}
+			}
+
+			// Store captured string start
+			*line = this->buffer + this->start;
+
+			if (this->start == this->stop && this->eof)
+				return false;
+
+			this->start = this->stop;
 
 			return true;
 		}

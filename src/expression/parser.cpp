@@ -61,7 +61,6 @@ namespace	Tesca
 		bool	Parser::parseAggregator (Lexer& lexer, const Aggregator** output)
 		{
 			const Aggregator*	aggregator;
-			stringstream		buffer;
 
 			if (lexer.getType () != Lexer::CONSTANT)
 				return this->fail (lexer, "expected aggregator name");
@@ -389,7 +388,6 @@ namespace	Tesca
 		{
 			const Accessor*	accessor;
 			Accessors		arguments;
-			stringstream	buffer;
 			const Constant*	constant;
 			const Function*	function;
 			string			name;
