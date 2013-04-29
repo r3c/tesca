@@ -454,7 +454,7 @@ namespace	Tesca
 						if (!constant)
 							return this->fail (lexer, "unknown constant name");
 
-						*output = new ConstantAccessor (constant->builder ());
+						*output = new ConstantAccessor (constant->value);
 					}
 
 					break;

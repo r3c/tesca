@@ -9,19 +9,10 @@ namespace	Tesca
 	{
 		const Constant	Constant::constants[] =
 		{
-			{"false",	[] () -> Variant
-			{
-				return Variant (false);
-			}},
-			{"true",	[] () -> Variant
-			{
-				return Variant (true);
-			}},
-			{"void",	[] () -> Variant
-			{
-				return Variant ();
-			}},
-			{0, 0}
+			{"false",	Variant (false)},
+			{"true",	Variant (true)},
+			{"void",	Variant ()},
+			{0, 		Variant ()}
 		};
 	}
 }

@@ -124,15 +124,6 @@ namespace	Tesca
 					return defined ? Variant (result) : Variant::empty;
 				});
 			}},
-			{"not",		2,	2,	[] (const vector<const Accessor*>& arguments) -> Accessor*
-			{
-				return new CallbackUnaryAccessor (arguments[0], [] (const Variant& argument)
-				{
-					bool	value;
-
-					return Variant (!argument.toBoolean (&value) || !value);
-				});
-			}},
 			{"slice",	2,	3,	[] (const vector<const Accessor*>& arguments) -> Accessor*
 			{
 				return new CallbackVectorAccessor (arguments, [] (const Variant* values, Int32u length)

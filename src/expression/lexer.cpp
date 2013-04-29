@@ -58,17 +58,17 @@ namespace	Tesca
 			// Scan constant
 			if ((this->character >= 'A' && this->character <= 'Z') ||
 			    (this->character >= 'a' && this->character <= 'z') ||
-				(this->character == '_') ||
-				(this->character == '.'))
+			    (this->character == '_') ||
+			    (this->character == '.'))
 			{
 				buffer.put (this->character);
 
 				while ((this->read ()) &&
 				       ((this->character >= '0' && this->character <= '9') ||
-					    (this->character >= 'A' && this->character <= 'Z') ||
-					    (this->character >= 'a' && this->character <= 'z') ||
-					    (this->character == '_') ||
-					    (this->character == '.')))
+				        (this->character >= 'A' && this->character <= 'Z') ||
+				        (this->character >= 'a' && this->character <= 'z') ||
+				        (this->character == '_') ||
+				        (this->character == '.')))
 					buffer.put (this->character);
 
 				this->current = buffer.str ();
@@ -84,7 +84,7 @@ namespace	Tesca
 
 				while ((this->read ()) &&
 				       ((this->character >= '0' && this->character <= '9') ||
-					    (this->character == '.')))
+				        (this->character == '.')))
 					buffer.put (this->character);
 
 				this->current = buffer.str ();
@@ -123,10 +123,10 @@ namespace	Tesca
 			{
 				while ((this->read ()) &&
 				       ((this->character >= '0' && this->character <= '9') ||
-					    (this->character >= 'A' && this->character <= 'Z') ||
-					    (this->character >= 'a' && this->character <= 'a') ||
-					    (this->character == '_') ||
-					    (this->character == '.')))
+				        (this->character >= 'A' && this->character <= 'Z') ||
+				        (this->character >= 'a' && this->character <= 'a') ||
+				        (this->character == '_') ||
+				        (this->character == '.')))
 					buffer.put (this->character);
 
 				this->current = buffer.str ();
