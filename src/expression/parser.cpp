@@ -421,7 +421,7 @@ namespace	Tesca
 
 						while (lexer.getType () != Lexer::PARENTHESIS_END)
 						{
-							if (arguments.size () > 0 && !this->parseType (lexer, Lexer::COLON, "argument separator"))
+							if (arguments.size () > 0 && !this->parseType (lexer, Lexer::COMMA, "argument separator"))
 								return false;
 
 							if (!this->parseExpression (lexer, lookup, &accessor))
