@@ -124,7 +124,7 @@ namespace	Tesca
 				while ((this->read ()) &&
 				       ((this->character >= '0' && this->character <= '9') ||
 				        (this->character >= 'A' && this->character <= 'Z') ||
-				        (this->character >= 'a' && this->character <= 'a') ||
+				        (this->character >= 'a' && this->character <= 'z') ||
 				        (this->character == '_') ||
 				        (this->character == '.')))
 					buffer.put (this->character);
