@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <functional>
 #include <map>
-#include <sstream>
+#include <string>
 #include "../../../storage/config.hpp"
 #include "../../row/array.hpp"
 #include "../../lookup.hpp"
@@ -38,12 +38,12 @@ namespace	Tesca
 				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
 
 				bool	readCharacter (Cursor*, char);
-				bool	readValue (Cursor*, std::stringstream&);
+				bool	readValue (Cursor*, std::string&);
 
-				Lookup				lookup;
-				std::stringstream	prefix;
-				std::string			root;				
-				ArrayRow			row;
+				Lookup		lookup;
+				std::string	prefix;
+				std::string	root;				
+				ArrayRow	row;
 		};
 	}
 }
