@@ -38,7 +38,7 @@ namespace	Tesca
 				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
 
 				bool	readCharacter (Cursor*, char);
-				bool	readValue (Cursor*, std::string&);
+				bool	readValue (Cursor*);
 
 				Lookup		lookup;
 				std::string	prefix;

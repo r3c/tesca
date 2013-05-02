@@ -45,14 +45,14 @@ namespace	Tesca
 		{
 			Cursor	cursor;
 
-			this->prefix.erase (this->prefix.begin (), this->prefix.end ());
+			this->prefix.erase ();
 			this->prefix.append (this->root);
 			this->row.clear ();			
 
 			cursor.buffer = line;
 			cursor.length = length;
 
-			return this->readValue (&cursor, this->prefix);
+			return this->readValue (&cursor);
 		}
 
 		bool	JSONLineReader::readCharacter (Cursor* cursor, char expected)
@@ -72,7 +72,7 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	JSONLineReader::readValue (Cursor* cursor, string& prefix)
+		bool	JSONLineReader::readValue (Cursor* cursor)
 		{
 			char		buffer[16];
 			bool		comma;
@@ -92,7 +92,7 @@ namespace	Tesca
 			if (cursor->length < 1)
 				return false;
 
-			tip = prefix.length ();
+			tip = this->prefix.length ();
 
 			switch (*cursor->buffer)
 			{
@@ -109,7 +109,7 @@ namespace	Tesca
 					if (cursor->length < 1)
 						return false;
 
-					if (this->lookup.find (prefix, &key))
+					if (this->lookup.find (this->prefix, &key))
 						this->row.set (key, Variant (start, cursor->buffer - start));
 
 					++cursor->buffer;
@@ -141,7 +141,7 @@ namespace	Tesca
 					if (!Convert::toFloat64 (&number, start, cursor->buffer - start))
 						return false;
 
-					if (this->lookup.find (prefix, &key))
+					if (this->lookup.find (this->prefix, &key))
 						this->row.set (key, Variant (number));
 
 					return true;
@@ -160,13 +160,13 @@ namespace	Tesca
 						if (!Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), index++))
 							return false;
 
-						prefix.push_back ('.');
-						prefix.append (buffer);
+						this->prefix.push_back ('.');
+						this->prefix.append (buffer);
 
-						if (!this->readValue (cursor, prefix))
+						if (!this->readValue (cursor))
 							return false;
 
-						prefix.erase (tip);
+						this->prefix.erase (tip);
 					}
 
 					return true;
@@ -183,23 +183,22 @@ namespace	Tesca
 						if (!this->readCharacter (cursor, '"'))
 							return false;
 
-						prefix.push_back ('.');
+						this->prefix.push_back ('.');
 
 						for (start = cursor->buffer; cursor->length > 0 && *cursor->buffer != '"'; )
 						{
-							prefix.push_back (*cursor->buffer);
+							this->prefix.push_back (*cursor->buffer);
 
 							++cursor->buffer;
 							--cursor->length;
 						}
 
-						if (!this->readCharacter (cursor, '"'))
+						if (!this->readCharacter (cursor, '"') ||
+						    !this->readCharacter (cursor, ':') ||
+						    !this->readValue (cursor))
 							return false;
 
-						if (!this->readCharacter (cursor, ':') || !this->readValue (cursor, prefix))
-							return false;
-
-						prefix.erase (tip);
+						this->prefix.erase (tip);
 					}
 
 					return true;
@@ -219,7 +218,7 @@ namespace	Tesca
 					{
 						if (current->length == length && memcmp (current->name, start, length * sizeof (*current->name)) == 0)
 						{
-							if (this->lookup.find (prefix, &key))
+							if (this->lookup.find (this->prefix, &key))
 								this->row.set (key, current->value);
 
 							return true;
