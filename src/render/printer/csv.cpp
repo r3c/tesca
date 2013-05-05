@@ -28,7 +28,7 @@ namespace	Tesca
 		{
 			string			value;
 			Int32u			width;
-			StringWriter	writer (stream);
+			FormatWriter	writer (stream);
 
 			if (this->headers)
 			{
@@ -37,14 +37,15 @@ namespace	Tesca
 				for (Int32u i = 0; i < columns.size (); ++i)
 				{
 					if (i > 0)
-						writer.writeString (this->split);
+						writer.write (this->split);
 
-					writer.writeString (this->quote);
-					writer.writeString (columns[i]->getIdentifier ());
-					writer.writeString (this->quote);
+					writer
+						.write (this->quote)
+						.write (columns[i]->getIdentifier ())
+						.write (this->quote);
 				}
 
-				writer.writeString ("\n");
+				writer.write ("\n");
 			}
 
 			width = table.getWidth ();
@@ -56,19 +57,20 @@ namespace	Tesca
 				for (Int32u i = 0; i < width; ++i)
 				{
 					if (i > 0)
-						writer.writeString (this->split);
+						writer.write (this->split);
 
 					if ((*slot)->current ().toString (&value))
 					{
-						writer.writeString (this->quote);
-						writer.writeString (value);
-						writer.writeString (this->quote);
+						writer
+							.write (this->quote)
+							.write (value)
+							.write (this->quote);
 					}
 
 					++slot;
 				}
 
-				writer.writeString ("\n");
+				writer.write ("\n");
 			}
 		}
 	}

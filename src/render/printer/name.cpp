@@ -23,7 +23,8 @@ namespace	Tesca
 
 		void	NamePrinter::print (OStream& stream, const Table& table)
 		{
-			string	value;
+			string			value;
+			FormatWriter	writer (stream);
 
 			for (auto iterator = table.begin (); iterator != table.end (); ++iterator)
 			{
@@ -34,19 +35,20 @@ namespace	Tesca
 					const Arithmetic::Slot*	slot = slots[i];
 
 					if (i > 0)
-						stream.write (", ", 2); // FIXME
+						writer.write (", ");
 
 					auto id = table.getColumns ()[i]->getIdentifier ();
 
 					if (!slot->current ().toString (&value))
 						value = "<void>";
 
-					stream.write (id.c_str (), id.length ());
-					stream.write (" = ", 3); // FIXME
-					stream.write (value.c_str (), value.length ());
+					writer
+						.write (id)
+						.write (" = ")
+						.write (value);
 				}
 
-				stream.write ("\n", 1); // FIXME
+				writer.write ("\n");
 			}
 		}
 	}
