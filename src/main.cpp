@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include "arithmetic/table.hpp"
 #include "expression/calculator.hpp"
 #include "expression/filter.hpp"
@@ -14,7 +13,8 @@ using namespace Tesca;
 
 int	execute (const Provision::Input& input, const Provision::Lookup& lookup, const Expression::Filter& filter, Expression::Calculator& calculator, const Render::Output& output, char* sources[], int length)
 {
-	int					index;
+	FileOStream			errorStream (stderr);
+	StringWriter		errorWriter (errorStream);
 	Render::Printer*	printer;
 	Provision::Reader*	reader;
 	FileIStream*		source;
@@ -25,14 +25,14 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 
 	if (!printer)
 	{
-		cerr << "error: cannot create printer" << endl;
+		errorWriter.writeString ("error: cannot create printer\n");
 
 		return 1;
 	}
 
 	table.reset (filter.getCondition (), calculator.getColumns ());
 
-	for (index = 0; index < length || index == 0; ++index)
+	for (int index = 0; index < length || index == 0; ++index)
 	{
 		if (index < length)
 			source = new FileIStream (sources[index]);
@@ -45,9 +45,11 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 
 			if (reader)
 			{
-				reader->getError ().bind ([] (const string& error)
+				reader->getError ().bind ([&] (const string& error)
 				{
-					cerr << "warning: reader error (" << error << ")" << endl;
+					errorWriter.writeString ("warning: reader error(");
+					errorWriter.writeString (error);
+					errorWriter.writeString (")\n");
 				});
 
 				while (reader->next ())
@@ -56,12 +58,16 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 				delete reader;
 			}
 			else
-				cerr << "error: cannot create reader" << endl;
+				errorWriter.writeString ("error: cannot create reader\n");
 		}
 		else if (index < length)
-			cerr << "error: cannot open file '" << sources[index] << "' for reading" << endl;
+		{
+			errorWriter.writeString ("error: cannot open file '");
+			errorWriter.writeString (sources[index]);
+			errorWriter.writeString ("' for reading\n");
+		}
 		else
-			cerr << "error: cannot open standard input for reading" << endl;
+			errorWriter.writeString ("error: cannot open standard input for reading");
 
 		delete source;
 	}
@@ -77,33 +83,45 @@ int	main (int argc, char* argv[])
 {
 	Expression::Calculator	calculator;
 	const char*				calculatorExpression;
+	FileOStream				errorStream (stderr);
+	StringWriter			errorWriter (errorStream);
 	Expression::Filter		filter;
 	const char*				filterCondition;
-	int						index;
 	Provision::Input		input;
 	const char*				inputFormat;
 	Provision::Lookup		lookup;
 	Render::Output			output;
 	const char*				outputFormat;
+	int						start;
+	FileOStream				stdStream (stdout);
+	StringWriter			stdWriter (stdStream);
 
-	calculator.getError ().bind ([] (const string& message)
+	calculator.getError ().bind ([&] (const string& message)
 	{
-		cerr << "error: invalid calculator expression (" << message << ")" << endl;
+		errorWriter.writeString ("error: invalid calculator expression (");
+		errorWriter.writeString (message);
+		errorWriter.writeString (")\n");
 	});
 
-	filter.getError ().bind ([] (const string& message)
+	filter.getError ().bind ([&] (const string& message)
 	{
-		cerr << "error: invalid filter condition (" << message << ")" << endl;
+		errorWriter.writeString ("error: invalid filter condition (");
+		errorWriter.writeString (message);
+		errorWriter.writeString (")\n");
 	});
 
-	input.getError ().bind ([] (const string& message)
+	input.getError ().bind ([&] (const string& message)
 	{
-		cerr << "error: invalid input format (" << message << ")" << endl;
+		errorWriter.writeString ("error: invalid input format (");
+		errorWriter.writeString (message);
+		errorWriter.writeString (")\n");
 	});
 
-	output.getError ().bind ([] (const string& message)
+	output.getError ().bind ([&] (const string& message)
 	{
-		cerr << "error: invalid output format (" << message << ")" << endl;
+		errorWriter.writeString ("error: invalid output format (");
+		errorWriter.writeString (message);
+		errorWriter.writeString (")\n");
 	});
 
 	calculatorExpression = "nb_lines:count";
@@ -111,71 +129,75 @@ int	main (int argc, char* argv[])
 	inputFormat = "csv";
 	outputFormat = "name";
 
-	for (index = 1; index < argc && argv[index][0] == '-'; ++index)
+	for (start = 1; start < argc && argv[start][0] == '-'; ++start)
 	{
-		for (const char* argument = argv[index] + 1; *argument != '\0'; ++argument)
+		for (const char* argument = argv[start] + 1; *argument != '\0'; ++argument)
 		{
 			switch (*argument)
 			{
 				case 'c':
-					if (++index >= argc)
+					if (++start >= argc)
 					{
-						cerr << "error: missing filter condition" << endl;
+						errorWriter.writeString ("error: missing filter condition\n");
 
 						return 1;
 					}
 
-					filterCondition = argv[index];
+					filterCondition = argv[start];
 
 					break;
 
 				case 'e':
-					if (++index >= argc)
+					if (++start >= argc)
 					{
-						cerr << "error: missing calculator expression" << endl;
+						errorWriter.writeString ("error: missing calculator expression\n");
 
 						return 1;
 					}
 
-					calculatorExpression = argv[index];
+					calculatorExpression = argv[start];
 
 					break;
 
 				case 'h':
-					cout << "usage: " << argv[0] << " [-i <format>] [-o <printer>] [-c <condition>] [-e <expression>] [<file> [<file>...]]" << endl;
-					cout << "  -c: filter condition, e.g. 'ge(len($0), 4)'" << endl;
-					cout << "  -e: calculator expression, e.g. 'name = $0, duration = $1:sum'" << endl;
-					cout << "  -i: input format, e.g. 'csv'" << endl;
-					cout << "  -o: output format, e.g. 'csv'" << endl;
+					stdWriter.writeString ("usage: ");
+					stdWriter.writeString (argv[0]);
+					stdWriter.writeString (" [-i <format>] [-o <printer>] [-c <condition>] [-e <expression>] [<file> [<file>...]]\n");
+					stdWriter.writeString ("  -c: filter condition, e.g. 'ge(len($0), 4)'\n");
+					stdWriter.writeString ("  -e: calculator expression, e.g. 'name = $0, duration = $1:sum'\n");
+					stdWriter.writeString ("  -i: input format, e.g. 'csv'\n");
+					stdWriter.writeString ("  -o: output format, e.g. 'csv'\n");
 
 					return 0;
 
 				case 'i':
-					if (++index >= argc)
+					if (++start >= argc)
 					{
-						cerr << "error: missing input format" << endl;
+						errorWriter.writeString ("error: missing input format\n");
 
 						return 1;
 					}
 
-					inputFormat = argv[index];
+					inputFormat = argv[start];
 
 					break;
 
 				case 'o':
-					if (++index >= argc)
+					if (++start >= argc)
 					{
-						cerr << "error: missing output format" << endl;
+						errorWriter.writeString ("error: missing output format\n");
 
 						return 1;
 					}
 
-					outputFormat = argv[index];
+					outputFormat = argv[start];
 
 					break;
 
 				default:
-					cerr << "error: unknown option '" << *argument << "'" << endl;
+					errorWriter.writeString ("error: unknown option '");
+//					errorWriter.writeString (*argument);
+					errorWriter.writeString ("'");
 
 					return 1;
 			}
@@ -188,5 +210,5 @@ int	main (int argc, char* argv[])
 		!output.parse (outputFormat))
 		return 1;
 
-	return execute (input, lookup, filter, calculator, output, argv + index, argc - index);
+	return execute (input, lookup, filter, calculator, output, argv + start, argc - start);
 }
