@@ -4,9 +4,6 @@ Tesca TODO list
 TODO
 ----
 
-- Implement a cleaner error messages system
-- Implement JSON reader
-- Speed up JSON reader by removing stringstream
 - Handle escaped quotes in CSV format
 
 DONE
@@ -25,3 +22,6 @@ DONE
 - Handle quotes in CSV format
 - Allow common binary & unary operators in expressions
 - Split expression parser into lexer/parser classes
+- Speed up JSON reader by removing stringstream
+- Implement a cleaner error messages system
+- Implement JSON reader

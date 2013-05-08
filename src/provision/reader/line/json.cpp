@@ -31,9 +31,15 @@ namespace	Tesca
 		JSONLineReader::JSONLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
 			LineReader (input, 1024 * 10),
 			lookup (lookup),
-			root (config.get ("root", "row")),
 			row (lookup.count ())
 		{
+			string	member (config.get ("member", ""));
+			string	root (config.get ("root", "row"));
+
+			for (auto i = root.begin (); i != root.end (); ++i)
+				this->lookup.next (*i);
+
+			this->member = member.length () > 0 ? member[0] : '.';
 		}
 
 		const Row&	JSONLineReader::current () const
@@ -45,8 +51,6 @@ namespace	Tesca
 		{
 			Cursor	cursor;
 
-			this->prefix.erase ();
-			this->prefix.append (this->root);
 			this->row.clear ();			
 
 			cursor.buffer = line;
@@ -76,12 +80,11 @@ namespace	Tesca
 		{
 			char		buffer[16];
 			bool		comma;
+			Int32u		field;
 			Int32u		index;
-			Int32u		key;
 			Int32u		length;
 			Float64		number;
 			const char*	start;
-			size_t		tip;
 
 			while (cursor->length > 0 && *cursor->buffer <= ' ')
 			{
@@ -91,8 +94,6 @@ namespace	Tesca
 
 			if (cursor->length < 1)
 				return false;
-
-			tip = this->prefix.length ();
 
 			switch (*cursor->buffer)
 			{
@@ -109,8 +110,8 @@ namespace	Tesca
 					if (cursor->length < 1)
 						return false;
 
-					if (this->lookup.find (this->prefix.c_str (), &key))
-						this->row.set (key, Variant (start, cursor->buffer - start));
+					if (this->lookup.fetch (&field))
+						this->row.set (field, Variant (start, cursor->buffer - start));
 
 					++cursor->buffer;
 					--cursor->length;
@@ -141,8 +142,8 @@ namespace	Tesca
 					if (!Convert::toFloat (&number, start, cursor->buffer - start))
 						return false;
 
-					if (this->lookup.find (this->prefix.c_str (), &key))
-						this->row.set (key, Variant (number));
+					if (this->lookup.fetch (&field))
+						this->row.set (field, Variant (number));
 
 					return true;
 
@@ -162,13 +163,20 @@ namespace	Tesca
 						if (length < 1)
 							return false;
 
-						this->prefix.push_back ('.');
-						this->prefix.append (buffer, length);
+						this->lookup.enter ();
+						this->lookup.next (this->member);
+
+						for (Int32u i = 0; i < length; ++i)
+							this->lookup.next (buffer[i]);
 
 						if (!this->readValue (cursor))
-							return false;
+						{
+							this->lookup.leave ();
 
-						this->prefix.erase (tip);
+							return false;
+						}
+
+						this->lookup.leave ();
 					}
 
 					return true;
@@ -185,11 +193,12 @@ namespace	Tesca
 						if (!this->readCharacter (cursor, '"'))
 							return false;
 
-						this->prefix.push_back ('.');
+						this->lookup.enter ();
+						this->lookup.next (this->member);
 
 						for (start = cursor->buffer; cursor->length > 0 && *cursor->buffer != '"'; )
 						{
-							this->prefix.push_back (*cursor->buffer);
+							this->lookup.next (*cursor->buffer);
 
 							++cursor->buffer;
 							--cursor->length;
@@ -198,9 +207,13 @@ namespace	Tesca
 						if (!this->readCharacter (cursor, '"') ||
 						    !this->readCharacter (cursor, ':') ||
 						    !this->readValue (cursor))
-							return false;
+						{
+							this->lookup.leave ();
 
-						this->prefix.erase (tip);
+							return false;
+						}
+
+						this->lookup.leave ();
 					}
 
 					return true;
@@ -220,8 +233,8 @@ namespace	Tesca
 					{
 						if (current->length == length && memcmp (current->name, start, length * sizeof (*current->name)) == 0)
 						{
-							if (this->lookup.find (this->prefix.c_str (), &key))
-								this->row.set (key, current->value);
+							if (this->lookup.fetch (&field))
+								this->row.set (field, current->value);
 
 							return true;
 						}

@@ -22,6 +22,7 @@ namespace	Tesca
 			row (lookup.count ())
 		{
 			const char*	buffer;
+			string		characters;
 			string		headers;
 			Int32u		index;
 			Int32u		length;
@@ -30,14 +31,20 @@ namespace	Tesca
 			// Read special character types from configuration
 			this->types = static_cast<char*> (calloc (1 << (sizeof (*this->types) * 8), sizeof (*this->types)));
 
-			for (buffer = config.get ("blanks", "\n\r\t ").c_str (); *buffer; )
-				this->types[(Int32u)*buffer++] = TYPE_BLANK;
+			characters = config.get ("blanks", "\n\r\t ");
 
-			for (buffer = config.get ("quotes", "\"").c_str (); *buffer; )
-				this->types[(Int32u)*buffer++] = TYPE_QUOTE;
+			for (auto i = characters.begin (); i != characters.end (); ++i)
+				this->types[(Int32s)*i] = TYPE_BLANK;
 
-			for (buffer = config.get ("splits", ",").c_str (); *buffer; )
-				this->types[(Int32u)*buffer++] = TYPE_SPLIT;
+			characters = config.get ("quotes", "\"");
+
+			for (auto i = characters.begin (); i != characters.end (); ++i)
+				this->types[(Int32s)*i] = TYPE_QUOTE;
+
+			characters = config.get ("splits", ",");
+
+			for (auto i = characters.begin (); i != characters.end (); ++i)
+				this->types[(Int32s)*i] = TYPE_SPLIT;
 
 			// Read headers from configuration or use default
 			if (config.get ("headers", &headers))

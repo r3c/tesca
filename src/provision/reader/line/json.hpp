@@ -41,8 +41,7 @@ namespace	Tesca
 				bool	readValue (Cursor*);
 
 				Lookup		lookup;
-				std::string	prefix;
-				std::string	root;				
+				char		member;
 				ArrayRow	row;
 		};
 	}
