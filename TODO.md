@@ -4,6 +4,7 @@ Tesca TODO list
 TODO
 ----
 
+- Change expressions syntax to something like "$row.0: name, avg(max($row.1, 0)): time"
 - Handle escaped quotes in CSV format
 
 DONE
