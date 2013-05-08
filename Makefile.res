@@ -9,13 +9,11 @@ SOURCE	= \
 	lib/glay/src/parallel/mutex.cpp \
 	lib/glay/src/parallel/signal.cpp \
 	lib/glay/src/pipe/reader/binary.cpp \
-	lib/glay/src/pipe/reader/type.cpp \
 	lib/glay/src/pipe/stream/file.cpp \
 	lib/glay/src/pipe/stream/memory.cpp \
 	lib/glay/src/pipe/stream/seek.cpp \
 	lib/glay/src/pipe/writer/binary.cpp \
 	lib/glay/src/pipe/writer/format.cpp \
-	lib/glay/src/pipe/writer/type.cpp \
 	lib/glay/src/pipe/reader.cpp \
 	lib/glay/src/pipe/stream.cpp \
 	lib/glay/src/pipe/writer.cpp \

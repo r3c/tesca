@@ -20,7 +20,7 @@ namespace	Tesca
 		{
 			Int32u	field;
 
-			if (!this->lookup.find (identifier, &field))
+			if (!this->lookup.find (identifier.c_str (), &field))
 				return false;
 
 			this->row.set (field, value);

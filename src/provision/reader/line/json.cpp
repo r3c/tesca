@@ -31,7 +31,7 @@ namespace	Tesca
 		JSONLineReader::JSONLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
 			LineReader (input, 1024 * 10),
 			lookup (lookup),
-			root (config.get ("root", "json")),
+			root (config.get ("root", "row")),
 			row (lookup.count ())
 		{
 		}
@@ -109,7 +109,7 @@ namespace	Tesca
 					if (cursor->length < 1)
 						return false;
 
-					if (this->lookup.find (this->prefix, &key))
+					if (this->lookup.find (this->prefix.c_str (), &key))
 						this->row.set (key, Variant (start, cursor->buffer - start));
 
 					++cursor->buffer;
@@ -138,10 +138,10 @@ namespace	Tesca
 						--cursor->length;
 					}
 
-					if (!Convert::toFloat64 (&number, start, cursor->buffer - start))
+					if (!Convert::toFloat (&number, start, cursor->buffer - start))
 						return false;
 
-					if (this->lookup.find (this->prefix, &key))
+					if (this->lookup.find (this->prefix.c_str (), &key))
 						this->row.set (key, Variant (number));
 
 					return true;
@@ -157,11 +157,13 @@ namespace	Tesca
 						if (comma && !this->readCharacter (cursor, ','))
 							return false;
 
-						if (!Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), index++))
+						length = Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), index++);
+
+						if (length < 1)
 							return false;
 
 						this->prefix.push_back ('.');
-						this->prefix.append (buffer);
+						this->prefix.append (buffer, length);
 
 						if (!this->readValue (cursor))
 							return false;
@@ -218,7 +220,7 @@ namespace	Tesca
 					{
 						if (current->length == length && memcmp (current->name, start, length * sizeof (*current->name)) == 0)
 						{
-							if (this->lookup.find (this->prefix, &key))
+							if (this->lookup.find (this->prefix.c_str (), &key))
 								this->row.set (key, current->value);
 
 							return true;

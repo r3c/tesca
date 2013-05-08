@@ -56,7 +56,7 @@ namespace	Tesca
 				std::string					current;
 				bool						eof;
 				Glay::Int32u				index;
-				Glay::Pipe::TypeReader		reader;
+				Glay::Pipe::BinaryReader	reader;
 				Glay::Pipe::MemoryIStream	stream;
 				Lexem						type;
 		};

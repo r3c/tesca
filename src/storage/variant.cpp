@@ -291,7 +291,7 @@ namespace	Tesca
 					return true;
 
 				case Variant::STRING:
-					return Convert::toFloat64 (output, this->content.string.buffer, this->content.string.length);
+					return Convert::toFloat (output, this->content.string.buffer, this->content.string.length);
 
 				default:
 					return false;

@@ -25,6 +25,7 @@ namespace	Tesca
 			string		headers;
 			Int32u		index;
 			Int32u		length;
+			Int32u		value;
 
 			// Read special character types from configuration
 			this->types = static_cast<char*> (calloc (1 << (sizeof (*this->types) * 8), sizeof (*this->types)));
@@ -54,28 +55,33 @@ namespace	Tesca
 
 				this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 				{
-					Int32u	target;
+					string	key (buffer, length);
+					Int32u	value;
 
-					if (lookup.find (string (buffer, length), &target))
+					if (lookup.find (key.c_str (), &value))
 					{
 						if (index >= this->mapping.size ())
 							this->mapping.resize (index + 1);
 
-						this->mapping[index] = target + 1;
+						this->mapping[index] = value + 1;
 					}
 				});
 			}
 			else
 			{
+				value = 0;
+
 				for (auto i = lookup.begin (); i != lookup.end (); ++i)
 				{
-					if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
+					if (Convert::toInteger (&index, i->c_str (), i->length ()))
 					{
 						if (index >= this->mapping.size ())
 							this->mapping.resize (index + 1);
 
-						this->mapping[index] = i->second + 1;
+						this->mapping[index] = value + 1;
 					}
+
+					++value;
 				}
 			}
 		}

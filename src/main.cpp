@@ -15,7 +15,7 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 {
 	Render::Printer*	printer;
 	Provision::Reader*	reader;
-	FileIStream*		source;
+	FileIStream			source;
 	Arithmetic::Table	table;
 	FileOStream			target (stdout);
 	FormatWriter		writer (err);
@@ -34,13 +34,13 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 	for (int index = 0; index < length || index == 0; ++index)
 	{
 		if (index < length)
-			source = new FileIStream (sources[index]);
+			source.open (sources[index]);
 		else
-			source = new FileIStream (stdin);
+			source.open (stdin);
 
-		if (*source)
+		if (source)
 		{
-			reader = input.create (source, lookup);
+			reader = input.create (&source, lookup);
 
 			if (reader)
 			{
@@ -69,8 +69,6 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 		}
 		else
 			writer.write ("error: cannot open standard input for reading");
-
-		delete source;
 	}
 
 	printer->print (target, table);

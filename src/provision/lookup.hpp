@@ -3,7 +3,9 @@
 #define __TESCA_PROVISION_LOOKUP_HPP
 
 #include <map>
+#include <stack>
 #include <string>
+#include <vector>
 #include "../../lib/glay/src/include.hpp"
 
 namespace	Tesca
@@ -13,8 +15,8 @@ namespace	Tesca
 		class	Lookup
 		{
 			public:
-				typedef std::map<std::string, Glay::Int32u>	Indices;
-				typedef Indices::const_iterator				const_iterator;
+				typedef std::vector<std::string>	Keys;
+				typedef Keys::const_iterator		const_iterator;
 
 				Lookup (const Lookup&);
 				Lookup ();
@@ -25,11 +27,33 @@ namespace	Tesca
 				const_iterator	end () const;
 
 				Glay::Int32u	count () const;
-				bool			find (const std::string&, Glay::Int32u*) const;
-				Glay::Int32u	set (const std::string&);
+				bool			fetch (Glay::Int32u*) const;
+				bool			find (const char*, Glay::Int32u*) const;
+				void			enter ();
+				void			leave ();
+				void			next (char);
+				Glay::Int32u	store (const char*);
 
 			private:
-				Indices	indices;
+				class	State
+				{
+					public:
+						State ();
+
+						bool	fetch (Glay::Int32u*) const;
+						bool	next (char, const State**) const;
+						void	set (const char*, Glay::Int32u);
+
+					private:
+						std::map<char, State>	branches;
+						bool					defined;
+						Glay::Int32u			value;
+				};
+
+				const State*				current;
+				State						initial;
+				Keys						keys;
+				std::stack<const State*>	states;
 		};
 	}
 }

@@ -460,7 +460,7 @@ namespace	Tesca
 					break;
 
 				case Lexer::NUMBER:
-					if (!Convert::toFloat64 (&number, lexer.getCurrent ().c_str (), lexer.getCurrent ().length ()))
+					if (!Convert::toFloat (&number, lexer.getCurrent ().c_str (), lexer.getCurrent ().length ()))
 						return this->fail (lexer, "invalid number");
 
 					*output = new ConstantAccessor (Variant (number));
@@ -470,7 +470,7 @@ namespace	Tesca
 					break;
 
 				case Lexer::REFERENCE:
-					*output = new FieldAccessor (lookup.set (lexer.getCurrent ()));
+					*output = new FieldAccessor (lookup.store (lexer.getCurrent ().c_str ()));
 
 					lexer.next ();
 
