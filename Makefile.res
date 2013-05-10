@@ -43,6 +43,7 @@ SOURCE	= \
 	src/arithmetic/column.cpp \
 	src/arithmetic/slot/average.cpp \
 	src/arithmetic/slot/count.cpp \
+	src/arithmetic/slot/first.cpp \
 	src/arithmetic/slot/last.cpp \
 	src/arithmetic/slot/sum.cpp \
 	src/arithmetic/slot/variance.cpp \

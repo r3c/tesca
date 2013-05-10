@@ -8,6 +8,11 @@ namespace	Tesca
 {
 	namespace	Arithmetic
 	{
+		LastSlot::LastSlot () :
+			last ()
+		{
+		}
+
 		Variant	LastSlot::current () const
 		{
 			return this->last;

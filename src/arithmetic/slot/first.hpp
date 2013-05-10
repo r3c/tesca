@@ -1,6 +1,6 @@
 
-#ifndef __TESCA_SLOT_LAST_HPP
-#define __TESCA_SLOT_LAST_HPP
+#ifndef __TESCA_SLOT_FIRST_HPP
+#define __TESCA_SLOT_FIRST_HPP
 
 #include "../../../lib/glay/src/include.hpp"
 #include "../slot.hpp"
@@ -9,17 +9,18 @@ namespace	Tesca
 {
 	namespace	Arithmetic
 	{
-		class	LastSlot : public Slot
+		class	FirstSlot : public Slot
 		{
 			public:
-				LastSlot ();
+				FirstSlot ();
 
 				virtual Storage::Variant	current () const;
 				virtual bool				push (const Storage::Variant&);
 				virtual void				reset ();
 
 			private:
-				Storage::Variant	last;
+				bool				empty;
+				Storage::Variant	first;
 		};
 	}
 }

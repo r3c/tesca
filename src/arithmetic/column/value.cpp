@@ -1,7 +1,7 @@
 
 #include "value.hpp"
 
-#include "../slot/last.hpp"
+#include "../slot/first.hpp"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ namespace	Tesca
 
 		Slot*	ValueColumn::create () const
 		{
-			return new LastSlot ();
+			return new FirstSlot ();
 		}
 
 		bool	ValueColumn::group () const

@@ -5,6 +5,7 @@
 #include "../arithmetic/column/group.hpp"
 #include "../arithmetic/slot/average.hpp"
 #include "../arithmetic/slot/count.hpp"
+#include "../arithmetic/slot/first.hpp"
 #include "../arithmetic/slot/last.hpp"
 #include "../arithmetic/slot/sum.hpp"
 #include "../arithmetic/slot/variance.hpp"
@@ -24,6 +25,10 @@ namespace	Tesca
 			{"count",	[] (const string& identifier, const Accessor* accessor) -> Column*
 			{
 				return new GroupColumn<CountSlot> (identifier, accessor);
+			}},
+			{"first",	[] (const string& identifier, const Accessor* accessor) -> Column*
+			{
+				return new GroupColumn<FirstSlot> (identifier, accessor);
 			}},
 			{"last",	[] (const string& identifier, const Accessor* accessor) -> Column*
 			{
