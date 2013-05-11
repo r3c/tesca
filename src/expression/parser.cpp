@@ -279,6 +279,9 @@ namespace	Tesca
 							this->extractors.push_back (value);
 						}
 
+						if (operands.top ()->getFlags () == 0)
+							return this->fail (lexer, "inconsistent expression");
+
 						*output = operands.top ();
 
 						return true;

@@ -14,9 +14,9 @@ namespace	Tesca
 		{
 		}
 
-		bool	SlotExtractor::composite () const
+		Int32u	SlotExtractor::getFlags () const
 		{
-			return true;
+			return COMPOSITE;
 		}
 
 		Variant	SlotExtractor::compute (const Aggregator* const* aggregators) const

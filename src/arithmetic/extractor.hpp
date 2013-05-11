@@ -13,9 +13,16 @@ namespace	Tesca
 		class	Extractor
 		{
 			public:
+				enum	Flags
+				{
+					COMPOSITE	= 1 << 0,
+					SCALAR		= 1 << 1
+				};
+
 				virtual	~Extractor ();
 
-				virtual bool				composite () const;
+				virtual Glay::Int32u	getFlags () const;
+
 				virtual Storage::Variant	compute (const Aggregator* const*) const = 0;
 				virtual Storage::Variant	extract (const Provision::Row&) const = 0;
 				virtual void				populate (Aggregator**) const;

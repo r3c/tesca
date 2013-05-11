@@ -40,7 +40,7 @@ namespace	Tesca
 					return Variant (a.compare (b));
 				});
 			}},
-			{"count",	0,	0,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
+			{"count",	0,	0,	[] (const vector<const Extractor*>&, Int32u* slot) -> Extractor*
 			{
 				return new ConstantSlotExtractor<CountAggregator> ((*slot)++, Variant::empty);
 			}},

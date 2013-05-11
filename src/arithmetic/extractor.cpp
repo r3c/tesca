@@ -1,6 +1,8 @@
 
 #include "extractor.hpp"
 
+using namespace Glay;
+
 namespace	Tesca
 {
 	namespace	Arithmetic
@@ -9,18 +11,18 @@ namespace	Tesca
 		{
 		}
 
-		bool	Extractor::composite () const
+		Int32u	Extractor::getFlags () const
 		{
-			bool	result;
+			Int32u	flags;
 
-			result = false;
+			flags = ~0;
 
 			this->recurse ([&] (const Extractor* accessor)
 			{
-				result = result || accessor->composite ();
+				flags &= accessor->getFlags ();
 			});
 
-			return result;
+			return flags;
 		}
 
 		void	Extractor::recurse (RecurseCallback) const

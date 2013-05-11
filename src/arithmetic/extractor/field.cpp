@@ -15,6 +15,11 @@ namespace	Tesca
 		{
 		}
 
+		Int32u	FieldExtractor::getFlags () const
+		{
+			return SCALAR;
+		}
+
 		Variant	FieldExtractor::compute (const Aggregator* const*) const
 		{
 			return Variant::empty;

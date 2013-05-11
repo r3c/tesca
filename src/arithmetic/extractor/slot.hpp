@@ -13,7 +13,8 @@ namespace	Tesca
 		class	SlotExtractor : public Extractor
 		{
 			public:
-				virtual bool				composite () const;
+				virtual Glay::Int32u	getFlags () const;
+
 				virtual Storage::Variant	compute (const Aggregator* const*) const;
 				virtual Storage::Variant	extract (const Provision::Row&) const;
 				virtual void				populate (Aggregator**) const;

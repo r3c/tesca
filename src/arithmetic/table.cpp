@@ -63,7 +63,7 @@ namespace	Tesca
 			{
 				auto extractor = i->getExtractor ();
 
-				if (extractor->composite ())
+				if (extractor->getFlags () & Extractor::COMPOSITE)
 					this->values[to] = extractor->compute (aggregators);
 				else
 					this->values[to] = bucket[from++];
@@ -166,7 +166,7 @@ namespace	Tesca
 			{
 				const Extractor*	extractor = i->getExtractor ();
 
-				if (extractor->composite ())
+				if (extractor->getFlags () & Extractor::COMPOSITE)
 					this->composites.push_back (extractor);
 				else
 					this->keys.push_back (extractor);
