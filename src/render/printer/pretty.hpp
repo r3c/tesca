@@ -23,7 +23,7 @@ namespace	Tesca
 
 			private:
 				Glay::Int32u	align;
-				Glay::Int32u	space;
+				Glay::Int32u	pad;
 		};
 	}
 }

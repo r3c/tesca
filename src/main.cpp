@@ -209,8 +209,8 @@ int	main (int argc, char* argv[])
 
 	if (!calculator.parse (lookup, calculatorExpression) ||
 	    !filter.parse (lookup, filterCondition) ||
-		!input.parse (inputFormat) ||
-		!output.parse (outputFormat))
+	    !input.parse (inputFormat) ||
+	    !output.parse (outputFormat))
 		return 1;
 
 	return execute (input, lookup, filter, calculator, output, argv + start, argc - start);

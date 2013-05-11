@@ -17,13 +17,13 @@ namespace	Tesca
 		PrettyPrinter::PrettyPrinter (const Config& config)
 		{
 			string	align (config.get ("align", ""));
-			string	space (config.get ("space", ""));
+			string	pad (config.get ("pad", ""));
 
 			if (!Convert::toInteger (&this->align, align.c_str (), align.length ()) || this->align < 1)
 				this->align = 4;
 
-			if (!Convert::toInteger (&this->space, space.c_str (), space.length ()))
-				this->space = 1;
+			if (!Convert::toInteger (&this->pad, pad.c_str (), pad.length ()))
+				this->pad = 1;
 		}
 
 		void	PrettyPrinter::print (OStream& stream, const Table& table)
@@ -39,7 +39,7 @@ namespace	Tesca
 
 			memset (lengths, 0, width * sizeof (*lengths));
 
-			margin = this->space + this->align - 1;
+			margin = this->align + this->pad - 1;
 
 			for (auto row = table.begin (); row != table.end (); ++row)
 			{
