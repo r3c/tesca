@@ -5,8 +5,7 @@
 #include <string>
 #include "../provision/row.hpp"
 #include "../storage/variant.hpp"
-#include "accessor.hpp"
-#include "slot.hpp"
+#include "extractor.hpp"
 
 namespace	Tesca
 {
@@ -15,21 +14,18 @@ namespace	Tesca
 		class	Column
 		{
 			public:
-						Column (const Column&);
-						Column (const std::string&, const Accessor*);
-				virtual	~Column ();
+				Column (const Column&);
+				Column (const std::string&, const Extractor*);
+				Column ();
 
 				Column&	operator = (const Column&);
 
-				const std::string&	getIdentifier () const;
-
-				virtual Slot*		create () const = 0;
-				virtual bool		group () const = 0;
-				Storage::Variant	read (const Provision::Row&) const;
+				const Extractor*	getExtractor () const;
+				const std::string&	getKey () const;
 
 			private:
-				const Accessor*	accessor;
-				std::string		identifier;
+				const Extractor*	extractor;
+				std::string			key;
 		};
 	}
 }

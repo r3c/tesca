@@ -5,7 +5,7 @@
 #include <functional>
 #include <vector>
 #include "../../lib/glay/src/include.hpp"
-#include "../arithmetic/accessor.hpp"
+#include "../arithmetic/extractor.hpp"
 
 namespace	Tesca
 {
@@ -13,7 +13,7 @@ namespace	Tesca
 	{
 		struct	Function
 		{
-			typedef std::function<Arithmetic::Accessor* (const std::vector<const Arithmetic::Accessor*>&)>	Builder;
+			typedef std::function<Arithmetic::Extractor* (const std::vector<const Arithmetic::Extractor*>&, Glay::Int32u*)>	Builder;
 
 			static const Function	functions[];
 

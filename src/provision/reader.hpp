@@ -14,8 +14,8 @@ namespace	Tesca
 			public:
 				typedef Glay::Design::Event<const std::string&>	Error;
 
-						Reader (const Reader&);
-						Reader ();
+				Reader (const Reader&);
+				Reader ();
 				virtual	~Reader ();
 
 				Reader&	operator = (const Reader&);

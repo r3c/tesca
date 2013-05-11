@@ -17,7 +17,7 @@ must be computed from those data.
 
 Example:
 
-./tesca -i 'csv' -e 'name = $0, score = $1:sum, average_score = $1:avg' file.csv
+./tesca -i 'csv' -e '#0: name, sum(#1): score, avg(#1): average_score' file.csv
 
 No documentation yet, sorry!
 

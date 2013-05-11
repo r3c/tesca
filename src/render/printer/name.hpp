@@ -13,9 +13,8 @@ namespace	Tesca
 		class	NamePrinter : public Printer
 		{
 			public:
-						NamePrinter (const NamePrinter&);
-						NamePrinter (const Storage::Config&);
-				virtual	~NamePrinter ();
+				NamePrinter (const NamePrinter&);
+				NamePrinter (const Storage::Config&);
 
 				NamePrinter&	operator = (const NamePrinter&);
 

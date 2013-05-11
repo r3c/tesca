@@ -12,8 +12,8 @@ namespace	Tesca
 		class	LineReader : public Reader
 		{
 			public:
-						LineReader (const LineReader&);
-						LineReader (Glay::Pipe::IStream*, Glay::Int32u);
+				LineReader (const LineReader&);
+				LineReader (Glay::Pipe::IStream*, Glay::Int32u);
 				virtual	~LineReader ();
 
 				LineReader&	operator = (const LineReader&);

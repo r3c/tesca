@@ -4,7 +4,7 @@ Tesca TODO list
 TODO
 ----
 
-- Change expressions syntax to something like "$row.0: name, avg(max($row.1, 0)): time"
+- Detect inconsistent expressions such as "avg(#0) + #1"
 - Handle escaped quotes in CSV format
 
 DONE
@@ -26,3 +26,4 @@ DONE
 - Speed up JSON reader by removing stringstream
 - Implement a cleaner error messages system
 - Implement JSON reader
+- Change expressions syntax to something like "$row.0: name, avg(max($row.1, 0)): time"

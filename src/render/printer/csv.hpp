@@ -16,7 +16,6 @@ namespace	Tesca
 			public:
 				CSVPrinter (const CSVPrinter&);
 				CSVPrinter (const Storage::Config&);
-				virtual	~CSVPrinter ();
 
 				CSVPrinter&	operator = (const CSVPrinter&);
 

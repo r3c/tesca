@@ -13,61 +13,55 @@ namespace	Tesca
 {
 	namespace	Render
 	{
-		CSVPrinter::CSVPrinter (const Config& config)
-		{
-			this->headers = config.get ("headers", 0);
-			this->quote = config.get ("quote", "");
-			this->split = config.get ("split", ",");
-		}
-
-		CSVPrinter::~CSVPrinter ()
+		CSVPrinter::CSVPrinter (const Config& config) :
+			headers (config.get ("headers", 0)),
+			quote (config.get ("quote", "")),
+			split (config.get ("split", ","))
 		{
 		}
 
 		void	CSVPrinter::print (OStream& stream, const Table& table)
 		{
-			string			value;
-			Int32u			width;
-			FormatWriter	writer (stream);
+			const Table::Columns&	columns (table.getColumns ());
+			string					output;
+			Variant*				value;
+			Int32u					width (table.getWidth ());
+			FormatWriter			writer (stream);
 
 			if (this->headers)
 			{
-				auto	columns = table.getColumns ();
-
-				for (Int32u i = 0; i < columns.size (); ++i)
+				for (Int32u i = 0; i < width; ++i)
 				{
 					if (i > 0)
 						writer.write (this->split);
 
 					writer
 						.write (this->quote)
-						.write (columns[i]->getIdentifier ())
+						.write (columns[i].getKey ())
 						.write (this->quote);
 				}
 
 				writer.write ("\n");
 			}
 
-			width = table.getWidth ();
-
 			for (auto row = table.begin (); row != table.end (); ++row)
 			{
-				auto	slot = row->second;
+				value = *row;
 
 				for (Int32u i = 0; i < width; ++i)
 				{
 					if (i > 0)
 						writer.write (this->split);
 
-					if ((*slot)->current ().toString (&value))
+					if (value->toString (&output))
 					{
 						writer
 							.write (this->quote)
-							.write (value)
+							.write (output)
 							.write (this->quote);
 					}
 
-					++slot;
+					++value;
 				}
 
 				writer.write ("\n");

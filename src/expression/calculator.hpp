@@ -13,8 +13,8 @@ namespace	Tesca
 		class	Calculator
 		{
 			public:
-				typedef std::vector<const Arithmetic::Column*>	Columns;
-				typedef Parser::Error							Error;
+				typedef std::vector<Arithmetic::Column>	Columns;
+				typedef Parser::Error					Error;
 
 				Calculator (const Calculator&);
 				Calculator ();
@@ -25,13 +25,15 @@ namespace	Tesca
 				const Columns&	getColumns () const;
 				const Error&	getError () const;
 				Error&			getError ();
+				Glay::Int32u	getSlots () const;
 
 				bool	parse (Provision::Lookup&, const char*);
 				void	reset ();
 
 			private:
-				Columns	columns;
-				Parser	parser;
+				Columns			columns;
+				Parser			parser;
+				Glay::Int32u	slots;
 
 		};
 	}

@@ -12,8 +12,8 @@ namespace	Tesca
 		class	Row
 		{
 			public:
-						Row (const Row&);
-						Row ();
+				Row (const Row&);
+				Row ();
 				virtual	~Row ();
 
 				Row&							operator = (const Row&);

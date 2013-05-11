@@ -20,36 +20,35 @@ SOURCE	= \
 	lib/glay/src/system/convert.cpp \
 	lib/glay/src/system/endian.cpp \
 	lib/glay/src/system/stopwatch.cpp \
-	src/arithmetic/accessor/binary/callback.cpp \
-	src/arithmetic/accessor/binary/number.cpp \
-	src/arithmetic/accessor/binary.cpp \
-	src/arithmetic/accessor/constant.cpp \
-	src/arithmetic/accessor/field.cpp \
-	src/arithmetic/accessor/if.cpp \
-	src/arithmetic/accessor/logical/and.cpp \
-	src/arithmetic/accessor/logical/or.cpp \
-	src/arithmetic/accessor/logical.cpp \
-	src/arithmetic/accessor/unary/boolean.cpp \
-	src/arithmetic/accessor/unary/callback.cpp \
-	src/arithmetic/accessor/unary/number.cpp \
-	src/arithmetic/accessor/unary/string.cpp \
-	src/arithmetic/accessor/unary.cpp \
-	src/arithmetic/accessor/vector/callback.cpp \
-	src/arithmetic/accessor/vector.cpp \
-	src/arithmetic/accessor/void.cpp \
-	src/arithmetic/accessor.cpp \
+	src/arithmetic/aggregator/average.cpp \
+	src/arithmetic/aggregator/count.cpp \
+	src/arithmetic/aggregator/first.cpp \
+	src/arithmetic/aggregator/last.cpp \
+	src/arithmetic/aggregator/sum.cpp \
+	src/arithmetic/aggregator/variance.cpp \
+	src/arithmetic/aggregator.cpp \
 	src/arithmetic/bucket.cpp \
-	src/arithmetic/column/value.cpp \
 	src/arithmetic/column.cpp \
-	src/arithmetic/slot/average.cpp \
-	src/arithmetic/slot/count.cpp \
-	src/arithmetic/slot/first.cpp \
-	src/arithmetic/slot/last.cpp \
-	src/arithmetic/slot/sum.cpp \
-	src/arithmetic/slot/variance.cpp \
-	src/arithmetic/slot.cpp \
+	src/arithmetic/extractor/binary/callback.cpp \
+	src/arithmetic/extractor/binary/number.cpp \
+	src/arithmetic/extractor/binary.cpp \
+	src/arithmetic/extractor/constant.cpp \
+	src/arithmetic/extractor/field.cpp \
+	src/arithmetic/extractor/if.cpp \
+	src/arithmetic/extractor/logical/and.cpp \
+	src/arithmetic/extractor/logical/or.cpp \
+	src/arithmetic/extractor/logical.cpp \
+	src/arithmetic/extractor/slot.cpp \
+	src/arithmetic/extractor/unary/boolean.cpp \
+	src/arithmetic/extractor/unary/callback.cpp \
+	src/arithmetic/extractor/unary/number.cpp \
+	src/arithmetic/extractor/unary/string.cpp \
+	src/arithmetic/extractor/unary.cpp \
+	src/arithmetic/extractor/vector/callback.cpp \
+	src/arithmetic/extractor/vector.cpp \
+	src/arithmetic/extractor/void.cpp \
+	src/arithmetic/extractor.cpp \
 	src/arithmetic/table.cpp \
-	src/expression/aggregator.cpp \
 	src/expression/calculator.cpp \
 	src/expression/constant.cpp \
 	src/expression/filter.cpp \
@@ -71,6 +70,7 @@ SOURCE	= \
 	src/storage/variant.cpp \
 	src/render/printer/csv.cpp \
 	src/render/printer/name.cpp \
+	src/render/printer/pretty.cpp \
 	src/render/format.cpp \
 	src/render/output.cpp \
 	src/render/printer.cpp \

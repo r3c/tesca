@@ -33,9 +33,9 @@ namespace	Tesca
 			return true;
 		}
 
-		void	Lookup::State::set (const char* key, Int32u value)
+		void	Lookup::State::set (const string& key, Int32u index, Int32u value)
 		{
-			if (*key == '\0')
+			if (index >= key.length ())
 			{
 				this->defined = true;
 				this->value = value;
@@ -43,7 +43,7 @@ namespace	Tesca
 				return;
 			}
 
-			this->branches[*key].set (key + 1, value);
+			this->branches[key[index]].set (key, index + 1, value);
 		}
 
 		Lookup::Lookup (const Lookup& other) :
@@ -79,14 +79,21 @@ namespace	Tesca
 			return this->current && this->current->fetch (field);
 		}
 
-		bool	Lookup::find (const char* key, Int32u* field) const
+		bool	Lookup::find (const string& key, Int32u* field) const
 		{
+			const char*		character;
 			const State*	current;
+			Int32u			length;
 
-			for (current = &this->initial; *key; ++key)
+			character = key.data ();
+			current = &this->initial;
+
+			for (length = key.length (); length > 0; --length)
 			{
-				if (!current->next (*key, &current))
+				if (!current->next (*character, &current))
 					return false;
+
+				++character;
 			}
 
 			return current->fetch (field);
@@ -110,13 +117,16 @@ namespace	Tesca
 				this->current = 0;
 		}
 
-		Int32u	Lookup::store (const char* key)
+		Int32u	Lookup::store (const string& key)
 		{
 			Int32u	field;
 
+			if (this->find (key, &field))
+				return field;
+
 			field = this->keys.size ();
 
-			this->initial.set (key, field);
+			this->initial.set (key, 0, field);
 			this->keys.push_back (key);
 
 			return field;

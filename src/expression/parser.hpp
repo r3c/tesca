@@ -8,8 +8,9 @@
 #include <string>
 #include <vector>
 #include "../../lib/glay/src/include.hpp"
+#include "../arithmetic/column.hpp"
+#include "../arithmetic/extractor.hpp"
 #include "../provision/lookup.hpp"
-#include "aggregator.hpp"
 #include "lexer.hpp"
 
 namespace	Tesca
@@ -30,24 +31,21 @@ namespace	Tesca
 				const Error&	getError () const;
 				Error&			getError ();
 
-				bool	parseAggregator (Lexer&, const Aggregator**);
-				bool	parseExpression (Lexer&, Provision::Lookup&, const Arithmetic::Accessor**);
-				bool	parseStatement (Lexer&, Provision::Lookup&, Arithmetic::Column**);
+				bool	parseExpression (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
+				bool	parseKey (Lexer&, std::string*);
 				bool	parseType (Lexer&, Lexer::Lexem, const char*);
-				bool	parseValue (Lexer&, Provision::Lookup&, const Arithmetic::Accessor**);
+				bool	parseValue (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
 
 				void	reset ();
 
 			private:
-				typedef std::vector<const Arithmetic::Accessor*>														Accessors;
-				typedef std::vector<const Arithmetic::Column*>															Columns;
-				typedef std::function<Arithmetic::Accessor* (const Arithmetic::Accessor*, const Arithmetic::Accessor*)>	Generator;
-				typedef std::pair<Glay::Int32u, Generator>																BinaryOp;
+				typedef std::vector<const Arithmetic::Extractor*>															Extractors;
+				typedef std::function<Arithmetic::Extractor* (const Arithmetic::Extractor*, const Arithmetic::Extractor*)>	Generator;
+				typedef std::pair<Glay::Int32u, Generator>																	BinaryOp;
 
 				bool	fail (const Lexer&, const std::string&);
 
-				Accessors	accessors;
-				Columns		columns;
+				Extractors	extractors;
 				Error		error;
 		};
 	}

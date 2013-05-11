@@ -1,7 +1,7 @@
 
 #include "table.hpp"
 
-#include "accessor/void.hpp"
+#include "extractor/void.hpp"
 
 using namespace Glay;
 using namespace Tesca::Provision;
@@ -11,8 +11,70 @@ namespace	Tesca
 {
 	namespace	Arithmetic
 	{
+		Table::iterator::iterator (const Columns& columns, const Groups& groups, Groups::const_iterator inner) :
+			columns (columns),
+			groups (groups),
+			inner (inner),
+			values (new Variant[columns.size ()])
+		{
+			if (inner != this->groups.end ())
+				this->update ();
+		}
+
+		Table::iterator::~iterator ()
+		{
+			delete [] this->values;
+		}
+
+		Table::iterator&	Table::iterator::operator ++ ()
+		{
+			if (++this->inner != this->groups.end ())
+				this->update ();
+
+			return *this;
+		}
+
+		bool	Table::iterator::operator == (const iterator& other)
+		{
+			return this->inner == other.inner;
+		}
+
+		bool	Table::iterator::operator != (const iterator& other)
+		{
+			return this->inner != other.inner;
+		}
+
+		Storage::Variant*&	Table::iterator::operator * ()
+		{
+			return this->values;
+		}
+
+		void	Table::iterator::update ()
+		{
+			const Aggregator* const*	aggregators = this->inner->second;
+			const Bucket&				bucket = this->inner->first;
+			Int32u						from;
+			Int32u						to;
+
+			from = 0;
+			to = 0;
+
+			for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
+			{
+				auto extractor = i->getExtractor ();
+
+				if (extractor->composite ())
+					this->values[to] = extractor->compute (aggregators);
+				else
+					this->values[to] = bucket[from++];
+
+				++to;
+			}
+		}
+
 		Table::Table () :
-			select (&VoidAccessor::instance)
+			condition (&VoidExtractor::instance),
+			slots (0)
 		{
 		}
 
@@ -33,93 +95,86 @@ namespace	Tesca
 
 		Table::iterator	Table::begin () const
 		{
-			return this->groups.begin ();
+			return iterator (this->columns, this->groups, this->groups.begin ());
 		}
 
 		Table::iterator	Table::end () const
 		{
-			return this->groups.end ();
+			return iterator (this->columns, this->groups, this->groups.end ());
 		}
 
 		void	Table::clear ()
 		{
-			this->select = &VoidAccessor::instance;
-
 			for (auto i = this->groups.begin (); i != this->groups.end (); ++i)
-				delete [] i->second;
+			{
+				auto aggregators = i->second;
 
-			for (auto i = this->slots.begin (); i != this->slots.end (); ++i)
-				delete *i;
+				for (auto j = this->slots; j-- > 0; )
+					delete aggregators[j];
 
+				delete [] aggregators;
+			}
+
+			this->condition = &VoidExtractor::instance;
+			this->slots = 0;
+
+			this->columns.clear ();
+			this->composites.clear ();
 			this->groups.clear ();
-			this->slots.clear ();
+			this->keys.clear ();
 		}
 
 		void	Table::push (const Row& row)
 		{
-			Bucket	bucket (this->indices.size ());
-			bool	filter;
-			Slot*	slot;
-			Slot**	slots;
-			Variant	values[this->columns.size ()];
+			Aggregator**	aggregators;		
+			Bucket			bucket (this->keys.size ());
+			bool			filter;
 
 			// Select row or exit if it should be discarded
-			if (!this->select->read (row).toBoolean (&filter) || !filter)
+			if (!this->condition->extract (row).toBoolean (&filter) || !filter)
 				return;
 
-			// Update columns and build bucket
-			for (auto i = this->columns.size (); i-- > 0; )
-				values[i] = this->columns[i]->read (row);
-
-			for (auto i = this->indices.size (); i-- > 0; )
-				bucket.set (i, values[this->indices[i]]);
+			// Build bucket from extractors of "key" columns
+			for (auto i = this->keys.size (); i-- > 0; )
+				bucket.set (i, this->keys[i]->extract (row));
 
 			// Retrieve group from bucket or create it
 			auto	found = this->groups.find (bucket);
 
 			if (found == this->groups.end ())
 			{
-				slots = new Slot*[this->columns.size ()];
+				aggregators = new Aggregator*[this->slots];
 
-				for (auto i = this->columns.size (); i-- > 0; )
-				{
-					slot = this->columns[i]->create ();
+				for (auto i = this->composites.size (); i-- > 0; )
+					this->composites[i]->populate (aggregators);
 
-					this->slots.push_back (slot);
-
-					slots[i] = slot;
-				}
-
-				this->groups[bucket.keep ()] = slots;
+				this->groups[bucket.keep ()] = aggregators;
 			}
 			else
-				slots = found->second;
+				aggregators = found->second;
 
-			// Append column values to group
-			for (auto i = this->columns.size (); i-- > 0; )
-				slots[i]->push (values[i]);
+			// Update aggregators for this column group
+			for (auto i = this->composites.size (); i-- > 0; )
+				this->composites[i]->store (aggregators, row);
 		}
 
-		void	Table::reset (const Accessor* select, const Columns& columns)
+		void	Table::reset (const Extractor* condition, const Columns& columns, Int32u slots)
 		{
-			Int32u	index;
-
 			this->clear ();
-
-			this->columns = columns;
-			this->select = select;
-
-			this->indices.clear ();
-
-			index = 0;
 
 			for (auto i = columns.begin (); i != columns.end (); ++i)
 			{
-				if ((*i)->group ())
-					this->indices.push_back (index);
+				const Extractor*	extractor = i->getExtractor ();
 
-				++index;
+				if (extractor->composite ())
+					this->composites.push_back (extractor);
+				else
+					this->keys.push_back (extractor);
 			}
+
+			this->columns = columns;
+			this->condition = condition;
+			this->slots = slots;
 		}
 	}
 }

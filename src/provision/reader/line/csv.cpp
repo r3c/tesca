@@ -62,10 +62,9 @@ namespace	Tesca
 
 				this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 				{
-					string	key (buffer, length);
 					Int32u	value;
 
-					if (lookup.find (key.c_str (), &value))
+					if (lookup.find (string (buffer, length), &value))
 					{
 						if (index >= this->mapping.size ())
 							this->mapping.resize (index + 1);
@@ -80,7 +79,9 @@ namespace	Tesca
 
 				for (auto i = lookup.begin (); i != lookup.end (); ++i)
 				{
-					if (Convert::toInteger (&index, i->c_str (), i->length ()))
+					const string&	key = *i;
+
+					if (key.length () > 1 && key[0] == '#' && Convert::toInteger (&index, key.c_str () + 1, key.length () - 1))
 					{
 						if (index >= this->mapping.size ())
 							this->mapping.resize (index + 1);

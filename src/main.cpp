@@ -29,7 +29,7 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 		return 1;
 	}
 
-	table.reset (filter.getCondition (), calculator.getColumns ());
+	table.reset (filter.getCondition (), calculator.getColumns (), calculator.getSlots ());
 
 	for (int index = 0; index < length || index == 0; ++index)
 	{
@@ -125,10 +125,10 @@ int	main (int argc, char* argv[])
 			.write (")\n");
 	});
 
-	calculatorExpression = "nb_lines:count";
+	calculatorExpression = "count():nb_lines";
 	filterCondition = "true";
 	inputFormat = "csv";
-	outputFormat = "name";
+	outputFormat = "pretty";
 
 	for (start = 1; start < argc && argv[start][0] == '-'; ++start)
 	{
@@ -165,8 +165,8 @@ int	main (int argc, char* argv[])
 						.write ("usage: ")
 						.write (argv[0])
 						.write (" [-i <format>] [-o <printer>] [-c <condition>] [-e <expression>] [<file> [<file>...]]\n")
-						.write ("  -c: filter condition, e.g. 'len($0) >= 3'\n")
-						.write ("  -e: calculator expression, e.g. 'name = $0, duration = $1:sum'\n")
+						.write ("  -c: filter condition, e.g. 'len(#0) >= 3'\n")
+						.write ("  -e: calculator expression, e.g. '#0: name, sum(#1): duration'\n")
 						.write ("  -i: input format, e.g. 'csv'\n")
 						.write ("  -o: output format, e.g. 'csv'\n");
 

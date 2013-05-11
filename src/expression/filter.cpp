@@ -2,6 +2,7 @@
 #include "filter.hpp"
 
 using namespace std;
+using namespace Glay;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 
@@ -19,7 +20,7 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		const Accessor*	Filter::getCondition () const
+		const Extractor*	Filter::getCondition () const
 		{
 			return this->condition;
 		}
@@ -36,9 +37,11 @@ namespace	Tesca
 
 		bool	Filter::parse (Lookup& lookup, const char* input)
 		{
+			Int32u	slots;
+
 			Lexer	lexer (input);
 
-			if (!this->parser.parseExpression (lexer, lookup, &this->condition))
+			if (!this->parser.parseExpression (lexer, lookup, &slots, &this->condition))
 				return false;
 
 			return true;

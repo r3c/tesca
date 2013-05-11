@@ -18,13 +18,13 @@ namespace	Tesca
 					AMPERSAND,
 					COLON,
 					COMMA,
-					CONSTANT,
 					DIFFERENT,
 					DIVIDE,
 					END,
 					EQUAL,
 					GREATER_EQUAL,
 					GREATER_THAN,
+					IDENTIFIER,
 					LOWER_EQUAL,
 					LOWER_THAN,
 					MODULO,
@@ -36,7 +36,6 @@ namespace	Tesca
 					PARENTHESIS_END,
 					PIPE,
 					PLUS,
-					REFERENCE,
 					STRING,
 					UNKNOWN
 				};

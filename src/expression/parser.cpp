@@ -3,16 +3,16 @@
 
 #include <sstream>
 #include <stack>
-#include "../arithmetic/accessor/binary/callback.hpp"
-#include "../arithmetic/accessor/binary/number.hpp"
-#include "../arithmetic/accessor/logical/and.hpp"
-#include "../arithmetic/accessor/logical/or.hpp"
-#include "../arithmetic/accessor/unary/boolean.hpp"
-#include "../arithmetic/accessor/unary/number.hpp"
-#include "../arithmetic/accessor/constant.hpp"
-#include "../arithmetic/accessor/field.hpp"
-#include "../arithmetic/accessor/void.hpp"
-#include "../arithmetic/column/value.hpp"
+#include "../arithmetic/column.hpp"
+#include "../arithmetic/extractor/binary/callback.hpp"
+#include "../arithmetic/extractor/binary/number.hpp"
+#include "../arithmetic/extractor/logical/and.hpp"
+#include "../arithmetic/extractor/logical/or.hpp"
+#include "../arithmetic/extractor/unary/boolean.hpp"
+#include "../arithmetic/extractor/unary/number.hpp"
+#include "../arithmetic/extractor/constant.hpp"
+#include "../arithmetic/extractor/field.hpp"
+#include "../arithmetic/extractor/void.hpp"
 #include "constant.hpp"
 #include "function.hpp"
 
@@ -58,41 +58,12 @@ namespace	Tesca
 			return false;
 		}
 
-		bool	Parser::parseAggregator (Lexer& lexer, const Aggregator** output)
-		{
-			const Aggregator*	aggregator;
-
-			if (lexer.getType () != Lexer::CONSTANT)
-				return this->fail (lexer, "expected aggregator name");
-
-			aggregator = 0;
-
-			for (auto current = Aggregator::aggregators; current->name; ++current)
-			{
-				if (lexer.getCurrent () == current->name)
-				{
-					aggregator = current;
-
-					break;
-				}
-			}
-
-			if (!aggregator)
-				return this->fail (lexer, "unknown aggregator name");
-
-			*output = aggregator;
-
-			lexer.next ();
-
-			return true;
-		}
-
-		bool	Parser::parseExpression (Lexer& lexer, Lookup& lookup, const Accessor** output)
+		bool	Parser::parseExpression (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
 		{
 			BinaryOp				binaryOp;
 			stack<BinaryOp>			binaryOps;
-			stack<const Accessor*>	operands;
-			const Accessor*			value;
+			stack<const Extractor*>	operands;
+			const Extractor*		value;
 
 			while (true)
 			{
@@ -101,7 +72,7 @@ namespace	Tesca
 					case Lexer::PLUS:
 						lexer.next ();
 
-						if (!this->parseExpression (lexer, lookup, &value))
+						if (!this->parseExpression (lexer, lookup, slot, &value))
 							return false;
 
 						break;
@@ -109,44 +80,44 @@ namespace	Tesca
 					case Lexer::MINUS:
 						lexer.next ();
 
-						if (!this->parseExpression (lexer, lookup, &value))
+						if (!this->parseExpression (lexer, lookup, slot, &value))
 							return false;
 
-						value = new NumberUnaryAccessor (value, [] (Float64 number)
+						value = new NumberUnaryExtractor (value, [] (Float64 number)
 						{
 							return Variant (-number);
 						});
 
-						this->accessors.push_back (value);
+						this->extractors.push_back (value);
 
 						break;
 
 					case Lexer::NOT:
 						lexer.next ();
 
-						if (!this->parseExpression (lexer, lookup, &value))
+						if (!this->parseExpression (lexer, lookup, slot, &value))
 							return false;
 
-						value = new BooleanUnaryAccessor (value, [] (bool value)
+						value = new BooleanUnaryExtractor (value, [] (bool value)
 						{
 							return Variant (!value);
 						});
 
-						this->accessors.push_back (value);
+						this->extractors.push_back (value);
 
 						break;
 
 					case Lexer::PARENTHESIS_BEGIN:
 						lexer.next ();
 
-						if (!this->parseExpression (lexer, lookup, &value) ||
+						if (!this->parseExpression (lexer, lookup, slot, &value) ||
 						    !this->parseType (lexer, Lexer::PARENTHESIS_END, "closing parenthesis"))
 							return false;
 
 						break;
 
 					default:
-						if (!this->parseValue (lexer, lookup, &value))
+						if (!this->parseValue (lexer, lookup, slot, &value))
 							return false;
 
 						break;
@@ -157,17 +128,17 @@ namespace	Tesca
 				switch (lexer.getType ())
 				{
 					case Lexer::AMPERSAND:
-						binaryOp = make_pair (1, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (1, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new AndLogicalAccessor (lhs, rhs);
+							return new AndLogicalExtractor (lhs, rhs);
 						});
 
 						break;
 
 					case Lexer::DIFFERENT:
-						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							return new CallbackBinaryExtractor (lhs, rhs, [] (const Variant& a, const Variant& b)
 							{
 								return Variant (a != b);
 							});
@@ -176,9 +147,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::DIVIDE:
-						binaryOp = make_pair (4, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							return new NumberBinaryExtractor (lhs, rhs, [] (Float64 a, Float64 b)
 							{
 								return b != 0 ? Variant (a / b) : Variant::empty;
 							});
@@ -187,9 +158,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::EQUAL:
-						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							return new CallbackBinaryExtractor (lhs, rhs, [] (const Variant& a, const Variant& b)
 							{
 								return Variant (a == b);
 							});
@@ -198,9 +169,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::GREATER_EQUAL:
-						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							return new CallbackBinaryExtractor (lhs, rhs, [] (const Variant& a, const Variant& b)
 							{
 								return Variant (a >= b);
 							});
@@ -209,9 +180,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::GREATER_THAN:
-						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							return new CallbackBinaryExtractor (lhs, rhs, [] (const Variant& a, const Variant& b)
 							{
 								return Variant (a > b);
 							});
@@ -220,9 +191,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::LOWER_EQUAL:
-						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							return new CallbackBinaryExtractor (lhs, rhs, [] (const Variant& a, const Variant& b)
 							{
 								return Variant (a <= b);
 							});
@@ -231,9 +202,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::LOWER_THAN:
-						binaryOp = make_pair (2, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new CallbackBinaryAccessor (lhs, rhs, [] (const Variant& a, const Variant& b)
+							return new CallbackBinaryExtractor (lhs, rhs, [] (const Variant& a, const Variant& b)
 							{
 								return Variant (a < b);
 							});
@@ -242,9 +213,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::MINUS:
-						binaryOp = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (3, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							return new NumberBinaryExtractor (lhs, rhs, [] (Float64 a, Float64 b)
 							{
 								return Variant (a - b);
 							});
@@ -253,9 +224,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::MODULO:
-						binaryOp = make_pair (4, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							return new NumberBinaryExtractor (lhs, rhs, [] (Float64 a, Float64 b)
 							{
 								return b != 0 ? Variant (fmod (a, b)) : Variant::empty;
 							});
@@ -264,9 +235,9 @@ namespace	Tesca
 						break;
 
 					case Lexer::MULTIPLY:
-						binaryOp = make_pair (4, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							return new NumberBinaryExtractor (lhs, rhs, [] (Float64 a, Float64 b)
 							{
 								return Variant (a * b);
 							});
@@ -275,17 +246,17 @@ namespace	Tesca
 						break;
 
 					case Lexer::PIPE:
-						binaryOp = make_pair (1, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (1, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new OrLogicalAccessor (lhs, rhs);
+							return new OrLogicalExtractor (lhs, rhs);
 						});
 
 						break;
 
 					case Lexer::PLUS:
-						binaryOp = make_pair (3, [] (const Accessor* lhs, const Accessor* rhs) -> Accessor*
+						binaryOp = make_pair (3, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new NumberBinaryAccessor (lhs, rhs, [] (Float64 a, Float64 b)
+							return new NumberBinaryExtractor (lhs, rhs, [] (Float64 a, Float64 b)
 							{
 								return Variant (a + b);
 							});
@@ -305,7 +276,7 @@ namespace	Tesca
 							operands.pop ();
 							operands.push (value);
 
-							this->accessors.push_back (value);
+							this->extractors.push_back (value);
 						}
 
 						*output = operands.top ();
@@ -326,50 +297,21 @@ namespace	Tesca
 					operands.pop ();
 					operands.push (value);
 
-					this->accessors.push_back (value);
+					this->extractors.push_back (value);
 				}
 
 				binaryOps.push (binaryOp);
 			}
 		}
 
-		bool	Parser::parseStatement (Lexer& lexer, Lookup& lookup, Column** column)
+		bool	Parser::parseKey (Lexer& lexer, string* output)
 		{
-			const Accessor*		accessor;
-			const Aggregator*	aggregator;
-			string				identifier;
+			if (lexer.getType () != Lexer::IDENTIFIER)
+				return this->fail (lexer, "invalid column key");
 
-			// Read column identifier
-			identifier = lexer.getCurrent ();
+			*output = lexer.getCurrent ();
 
-			if (!this->parseType (lexer, Lexer::CONSTANT, "column identifier"))
-				return false;
-
-			// Read column expression
-			if (lexer.getType () == Lexer::EQUAL)
-			{
-				lexer.next ();
-
-				if (!this->parseExpression (lexer, lookup, &accessor))
-					return false;
-			}
-			else
-				accessor = &VoidAccessor::instance;
-
-			// Read column aggregator
-			if (lexer.getType () == Lexer::COLON)
-			{
-				lexer.next ();
-
-				if (!this->parseAggregator (lexer, &aggregator))
-					return false;
-
-				*column = aggregator->builder (identifier, accessor);
-			}
-			else
-				*column = new ValueColumn (identifier, accessor);
-
-			this->columns.push_back (*column);
+			lexer.next ();
 
 			return true;
 		}
@@ -384,18 +326,18 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	Parser::parseValue (Lexer& lexer, Lookup& lookup, const Accessor** output)
+		bool	Parser::parseValue (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
 		{
-			const Accessor*	accessor;
-			Accessors		arguments;
-			const Constant*	constant;
-			const Function*	function;
-			string			name;
-			Float64			number;
+			const Extractor*	argument;
+			Extractors			arguments;
+			const Constant*		constant;
+			const Function*		function;
+			string				name;
+			Float64				number;
 
 			switch (lexer.getType ())
 			{
-				case Lexer::CONSTANT:
+				case Lexer::IDENTIFIER:
 					name = lexer.getCurrent ();
 
 					lexer.next ();
@@ -424,10 +366,10 @@ namespace	Tesca
 							if (arguments.size () > 0 && !this->parseType (lexer, Lexer::COMMA, "argument separator"))
 								return false;
 
-							if (!this->parseExpression (lexer, lookup, &accessor))
+							if (!this->parseExpression (lexer, lookup, slot, &argument))
 								return false;
 
-							arguments.push_back (accessor);
+							arguments.push_back (argument);
 						}
 
 						lexer.next ();
@@ -435,7 +377,7 @@ namespace	Tesca
 						if (arguments.size () < function->min || (function->max > 0 && arguments.size () > function->max))
 							return this->fail (lexer, "wrong number of arguments");
 
-						*output = function->builder (arguments);
+						*output = function->builder (arguments, slot);
 					}
 					else
 					{
@@ -451,10 +393,10 @@ namespace	Tesca
 							}
 						}
 
-						if (!constant)
-							return this->fail (lexer, "unknown constant name");
-
-						*output = new ConstantAccessor (constant->value);
+						if (constant)
+							*output = new ConstantExtractor (constant->value);
+						else
+							*output = new FieldExtractor (lookup.store (name));
 					}
 
 					break;
@@ -463,21 +405,14 @@ namespace	Tesca
 					if (!Convert::toFloat (&number, lexer.getCurrent ().c_str (), lexer.getCurrent ().length ()))
 						return this->fail (lexer, "invalid number");
 
-					*output = new ConstantAccessor (Variant (number));
-
-					lexer.next ();
-
-					break;
-
-				case Lexer::REFERENCE:
-					*output = new FieldAccessor (lookup.store (lexer.getCurrent ().c_str ()));
+					*output = new ConstantExtractor (Variant (number));
 
 					lexer.next ();
 
 					break;
 
 				case Lexer::STRING:
-					*output = new ConstantAccessor (Variant (lexer.getCurrent ()));
+					*output = new ConstantExtractor (Variant (lexer.getCurrent ()));
 
 					lexer.next ();
 
@@ -489,21 +424,17 @@ namespace	Tesca
 					return false;
 			}
 
-			this->accessors.push_back (*output);
+			this->extractors.push_back (*output);
 
 			return true;
 		}
 
 		void	Parser::reset ()
 		{
-			for (auto i = this->accessors.begin (); i != this->accessors.end (); ++i)
+			for (auto i = this->extractors.begin (); i != this->extractors.end (); ++i)
 				delete *i;
 
-			for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
-				delete *i;
-
-			this->accessors.clear ();
-			this->columns.clear ();
+			this->extractors.clear ();
 		}
 	}
 }

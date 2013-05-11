@@ -20,7 +20,7 @@ namespace	Tesca
 
 				Filter&	operator = (const Filter&);
 
-				const Arithmetic::Accessor*	getCondition () const;
+				const Arithmetic::Extractor*	getCondition () const;
 				const Error&				getError () const;
 				Error&						getError ();
 
@@ -28,7 +28,7 @@ namespace	Tesca
 				void	reset ();
 
 			private:
-				const Arithmetic::Accessor*	condition;
+				const Arithmetic::Extractor*	condition;
 				Parser						parser;
 
 		};

@@ -9,24 +9,40 @@ namespace	Tesca
 {
 	namespace	Arithmetic
 	{
-		Column::Column (const string& identifier, const Accessor* accessor) :
-			accessor (accessor),
-			identifier (identifier)
+		Column::Column (const Column& other) :
+			extractor (other.extractor),
+			key (other.key)
 		{
 		}
 
-		Column::~Column ()
+		Column::Column (const string& key, const Extractor* extractor) :
+			extractor (extractor),
+			key (key)
 		{
 		}
 
-		const string&	Column::getIdentifier () const
+		Column::Column () :
+			extractor (0),
+			key ()
 		{
-			return this->identifier;
 		}
 
-		Variant	Column::read (const Row& row) const
+		Column&	Column::operator = (const Column& other)
 		{
-			return this->accessor->read (row);
+			this->extractor = other.extractor;
+			this->key = other.key;
+
+			return *this;
+		}
+
+		const Extractor*	Column::getExtractor () const
+		{
+			return this->extractor;
+		}
+
+		const string&	Column::getKey () const
+		{
+			return this->key;
 		}
 	}
 }

@@ -18,8 +18,8 @@ namespace	Tesca
 			public:
 				typedef Glay::Design::Event<const std::string&>	Error;
 
-						Input (const Input&);
-						Input ();
+				Input (const Input&);
+				Input ();
 				virtual	~Input ();
 
 				Input&	operator = (const Input&);

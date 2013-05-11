@@ -28,11 +28,11 @@ namespace	Tesca
 
 				Glay::Int32u	count () const;
 				bool			fetch (Glay::Int32u*) const;
-				bool			find (const char*, Glay::Int32u*) const;
+				bool			find (const std::string&, Glay::Int32u*) const;
 				void			enter ();
 				void			leave ();
 				void			next (char);
-				Glay::Int32u	store (const char*);
+				Glay::Int32u	store (const std::string&);
 
 			private:
 				class	State
@@ -42,7 +42,7 @@ namespace	Tesca
 
 						bool	fetch (Glay::Int32u*) const;
 						bool	next (char, const State**) const;
-						void	set (const char*, Glay::Int32u);
+						void	set (const std::string&, Glay::Int32u, Glay::Int32u);
 
 					private:
 						std::map<char, State>	branches;

@@ -12,8 +12,8 @@ namespace	Tesca
 		class	ArrayRow : public Row
 		{
 			public:
-						ArrayRow (const ArrayRow&);
-						ArrayRow (Glay::Int32u);
+				ArrayRow (const ArrayRow&);
+				ArrayRow (Glay::Int32u);
 				virtual	~ArrayRow ();
 
 				ArrayRow&						operator = (const ArrayRow&);

@@ -17,35 +17,32 @@ namespace	Tesca
 		{
 		}
 
-		NamePrinter::~NamePrinter ()
-		{
-		}
-
 		void	NamePrinter::print (OStream& stream, const Table& table)
 		{
-			string			value;
-			FormatWriter	writer (stream);
+			const Table::Columns&	columns (table.getColumns ());
+			string					output;
+			Variant*				value;
+			Int32u					width (table.getWidth ());
+			FormatWriter			writer (stream);
 
-			for (auto iterator = table.begin (); iterator != table.end (); ++iterator)
+			for (auto row = table.begin (); row != table.end (); ++row)
 			{
-				const Arithmetic::Slot* const*	slots = iterator->second;
+				value = *row;
 
-				for (Int32u i = 0; i < table.getWidth (); ++i)
+				for (Int32u i = 0; i < width; ++i)
 				{
-					const Arithmetic::Slot*	slot = slots[i];
-
 					if (i > 0)
 						writer.write (", ");
 
-					auto id = table.getColumns ()[i]->getIdentifier ();
-
-					if (!slot->current ().toString (&value))
-						value = "<void>";
+					if (!value->toString (&output))
+						output = "<void>";
 
 					writer
-						.write (id)
+						.write (columns[i].getKey ())
 						.write (" = ")
-						.write (value);
+						.write (output);
+
+					++value;
 				}
 
 				writer.write ("\n");
