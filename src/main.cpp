@@ -167,15 +167,15 @@ int	main (int argc, char* argv[])
 						.write (" [-i <format>] [-o <printer>] [-c <condition>] [-e <expression>] [<file> [<file>...]]\n")
 						.write ("  -c: filter condition, e.g. 'len(#0) >= 3'\n")
 						.write ("  -e: calculator expression, e.g. '#0: name, sum(#1): duration'\n")
-						.write ("  -i: input format, e.g. 'csv'\n")
-						.write ("  -o: output format, e.g. 'csv'\n");
+						.write ("  -i: input stream format, e.g. 'csv'\n")
+						.write ("  -o: output stream format, e.g. 'csv'\n");
 
 					return 0;
 
 				case 'i':
 					if (++start >= argc)
 					{
-						writer.write ("error: missing input format\n");
+						writer.write ("error: missing input stream format\n");
 
 						return 1;
 					}
@@ -187,7 +187,7 @@ int	main (int argc, char* argv[])
 				case 'o':
 					if (++start >= argc)
 					{
-						writer.write ("error: missing output format\n");
+						writer.write ("error: missing output stream format\n");
 
 						return 1;
 					}
@@ -199,8 +199,8 @@ int	main (int argc, char* argv[])
 				default:
 					writer
 						.write ("error: unknown option '")
-//						.write (*argument) // FIXME
-						.write ("'");
+						.write (*argument)
+						.write ("'\n");
 
 					return 1;
 			}
