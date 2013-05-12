@@ -70,6 +70,16 @@ Sub-expressions can contains:
   * String constants (example: ``"Hello, World!"``).
   * Void constant (example: ``void``).
 
+Available mathematical operators are (sorted by decreasing precedence):
+
+  * Unary operators ``+n``, ``-n``, ``!n`` (logical 'not n')
+  * Binary operators ``a * b``, ``a / b``, ``a % b`` (modulo)
+  * Binary operators ``a + b``, ``a - b``
+  * Comparison operators ``a < b``, ``a <= b``, ``a = b``, ``a >= b``,
+  ``a > b``, ``a != b`` (different)
+  * Logical operators ``a & b`` (logical 'a and b'), ``a | b`` (logical 'a or
+  b')
+
 Available scalar functions are:
 
   * ``at(index, a, b[, c...])``: returns the n-th argument with n = ``index +
@@ -108,7 +118,7 @@ Available aggregation functions are:
 
 Sub-expressions can be named (otherwise their automatic names are ``#0``,
 ``#1`` and so on) by appending ``: name`` after it (example: ``sum(#0):
-scores_sum``). Value characters in names are letters, digits, '#', '$', '%',
+scores_sum``). Valid characters in names are letters, digits, '#', '$', '%',
 '&', '_' and '.'.
 
 ### Filter condition (-f &lt;condition&gt;):
