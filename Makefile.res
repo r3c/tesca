@@ -32,13 +32,13 @@ SOURCE	= \
 	src/arithmetic/extractor/binary/callback.cpp \
 	src/arithmetic/extractor/binary/number.cpp \
 	src/arithmetic/extractor/binary.cpp \
+	src/arithmetic/extractor/composite.cpp \
 	src/arithmetic/extractor/constant.cpp \
 	src/arithmetic/extractor/field.cpp \
 	src/arithmetic/extractor/if.cpp \
 	src/arithmetic/extractor/logical/and.cpp \
 	src/arithmetic/extractor/logical/or.cpp \
 	src/arithmetic/extractor/logical.cpp \
-	src/arithmetic/extractor/slot.cpp \
 	src/arithmetic/extractor/unary/boolean.cpp \
 	src/arithmetic/extractor/unary/callback.cpp \
 	src/arithmetic/extractor/unary/number.cpp \

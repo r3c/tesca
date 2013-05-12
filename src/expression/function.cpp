@@ -11,9 +11,9 @@
 #include "../arithmetic/aggregator/variance.hpp"
 #include "../arithmetic/extractor/binary/callback.hpp"
 #include "../arithmetic/extractor/binary/number.hpp"
+#include "../arithmetic/extractor/composite/constant.hpp"
+#include "../arithmetic/extractor/composite/reduce.hpp"
 #include "../arithmetic/extractor/if.hpp"
-#include "../arithmetic/extractor/slot/constant.hpp"
-#include "../arithmetic/extractor/slot/reduce.hpp"
 #include "../arithmetic/extractor/unary/callback.hpp"
 #include "../arithmetic/extractor/unary/string.hpp"
 #include "../arithmetic/extractor/vector/callback.hpp"
@@ -31,7 +31,7 @@ namespace	Tesca
 		{
 			{"avg",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceSlotExtractor<AverageAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<AverageAggregator> ((*slot)++, arguments[0]);
 			}},
 			{"cmp",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -42,11 +42,11 @@ namespace	Tesca
 			}},
 			{"count",	0,	0,	[] (const vector<const Extractor*>&, Int32u* slot) -> Extractor*
 			{
-				return new ConstantSlotExtractor<CountAggregator> ((*slot)++, Variant::empty);
+				return new ConstantCompositeExtractor<CountAggregator> ((*slot)++, Variant::empty);
 			}},
 			{"first",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceSlotExtractor<FirstAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<FirstAggregator> ((*slot)++, arguments[0]);
 			}},
 			{"if",		2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -74,7 +74,7 @@ namespace	Tesca
 			}},
 			{"last",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceSlotExtractor<LastAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<LastAggregator> ((*slot)++, arguments[0]);
 			}},
 			{"lcase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -177,7 +177,7 @@ namespace	Tesca
 			}},
 			{"sum",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceSlotExtractor<SumAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<SumAggregator> ((*slot)++, arguments[0]);
 			}},
 			{"ucase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -200,7 +200,7 @@ namespace	Tesca
 			}},
 			{"var",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceSlotExtractor<VarianceAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<VarianceAggregator> ((*slot)++, arguments[0]);
 			}},
 			{0, 0, 0, 0}
 		};
