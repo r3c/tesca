@@ -24,13 +24,15 @@ SOURCE	= \
 	src/arithmetic/aggregator/count.cpp \
 	src/arithmetic/aggregator/first.cpp \
 	src/arithmetic/aggregator/last.cpp \
+	src/arithmetic/aggregator/max.cpp \
+	src/arithmetic/aggregator/min.cpp \
 	src/arithmetic/aggregator/sum.cpp \
 	src/arithmetic/aggregator/variance.cpp \
 	src/arithmetic/aggregator.cpp \
 	src/arithmetic/bucket.cpp \
 	src/arithmetic/column.cpp \
-	src/arithmetic/extractor/binary/callback.cpp \
 	src/arithmetic/extractor/binary/number.cpp \
+	src/arithmetic/extractor/binary/variant.cpp \
 	src/arithmetic/extractor/binary.cpp \
 	src/arithmetic/extractor/composite.cpp \
 	src/arithmetic/extractor/constant.cpp \
@@ -40,11 +42,11 @@ SOURCE	= \
 	src/arithmetic/extractor/logical/or.cpp \
 	src/arithmetic/extractor/logical.cpp \
 	src/arithmetic/extractor/unary/boolean.cpp \
-	src/arithmetic/extractor/unary/callback.cpp \
 	src/arithmetic/extractor/unary/number.cpp \
 	src/arithmetic/extractor/unary/string.cpp \
 	src/arithmetic/extractor/unary.cpp \
 	src/arithmetic/extractor/vector/callback.cpp \
+	src/arithmetic/extractor/vector/lazy.cpp \
 	src/arithmetic/extractor/vector.cpp \
 	src/arithmetic/extractor/void.cpp \
 	src/arithmetic/extractor.cpp \

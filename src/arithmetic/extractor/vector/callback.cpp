@@ -3,6 +3,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
 namespace	Tesca
@@ -15,9 +16,24 @@ namespace	Tesca
 		{
 		}
 
-		Variant	CallbackVectorExtractor::evaluate (const Variant* values, Int32u length) const
+		Variant	CallbackVectorExtractor::compute (const Aggregator* const* aggregators) const
 		{
-			return this->callback (values, length);
+			Variant	values[this->length];
+
+			for (auto i = this->length; i-- > 0; )
+				values[i] = this->extractors[i]->compute (aggregators);
+
+			return this->callback (values, this->length);
+		}
+
+		Variant	CallbackVectorExtractor::extract (const Row& row) const
+		{
+			Variant	values[this->length];
+
+			for (auto i = this->length; i-- > 0; )
+				values[i] = this->extractors[i]->extract (row);
+
+			return this->callback (values, this->length);
 		}
 	}
 }

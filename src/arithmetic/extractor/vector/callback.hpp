@@ -16,7 +16,8 @@ namespace	Tesca
 
 				CallbackVectorExtractor (const std::vector<const Extractor*>&, Callback);
 
-				virtual Storage::Variant	evaluate (const Storage::Variant*, Glay::Int32u) const;
+				virtual Storage::Variant	compute (const Aggregator* const*) const;
+				virtual Storage::Variant	extract (const Provision::Row&) const;
 
 			private:
 				Callback	callback;

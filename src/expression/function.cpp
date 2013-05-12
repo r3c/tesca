@@ -7,16 +7,18 @@
 #include "../arithmetic/aggregator/count.hpp"
 #include "../arithmetic/aggregator/first.hpp"
 #include "../arithmetic/aggregator/last.hpp"
+#include "../arithmetic/aggregator/max.hpp"
+#include "../arithmetic/aggregator/min.hpp"
 #include "../arithmetic/aggregator/sum.hpp"
 #include "../arithmetic/aggregator/variance.hpp"
-#include "../arithmetic/extractor/binary/callback.hpp"
 #include "../arithmetic/extractor/binary/number.hpp"
+#include "../arithmetic/extractor/binary/variant.hpp"
 #include "../arithmetic/extractor/composite/constant.hpp"
 #include "../arithmetic/extractor/composite/reduce.hpp"
 #include "../arithmetic/extractor/if.hpp"
-#include "../arithmetic/extractor/unary/callback.hpp"
 #include "../arithmetic/extractor/unary/string.hpp"
 #include "../arithmetic/extractor/vector/callback.hpp"
+#include "../arithmetic/extractor/vector/lazy.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -29,13 +31,31 @@ namespace	Tesca
 	{
 		const Function	Function::functions[] =
 		{
+			{"at",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new LazyVectorExtractor (arguments, [] (LazyVectorExtractor::Resolver resolver, Int32u count)
+				{
+					Int32u	index;
+					Float64	value;
+
+					if (resolver (0).toNumber (&value) && value >= 0)
+					{
+						index = (Int32u)value;
+
+						if (index + 1 < count)
+							return resolver (index + 1);
+					}
+
+					return Variant::empty;
+				});
+			}},
 			{"avg",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
 				return new ReduceCompositeExtractor<AverageAggregator> ((*slot)++, arguments[0]);
 			}},
 			{"cmp",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new CallbackBinaryExtractor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
+				return new VariantBinaryExtractor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
 				{
 					return Variant (a.compare (b));
 				});
@@ -43,6 +63,34 @@ namespace	Tesca
 			{"count",	0,	0,	[] (const vector<const Extractor*>&, Int32u* slot) -> Extractor*
 			{
 				return new ConstantCompositeExtractor<CountAggregator> ((*slot)++, Variant::empty);
+			}},
+			{"find",	2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				{
+					size_t	position;
+					string	source;
+					string	search;
+					Int32u	start;
+					Float64	value;
+
+					if (!values[0].toString (&source) || !values[1].toString (&search))
+						return Variant::empty;
+
+					if (count > 2)
+					{
+						if (!values[2].toNumber (&value) || value < 0)
+							return Variant::empty;
+
+						start = std::min ((Int32u)value, source.length ());
+					}
+					else
+						start = 0;
+
+					position = source.find (search, start);
+
+					return position != string::npos ? Variant (position) : Variant::empty;
+				});
 			}},
 			{"first",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
@@ -57,13 +105,13 @@ namespace	Tesca
 			}},
 			{"in",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u length)
+				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
 					const Variant*	search;
 
 					search = values++;
 
-					for (; length-- > 1; ++values)
+					for (; count-- > 1; ++values)
 					{
 						if (search->compare (*values) == 0)
 							return Variant (true);
@@ -102,77 +150,86 @@ namespace	Tesca
 					return Variant (argument.length ());
 				});
 			}},
-			{"max",		0,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{"max",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u length)
+				if (arguments.size () == 1)
+					return new ReduceCompositeExtractor<MaxAggregator> ((*slot)++, arguments[0]);
+
+				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					bool	defined;
-					Float64	number;
-					Float64	result;
+					Float64	current;
+					bool	empty;
+					Float64	max;
 
-					defined = false;
-					result = 0;
+					empty = false;
+					max = 0;
 
-					for (; length-- > 0; ++values)
+					for (; count-- > 0; ++values)
 					{
-						if (values->toNumber (&number) && (!defined || number > result))
+						if (values->toNumber (&current) && (empty || current > max))
 						{
-							defined = true;
-							result = number;
+							empty = false;
+							max = current;
 						}
 					}
 
-					return defined ? Variant (result) : Variant::empty;
+					return empty ? Variant::empty : Variant (max);
 				});
 			}},
-			{"min",		0,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{"min",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u length)
+				if (arguments.size () == 1)
+					return new ReduceCompositeExtractor<MinAggregator> ((*slot)++, arguments[0]);
+
+				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					bool	defined;
-					Float64	number;
-					Float64	result;
+					Float64	current;
+					bool	empty;
+					Float64	min;
 
-					defined = false;
-					result = 0;
+					empty = false;
+					min = 0;
 
-					for (; length-- > 0; ++values)
+					for (; count-- > 0; ++values)
 					{
-						if (values->toNumber (&number) && (!defined || number < result))
+						if (values->toNumber (&current) && (empty || current < min))
 						{
-							defined = true;
-							result = number;
+							empty = false;
+							min = current;
 						}
 					}
 
-					return defined ? Variant (result) : Variant::empty;
+					return empty ? Variant::empty : Variant (min);
 				});
 			}},
 			{"slice",	2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u length)
+				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					Float64	count;
+					Int32u	length;
 					string	source;
-					Float64	number;
-					Int32u	offset;
+					Int32u	start;
+					Float64	value;
 
-					if (!values[0].toString (&source) || !values[1].toNumber (&number))
+					if (!values[0].toString (&source) || !values[1].toNumber (&value))
 						return Variant::empty;
 
-					offset = std::min ((Int32u)number, source.length ());
+					if (value < 0)
+						start = std::min (source.length () + (Int32u)value, source.length ());
+					else
+						start = std::min ((Int32u)value, source.length ());
 
-					if (length > 2)
+					if (count > 2)
 					{
-						if (!values[2].toNumber (&number))
+						if (!values[2].toNumber (&value) || value < 0)
 							return Variant::empty;
 
-						count = std::min ((Int32u)number, source.length () - offset);
+						length = std::min ((Int32u)value, source.length () - start);
 					}
 					else
-						count = source.length () - offset;
+						length = source.length () - start;
 
-					return Variant (source.substr (offset, count)).keep ();
+					return Variant (source.substr (start, length)).keep ();
 				});
 			}},
 			{"sum",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
