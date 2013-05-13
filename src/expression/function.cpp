@@ -2,6 +2,7 @@
 #include "function.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <string> 
 #include "../arithmetic/aggregator/average.hpp"
 #include "../arithmetic/aggregator/count.hpp"
@@ -16,6 +17,7 @@
 #include "../arithmetic/extractor/composite/constant.hpp"
 #include "../arithmetic/extractor/composite/reduce.hpp"
 #include "../arithmetic/extractor/if.hpp"
+#include "../arithmetic/extractor/unary/number.hpp"
 #include "../arithmetic/extractor/unary/string.hpp"
 #include "../arithmetic/extractor/vector/callback.hpp"
 #include "../arithmetic/extractor/vector/lazy.hpp"
@@ -31,6 +33,13 @@ namespace	Tesca
 	{
 		const Function	Function::functions[] =
 		{
+			{"abs",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				{
+					return Variant (fabs (value));
+				});
+			}},
 			{"at",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
 				return new LazyVectorExtractor (arguments, [] (LazyVectorExtractor::Resolver resolver, Int32u count)
@@ -52,6 +61,13 @@ namespace	Tesca
 			{"avg",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
 				return new ReduceCompositeExtractor<AverageAggregator> ((*slot)++, arguments[0]);
+			}},
+			{"ceil",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				{
+					return Variant (ceil (value));
+				});
 			}},
 			{"cmp",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -95,6 +111,13 @@ namespace	Tesca
 			{"first",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
 				return new ReduceCompositeExtractor<FirstAggregator> ((*slot)++, arguments[0]);
+			}},
+			{"floor",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				{
+					return Variant (floor (value));
+				});
 			}},
 			{"if",		2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -200,6 +223,20 @@ namespace	Tesca
 					}
 
 					return empty ? Variant::empty : Variant (min);
+				});
+			}},
+			{"pow",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new NumberBinaryExtractor (arguments[0], arguments[1], [] (Float64 base, Float64 exponent)
+				{
+					return Variant (pow (base, exponent));
+				});
+			}},
+			{"round",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				{
+					return Variant (round (value));
 				});
 			}},
 			{"slice",	2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*

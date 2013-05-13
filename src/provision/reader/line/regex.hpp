@@ -17,7 +17,7 @@ namespace	Tesca
 		{
 			public:
 				RegexLineReader (const RegexLineReader&);
-				RegexLineReader (Glay::Pipe::IStream*, const Lookup&, const Storage::Config&);
+				RegexLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
 
 				RegexLineReader&	operator = (const RegexLineReader&);
 

@@ -18,7 +18,7 @@ namespace	Tesca
 
 				Printer&	operator = (const Printer&);
 
-				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) = 0;
+				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) const = 0;
 		};
 	}
 }

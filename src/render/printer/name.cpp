@@ -17,7 +17,7 @@ namespace	Tesca
 		{
 		}
 
-		void	NamePrinter::print (OStream& stream, const Table& table)
+		void	NamePrinter::print (OStream& stream, const Table& table) const
 		{
 			const Table::Columns&	columns (table.getColumns ());
 			string					output;

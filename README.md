@@ -82,13 +82,16 @@ Available mathematical operators are (sorted by decreasing precedence):
 
 Available scalar functions are:
 
+  * ``abs(x)``: returns absolute value of ``x``.
   * ``at(index, a, b[, c...])``: returns the n-th argument with n = ``index +
   2`` (this function returns ``a`` if ``index = 0``, ``b`` if ``index = 1``,
   etc.).
+  * ``ceil(x)``: returns ``x`` rounded up to a whole number.
   * ``cmp(a, b)``: returns ``-1`` if ``a < b``, ``0`` if ``a = b``, 1 else.
   * ``find(str, search[, start])``: searches for string ``search`` in ``str``
   from offset ``start`` (or 0 if missing) and returns position of the first
   character if found, or ``void`` else.
+  * ``floor(x)``: returns ``x`` rounded down to a whole number.
   * ``if(test, a[, b])``: returns ``a`` if ``test`` is true or equivalent
   (non-empty string or non-zero number), ``b`` else (or ``void`` if missing).
   * ``in(search, a, b, [, c...])``: returns ``true`` if ``search`` is equal to
@@ -99,6 +102,8 @@ Available scalar functions are:
   and following.
   * ``min(a, b, [, c...])``: returns lowest value among ``a``, ``b``, ``c`` and
   following.
+  * ``pow(base, exponent)``: returns ``base`` to the power of ``exponent``.
+  * ``round(x)``: returns ``x`` rounded to the nearest integral value.
   * ``slice(str, start, [, length])``: returns up to ``length`` characters (or
   all remaining characters if ``length`` is missing) from string ``str``,
   starting at index ``start`` (use a negative ``start`` index to start at the
@@ -118,8 +123,7 @@ Available aggregation functions are:
 
 Sub-expressions can be named (otherwise their automatic names are ``#0``,
 ``#1`` and so on) by appending ``: name`` after it (example: ``sum(#0):
-scores_sum``). Valid characters in names are letters, digits, '#', '$', '%',
-'&', '_' and '.'.
+scores_sum``). Valid characters in names are letters, digits, '#', '_' and '.'.
 
 ### Filter condition (-f &lt;condition&gt;):
 

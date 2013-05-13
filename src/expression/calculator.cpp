@@ -26,19 +26,19 @@ namespace	Tesca
 			return this->columns;
 		}
 
-		const Calculator::Error&	Calculator::getError () const
-		{
-			return this->parser.getError ();
-		}
-
-		Calculator::Error&	Calculator::getError ()
-		{
-			return this->parser.getError ();
-		}
-
 		Int32u	Calculator::getSlots () const
 		{
 			return this->slots;
+		}
+
+		const Calculator::Error&	Calculator::onError () const
+		{
+			return this->parser.onError ();
+		}
+
+		Calculator::Error&	Calculator::onError ()
+		{
+			return this->parser.onError ();
 		}
 
 		bool	Calculator::parse (Lookup& lookup, const char* input)

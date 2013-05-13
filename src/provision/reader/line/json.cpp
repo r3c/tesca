@@ -3,6 +3,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Glay::Pipe;
 using namespace Glay::System;
 using namespace Tesca::Storage;
 
@@ -28,7 +29,7 @@ namespace	Tesca
 {
 	namespace	Provision
 	{
-		JSONLineReader::JSONLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
+		JSONLineReader::JSONLineReader (SeekIStream* input, const Lookup& lookup, const Config& config) :
 			LineReader (input, 1024 * 10),
 			lookup (lookup),
 			row (lookup.count ())

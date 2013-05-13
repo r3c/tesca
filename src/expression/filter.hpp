@@ -21,8 +21,9 @@ namespace	Tesca
 				Filter&	operator = (const Filter&);
 
 				const Arithmetic::Extractor*	getCondition () const;
-				const Error&				getError () const;
-				Error&						getError ();
+
+				const Error&	onError () const;
+				Error&			onError ();
 
 				bool	parse (Provision::Lookup&, const char*);
 				void	reset ();

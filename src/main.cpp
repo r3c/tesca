@@ -44,12 +44,17 @@ int	execute (const Provision::Input& input, const Provision::Lookup& lookup, con
 
 			if (reader)
 			{
-				reader->getError ().bind ([&] (const string& error)
+				reader->onError ().bind ([&] (const string& error)
 				{
 					writer
 						.write ("warning: reader error(")
 						.write (error)
 						.write(")\n");
+				});
+
+				reader->onRead ().bind ([&] (const Provision::Reader::Progress&)
+				{
+					// FIXME
 				});
 
 				while (reader->next ())
@@ -93,7 +98,7 @@ int	main (int argc, char* argv[])
 	int						start;
 	FormatWriter			writer (err);
 
-	calculator.getError ().bind ([&] (const string& message)
+	calculator.onError ().bind ([&] (const string& message)
 	{
 		writer
 			.write ("error: invalid calculator expression (")
@@ -101,7 +106,7 @@ int	main (int argc, char* argv[])
 			.write (")\n");
 	});
 
-	filter.getError ().bind ([&] (const string& message)
+	filter.onError ().bind ([&] (const string& message)
 	{
 		writer
 			.write ("error: invalid filter condition (")
@@ -109,7 +114,7 @@ int	main (int argc, char* argv[])
 			.write (")\n");
 	});
 
-	input.getError ().bind ([&] (const string& message)
+	input.onError ().bind ([&] (const string& message)
 	{
 		writer
 			.write ("error: invalid input format (")
@@ -117,7 +122,7 @@ int	main (int argc, char* argv[])
 			.write (")\n");
 	});
 
-	output.getError ().bind ([&] (const string& message)
+	output.onError ().bind ([&] (const string& message)
 	{
 		writer
 			.write ("error: invalid output format (")

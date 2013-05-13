@@ -25,14 +25,14 @@ namespace	Tesca
 			return this->condition;
 		}
 
-		const Filter::Error&	Filter::getError () const
+		const Filter::Error&	Filter::onError () const
 		{
-			return this->parser.getError ();
+			return this->parser.onError ();
 		}
 
-		Filter::Error&	Filter::getError ()
+		Filter::Error&	Filter::onError ()
 		{
-			return this->parser.getError ();
+			return this->parser.onError ();
 		}
 
 		bool	Filter::parse (Lookup& lookup, const char* input)

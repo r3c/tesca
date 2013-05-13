@@ -3,6 +3,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Glay::Pipe;
 using namespace Glay::System;
 using namespace Tesca::Storage;
 
@@ -10,7 +11,7 @@ namespace	Tesca
 {
 	namespace	Provision
 	{
-		RegexLineReader::RegexLineReader (Pipe::IStream* input, const Lookup& lookup, const Config&) :
+		RegexLineReader::RegexLineReader (SeekIStream* input, const Lookup& lookup, const Config&) :
 			LineReader (input),
 			regex ("FIXME"),
 			row (lookup.count ())

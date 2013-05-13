@@ -26,7 +26,7 @@ namespace	Tesca
 				this->pad = 1;
 		}
 
-		void	PrettyPrinter::print (OStream& stream, const Table& table)
+		void	PrettyPrinter::print (OStream& stream, const Table& table) const
 		{
 			const Table::Columns&	columns (table.getColumns ());
 			Int32u*					length;

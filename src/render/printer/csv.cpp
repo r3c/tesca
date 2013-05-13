@@ -15,12 +15,12 @@ namespace	Tesca
 	{
 		CSVPrinter::CSVPrinter (const Config& config) :
 			headers (config.get ("headers", 0)),
-			quote (config.get ("quote", "")),
+			quote (config.get ("quote", "\"")),
 			split (config.get ("split", ","))
 		{
 		}
 
-		void	CSVPrinter::print (OStream& stream, const Table& table)
+		void	CSVPrinter::print (OStream& stream, const Table& table) const
 		{
 			const Table::Columns&	columns (table.getColumns ());
 			string					output;
@@ -35,10 +35,7 @@ namespace	Tesca
 					if (i > 0)
 						writer.write (this->split);
 
-					writer
-						.write (this->quote)
-						.write (columns[i].getKey ())
-						.write (this->quote);
+					this->write (writer, columns[i].getKey ());
 				}
 
 				writer.write ("\n");
@@ -54,18 +51,28 @@ namespace	Tesca
 						writer.write (this->split);
 
 					if (value->toString (&output))
-					{
-						writer
-							.write (this->quote)
-							.write (output)
-							.write (this->quote);
-					}
+						this->write (writer, output);
 
 					++value;
 				}
 
 				writer.write ("\n");
 			}
+		}
+
+		void	CSVPrinter::write (FormatWriter& writer, const string& value) const
+		{
+			bool	escape;
+
+			escape = value.find (this->quote) != string::npos || value.find (this->split) != string::npos;
+
+			if (escape)
+				writer.write (this->quote);
+
+			writer.write (value);
+
+			if (escape)
+				writer.write (this->quote);
 		}
 	}
 }

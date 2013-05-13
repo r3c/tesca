@@ -18,7 +18,7 @@ namespace	Tesca
 		{
 			public:
 				CSVLineReader (const CSVLineReader&);
-				CSVLineReader (Glay::Pipe::IStream*, const Lookup&, const Storage::Config&);
+				CSVLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
 
 				CSVLineReader&	operator = (const CSVLineReader&);
 

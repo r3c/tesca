@@ -13,7 +13,7 @@ namespace	Tesca
 		{
 			public:
 				LineReader (const LineReader&);
-				LineReader (Glay::Pipe::IStream*, Glay::Int32u);
+				LineReader (Glay::Pipe::SeekIStream*, Glay::Int32u);
 				virtual	~LineReader ();
 
 				LineReader&	operator = (const LineReader&);
@@ -22,20 +22,22 @@ namespace	Tesca
 
 			protected:
 				virtual bool	parse (const char*, Glay::Int32u) = 0;
-				bool			read (const char**, Glay::Int32u*);
+				bool			shift (const char**, Glay::Int32u*);
 
 			private:
 				bool	fetch ();
 
-				Glay::Int32u			available;
-				char*					buffer;
-				bool					eof;
-				Glay::Pipe::IStream&	input;
-				Glay::Int32u			line;
-				Glay::Int32u			reserve;
-				Glay::Int32u			size;
-				Glay::Int32u			start;
-				Glay::Int32u			stop;
+				char*						buffer;
+				Glay::Int32u				bufferOffset;
+				Glay::Int32u				bufferReserve;
+				Glay::Int32u				bufferSize;
+				bool						eof;
+				Glay::Pipe::SeekIStream&	input;
+				Glay::Int32u				line;
+				Glay::Int32u				start;
+				Glay::Int32u				stop;
+				Glay::Int32u				streamRead;
+				Glay::Int32u				streamSize;
 		};
 	}
 }

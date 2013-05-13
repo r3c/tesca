@@ -23,8 +23,8 @@ namespace	Tesca
 
 				Output&	operator = (const Output&);
 
-				const Error&	getError () const;
-				Error&			getError ();
+				const Error&	onError () const;
+				Error&			onError ();
 
 				Printer*	create () const;
 				bool		parse (const char*);

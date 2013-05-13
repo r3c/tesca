@@ -28,8 +28,8 @@ namespace	Tesca
 
 				Parser&	operator = (const Parser&);
 
-				const Error&	getError () const;
-				Error&			getError ();
+				const Error&	onError () const;
+				Error&			onError ();
 
 				bool	parseExpression (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
 				bool	parseKey (Lexer&, std::string*);

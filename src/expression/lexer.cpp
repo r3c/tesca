@@ -59,9 +59,6 @@ namespace	Tesca
 			if ((this->character >= 'A' && this->character <= 'Z') ||
 			    (this->character >= 'a' && this->character <= 'z') ||
 			    (this->character == '#') ||
-			    (this->character == '$') ||
-			    (this->character == '%') ||
-			    (this->character == '&') ||
 			    (this->character == '_') ||
 			    (this->character == '.'))
 			{
@@ -72,9 +69,6 @@ namespace	Tesca
 				        (this->character >= 'A' && this->character <= 'Z') ||
 				        (this->character >= 'a' && this->character <= 'z') ||
 				        (this->character == '#') ||
-				        (this->character == '$') ||
-				        (this->character == '%') ||
-				        (this->character == '&') ||
 				        (this->character == '_') ||
 				        (this->character == '.')))
 					buffer.put (this->character);

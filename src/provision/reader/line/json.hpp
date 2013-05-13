@@ -19,7 +19,7 @@ namespace	Tesca
 		{
 			public:
 				JSONLineReader (const JSONLineReader&);
-				JSONLineReader (Glay::Pipe::IStream*, const Lookup&, const Storage::Config&);
+				JSONLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
 
 				JSONLineReader&	operator = (const JSONLineReader&);
 

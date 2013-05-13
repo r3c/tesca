@@ -10,17 +10,19 @@ namespace	Tesca
 {
 	namespace	Provision
 	{
-		LineReader::LineReader (Pipe::IStream* input, Int32u reserve) :
-			available (0),
+		LineReader::LineReader (Pipe::SeekIStream* input, Int32u reserve) :
 			buffer (0),
+			bufferOffset (0),
+			bufferReserve (reserve),
+			bufferSize (0),
 			eof (false),
 			input (*input),
 			line (0),
-			reserve (reserve),
-			size (0),
 			start (0),
 			stop (0)
 		{
+			this->streamRead = 0;
+			this->streamSize = input->getSize ();
 		}
 
 		LineReader::~LineReader ()
@@ -34,7 +36,7 @@ namespace	Tesca
 			const char*	buffer;
 			Int32u		length;
 
-			if (!this->read (&buffer, &length))
+			if (!this->shift (&buffer, &length))
 				return false;
 
 			if (!this->parse (buffer, length))
@@ -63,17 +65,17 @@ namespace	Tesca
 			{
 				count = this->start;
 
-				memmove (this->buffer, this->buffer + count, sizeof (*this->buffer) * (this->available - count));
+				memmove (this->buffer, this->buffer + count, sizeof (*this->buffer) * (this->bufferOffset - count));
 
-				this->available -= count;
+				this->bufferOffset -= count;
 				this->start = 0;
 				this->stop -= count;
 			}
 			else
 			{
-				this->size = max (this->size * 2 + 1, this->reserve);
+				this->bufferSize = max (this->bufferSize * 2 + 1, this->bufferReserve);
 
-				swap = static_cast<char*> (realloc (this->buffer, sizeof (*this->buffer) * this->size));
+				swap = static_cast<char*> (realloc (this->buffer, sizeof (*this->buffer) * this->bufferSize));
 
 				if (swap == 0)
 				{
@@ -81,7 +83,7 @@ namespace	Tesca
 						free (this->buffer);
 
 					this->buffer = 0;
-					this->size = 0;
+					this->bufferSize = 0;
 
 					return false;
 				}
@@ -90,17 +92,20 @@ namespace	Tesca
 			}
 
 			// Read data from stream to buffer
-			count = this->input.read (this->buffer + this->available, this->size - this->available);
+			count = this->input.read (this->buffer + this->bufferOffset, this->bufferSize - this->bufferOffset);
 
-			if (count < this->size - this->available)
+			if (count < this->bufferSize - this->bufferOffset)
 				this->eof = true;
 
-			this->available += count;
+			this->bufferOffset += count;
+			this->streamRead += count;
+
+			this->read.fire (Progress (this->streamRead, this->streamSize));
 
 			return true;
 		}
 
-		bool	LineReader::read (const char** line, Int32u* length)
+		bool	LineReader::shift (const char** line, Int32u* length)
 		{
 			const char*	head;
 			const char*	tail;
@@ -109,14 +114,14 @@ namespace	Tesca
 			while (true)
 			{
 				head = this->buffer + this->stop;
-				tail = this->buffer + this->available;
+				tail = this->buffer + this->bufferOffset;
 
 				while (head < tail && *head != '\n' && *head != '\r')
 					++head;
 
 				this->stop = head - this->buffer;
 
-				if (this->stop < this->available || this->eof)
+				if (this->stop < this->bufferOffset || this->eof)
 					break;
 
 				if (!this->fetch ())
@@ -129,11 +134,11 @@ namespace	Tesca
 			++this->line;
 
 			// Ignore repeated line break characters
-			if (this->stop < this->available)
+			if (this->stop < this->bufferOffset)
 			{
 				++this->stop;
 
-				if (this->stop < this->available || (this->fetch () && this->stop < this->available))
+				if (this->stop < this->bufferOffset || (this->fetch () && this->stop < this->bufferOffset))
 				{
 					head = this->buffer + this->stop - 1;
 					tail = head + 1;

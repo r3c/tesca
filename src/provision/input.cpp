@@ -5,6 +5,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Glay::Pipe;
 
 namespace	Tesca
 {
@@ -19,17 +20,17 @@ namespace	Tesca
 		{
 		}
 
-		const Input::Error&	Input::getError () const
+		const Input::Error&	Input::onError () const
 		{
 			return this->error;
 		}
 
-		Input::Error&	Input::getError ()
+		Input::Error&	Input::onError ()
 		{
 			return this->error;
 		}
 
-		Reader*	Input::create (Pipe::IStream* stream, const Lookup& lookup) const
+		Reader*	Input::create (SeekIStream* stream, const Lookup& lookup) const
 		{
 			if (this->format != 0)
 				return this->format->builder (stream, lookup, this->config);

@@ -3,6 +3,7 @@
 
 using namespace std;
 using namespace Glay;
+using namespace Glay::Pipe;
 using namespace Glay::System;
 using namespace Tesca::Storage;
 
@@ -17,7 +18,7 @@ namespace	Tesca
 {
 	namespace	Provision
 	{
-		CSVLineReader::CSVLineReader (Pipe::IStream* input, const Lookup& lookup, const Config& config) :
+		CSVLineReader::CSVLineReader (SeekIStream* input, const Lookup& lookup, const Config& config) :
 			LineReader (input, 1024 * 10),
 			row (lookup.count ())
 		{
@@ -54,7 +55,7 @@ namespace	Tesca
 					buffer = headers.c_str ();
 					length = headers.length ();
 				}
-				else if (!this->read (&buffer, &length))
+				else if (!this->shift (&buffer, &length))
 				{
 					buffer = 0;
 					length = 0;

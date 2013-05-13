@@ -23,9 +23,10 @@ namespace	Tesca
 				Calculator&	operator = (const Calculator&);
 
 				const Columns&	getColumns () const;
-				const Error&	getError () const;
-				Error&			getError ();
 				Glay::Int32u	getSlots () const;
+
+				const Error&	onError () const;
+				Error&			onError ();
 
 				bool	parse (Provision::Lookup&, const char*);
 				void	reset ();

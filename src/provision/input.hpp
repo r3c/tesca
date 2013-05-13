@@ -24,10 +24,10 @@ namespace	Tesca
 
 				Input&	operator = (const Input&);
 
-				const Error&	getError () const;
-				Error&			getError ();
+				const Error&	onError () const;
+				Error&			onError ();
 
-				Reader*	create (Glay::Pipe::IStream*, const Lookup&) const;
+				Reader*	create (Glay::Pipe::SeekIStream*, const Lookup&) const;
 				bool	parse (const char*);
 
 			private:

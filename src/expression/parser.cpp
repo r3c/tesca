@@ -37,12 +37,12 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		const Parser::Error&	Parser::getError () const
+		const Parser::Error&	Parser::onError () const
 		{
 			return this->error;
 		}
 
-		Parser::Error&	Parser::getError ()
+		Parser::Error&	Parser::onError ()
 		{
 			return this->error;
 		}

@@ -19,12 +19,12 @@ namespace	Tesca
 		{
 		}
 
-		const Output::Error&	Output::getError () const
+		const Output::Error&	Output::onError () const
 		{
 			return this->error;
 		}
 
-		Output::Error&	Output::getError ()
+		Output::Error&	Output::onError ()
 		{
 			return this->error;
 		}

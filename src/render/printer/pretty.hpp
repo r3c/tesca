@@ -19,7 +19,7 @@ namespace	Tesca
 
 				PrettyPrinter&	operator = (const PrettyPrinter&);
 
-				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&);
+				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
 
 			private:
 				Glay::Int32u	align;

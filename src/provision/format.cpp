@@ -5,6 +5,7 @@
 #include "reader/line/json.hpp"
 
 using namespace Glay;
+using namespace Glay::Pipe;
 using namespace Tesca::Storage;
 
 namespace	Tesca
@@ -13,11 +14,11 @@ namespace	Tesca
 	{
 		const Format	Format::formats[] =
 		{
-			{"csv",		[] (Pipe::IStream* stream, const Lookup& lookup, const Config& config) -> Reader*
+			{"csv",		[] (SeekIStream* stream, const Lookup& lookup, const Config& config) -> Reader*
 			{
 				return new CSVLineReader (stream, lookup, config);
 			}},
-			{"json",	[] (Pipe::IStream* stream, const Lookup& lookup, const Config& config) -> Reader*
+			{"json",	[] (SeekIStream* stream, const Lookup& lookup, const Config& config) -> Reader*
 			{
 				return new JSONLineReader (stream, lookup, config);
 			}},

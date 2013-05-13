@@ -19,9 +19,11 @@ namespace	Tesca
 
 				CSVPrinter&	operator = (const CSVPrinter&);
 
-				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&);
+				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
 
 			private:
+				void	write (Glay::Pipe::FormatWriter&, const std::string&) const;
+
 				bool		headers;
 				std::string	quote;
 				std::string	split;
