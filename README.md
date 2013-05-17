@@ -20,7 +20,7 @@ You can get the total score and average time by player using this command:
 
 	./tesca -e '#0, sum(#1), avg(#2)' results.csv
 
-Output looks like this:
+So output looks like this:
 
 	#0      #1      #2
 	Dendrob 30000   26.3
@@ -28,10 +28,10 @@ Output looks like this:
 	Zephyra 220000  43
 
 Input text files should contain structured data, one row per line, and use a
-supported format (currently only CSV and JSON, then anything that can be
-matched through regular expressions as soon as MinGW/GCC has a decent support
-for new C++11 &lt;regex&gt; header). Then you have to describe what kind of
-data contains each row and how result must be computed from those data.
+supported format (currently only CSV and JSON, and as soon as MinGW/GCC has a
+decent support for new C++11 &lt;regex&gt; header anything that can be matched
+through regular expressions). Once your input is defined you have to describe
+what kind of data contains each row and what do you want to compute from it.
 
 Installation
 ------------
@@ -39,9 +39,9 @@ Installation
 Grab a C++ compiler compatible with basic C++11 features (mainly lambda
 expressions) such as GCC, update the Makefile.conf if needed and run make.
 
-Build only tested on Windows (should work on any system with a C++11-compliant
-GCC though, just remove the "-lwinmm" parameter from LDFLAGS variable in
-Makefile.conf).
+Build has been only tested on Windows using MinGW. It should work on any system
+with a C++11-compliant GCC though, just remove the "-lwinmm" parameter from
+LDFLAGS variable in Makefile.conf.
 
 Usage
 -----
@@ -50,28 +50,78 @@ Run Tesca on a text stream by either specifying files as command line arguments
 or using stdin. Use following options to control how stream is read and what is
 computed from its rows:
 
+### Input stream format (-i &lt;format&gt;):
+
+Defines how values are extracted from each line of input file and which name
+should be used to access them in expressions. Formats can be cutomized by
+specifying options after the format name like this:
+``-i 'format:option1=value1;option2=value2'``. Valid values for input stream
+format are:
+
+  * ``-i csv`` (default value): read lines as comma-separated values, fields
+  can be referred to as ``#0``, ``#1``, ``#2`` and so on in expression (unless
+  you use the 'headers' option).
+    * use option 'headers' without argument to use first line as a header, its
+    values will be used to define field names (example: ``-i 'csv:headers'``).
+    * use option 'headers' with comma-separated arguments to define fixed field
+    names (example: ``-i 'csv:headers=first,second,third'``).
+    * use option 'splits' to change separator character (example:
+    ``-i 'csv:splits=|'``).
+  * ``-i json``: read lines as JSON objects, fields can be referred to as
+  ``row.key`` where ``key`` is a key in JSON object (example: to read values
+  from JSON object ``{"first": 1, "second": [2], "third": {"x": true, "y":
+  false}}`` you can use ``row.first``, ``row.second.0``, ``third.x`` and
+  ``third.y`` in your expressions).
+    * use option 'member' to change the character used to select a member from
+    a sub-object (example: ``-i 'json:member=/'``), default is '.' (dot).
+    * use option 'root' to change the name of root JSON object (example: ``-i
+    'json:root=line'``), default is 'row'.
+
 ### Calculator expression (-e &lt;expression&gt;):
 
 List of values that must be calculated from input stream, as a list of
-sub-expressions separated by commas (example: ``#0, avg(#1), sum(#2) / 5``).
-Result is automatically grouped by values obtained from expressions that do not
-contain any aggregation function (like the first sub-expression in previous
-example).
+column definitions separated by commas (example: ``slice(#0, 0, 10), avg(#1) +
+1, sum(#2)``). As you can notice, column definitions can mix constructions that
+compute a result for each row (mathematical operators, row functions) and
+instructions that aggregate a result from several combined rows (aggregation
+functions).
 
-Sub-expressions can contains:
+Is previous example, ``avg(n)`` and ``sum(n)`` are aggregation functions. This
+means they'll group all rows sharing the same value for other (non-aggregating)
+columns, which in this case is the first column only, and compute an aggregated
+result from them.
 
+Note that you can aggregate a value computed from either mathematical operators
+and/or row functions, but once you have an aggregated result you can't mix it
+with row-level constructions as it would have no sense. This means
+``avg(max(#0, 5) + 2)`` is valid but ``sum(#0) + #1`` is not.
+
+Column definitions can contains:
+
+  * Aggregation functions (example: ``avg(field)``, ``sum(value)``).
+  * Mathematical operators (example: ``field * 2``, ``value + 1``).
+  * Row functions (example: ``max(field, 5)``, ``len("Hello, World!")``).
   * Field references (example: ``#0``, ``row.key`` ; see 'input stream format'
   section to know what to use as field names depending on input format).
-  * Scalar functions (example: ``max(field, 5)``, ``len("Hello, World!")``).
-  * Aggregation functions (example: ``avg(field)``, ``sum(value)``).
-  * Common mathematical operators (example: ``field * 2``, ``value + 1``).
   * Boolean constants (example: ``true``, ``false``).
   * Numeric constants (example: ``1``, ``42.17``).
   * String constants (example: ``"Hello, World!"``).
   * Void constant (example: ``void``).
 
+Available aggregation functions are:
+
+  * ``avg(n)``: computes average of ``n``.
+  * ``count()``: counts number of aggregated rows.
+  * ``first(n)``: keeps only first value of ``n``.
+  * ``last(n)``: keeps only last value of ``n``.
+  * ``max(n)``: keeps the highest value of ``n``.
+  * ``min(n)``: keeps the lowest value of ``n``.
+  * ``sum(n)``: computes sum of ``n``.
+  * ``var(n)``: computes variance of ``n``.
+
 Available mathematical operators are (sorted by decreasing precedence):
 
+  * Parenthesis ``(``, ``)``
   * Unary operators ``+n``, ``-n``, ``!n`` (logical 'not n')
   * Binary operators ``a * b``, ``a / b``, ``a % b`` (modulo)
   * Binary operators ``a + b``, ``a - b``
@@ -80,7 +130,7 @@ Available mathematical operators are (sorted by decreasing precedence):
   * Logical operators ``a & b`` (logical 'a and b'), ``a | b`` (logical 'a or
   b')
 
-Available scalar functions are:
+Available row functions are:
 
   * ``abs(x)``: returns absolute value of ``x``.
   * ``at(index, a, b[, c...])``: returns the n-th argument with n = ``index +
@@ -110,49 +160,21 @@ Available scalar functions are:
   ``len(str) + start``-th character).
   * ``ucase(str)``: returns uppercase conversion of string ``str``.
 
-Available aggregation functions are:
-
-  * ``avg(n)``: computes average of expression ``n`` results.
-  * ``count()``: counts number of aggregated rows.
-  * ``first(n)``: keeps only first value of expression ``n`` results.
-  * ``last(n)``: keeps only last value of expression ``n`` results.
-  * ``max(n)``: keeps the highest value of expression ``n`` results.
-  * ``min(n)``: keeps the lowest value of expression ``n`` results.
-  * ``sum(n)``: computes sum of expression ``n`` results.
-  * ``var(n)``: computes variance of expression ``n`` results.
-
-Sub-expressions can be named (otherwise their automatic names are ``#0``,
-``#1`` and so on) by appending ``: name`` after it (example: ``sum(#0):
+Column definitions can also declare a name (otherwise their automatic names are
+``#0``, ``#1`` and so on) by appending ``: name`` after it (example: ``sum(#0):
 scores_sum``). Valid characters in names are letters, digits, '#', '_' and '.'.
+
+Note that their are two ``max`` and two ``min`` functions: an aggregation
+function and a row function for each. They differ by the number of arguments
+they expect, as the aggregation variants require one argument where the row
+ones require at least 2 arguments. Don't confuse one with the other as they
+have very different behaviors.
 
 ### Filter condition (-f &lt;condition&gt;):
 
 Apply a filter on each row and use it only if filter is true (see description
 of ``if`` scalar function for details). Syntax for filters is the same than the
-one used for sub-expressions.
-
-### Input stream format (-i &lt;format&gt;):
-
-Defines how values are extracted from each line of input file. Formats can be
-cutomized by specifying options after the format name like this:
-``format:option1=value1;option2=value2``. Valid values for input stream format
-are:
-
-  * ``-i csv`` (default value): read lines as comma-separated values, fields
-  can be referred to as ``#0``, ``#1``, ``#2`` and so on in expression (unless
-  you use the 'headers' option).
-    * use option 'headers' without argument to use first line as a header, its
-    values will be used to define field names (example: ``-i 'csv:headers'``).
-    * use option 'headers' with comma-separated arguments to define fixed field
-    names (example: ``-i 'csv:headers=first,second,third'``).
-    * use option 'splits' to change separator character (example:
-    ``-i 'csv:splits=|'``).
-  * ``-i json``: read lines as JSON objects, fields can be referred to as
-  ``row.key`` where ``key`` is a key in JSON object.
-    * use option 'member' to change the character used to select a member from
-    a sub-object (example: ``-i 'json:member=/'``), default is '.' (dot).
-    * use option 'root' to change the name of root JSON object (example: ``-i
-    'json:root=line'``), default is 'row'.
+one used for column definitions (example: ``-f '#0 >= 0 & #0 < 8'``).
 
 ### Output stream format (-o &lt;format&gt;):
 
