@@ -55,12 +55,10 @@ namespace	Tesca
 				}
 			}
 
-			// Scan identifier
+			// Scan constant
 			if ((this->character >= 'A' && this->character <= 'Z') ||
 			    (this->character >= 'a' && this->character <= 'z') ||
-			    (this->character == '#') ||
-			    (this->character == '_') ||
-			    (this->character == '.'))
+			    (this->character == '_'))
 			{
 				buffer.put (this->character);
 
@@ -68,13 +66,54 @@ namespace	Tesca
 				       ((this->character >= '0' && this->character <= '9') ||
 				        (this->character >= 'A' && this->character <= 'Z') ||
 				        (this->character >= 'a' && this->character <= 'z') ||
-				        (this->character == '#') ||
-				        (this->character == '_') ||
-				        (this->character == '.')))
+				        (this->character == '_')))
+					buffer.put (this->character);
+
+				this->current = buffer.str ();
+				this->type = CONSTANT;
+
+				return true;
+			}
+
+			// Scan identifier
+			if (this->character == '$')
+			{
+				while ((this->read ()) &&
+				       ((this->character >= '0' && this->character <= '9') ||
+				        (this->character >= 'A' && this->character <= 'Z') ||
+				        (this->character >= 'a' && this->character <= 'z') ||
+				        (this->character == '.') ||
+				        (this->character == '_')))
 					buffer.put (this->character);
 
 				this->current = buffer.str ();
 				this->type = IDENTIFIER;
+
+				return true;
+			}
+
+			// Scan name
+			if (this->character == ':')
+			{
+				do
+				{
+					if (!this->read ())
+						return false;
+				}
+				while (this->character <= ' ');
+
+				buffer.put (this->character);
+
+				while ((this->read ()) &&
+				       ((this->character >= '0' && this->character <= '9') ||
+				        (this->character >= 'A' && this->character <= 'Z') ||
+				        (this->character >= 'a' && this->character <= 'z') ||
+				        (this->character == '.') ||
+				        (this->character == '_')))
+					buffer.put (this->character);
+
+				this->current = buffer.str ();
+				this->type = NAME;
 
 				return true;
 			}
@@ -126,12 +165,6 @@ namespace	Tesca
 				case '&':
 					this->read ();
 					this->type = AMPERSAND;
-
-					break;
-
-				case ':':
-					this->read ();
-					this->type = COLON;
 
 					break;
 

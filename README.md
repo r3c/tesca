@@ -18,11 +18,11 @@ completion times for several players:
 
 You can get the total score and average time by player using this command:
 
-	./tesca -e '#0, sum(#1), avg(#2)' results.csv
+	./tesca -e '$0, sum($1), avg($2)' results.csv
 
 So output looks like this:
 
-	#0      #1      #2
+	[0]     [1]     [2]
 	Dendrob 30000   26.3
 	Physali 90000   27.25
 	Zephyra 220000  43
@@ -58,30 +58,39 @@ specifying options after the format name like this:
 ``-i 'format:option1=value1;option2=value2'``. Valid values for input stream
 format are:
 
-  * ``-i csv`` (default value): read lines as comma-separated values, fields
-  can be referred to as ``#0``, ``#1``, ``#2`` and so on in expression (unless
-  you use the 'headers' option).
-    * use option 'headers' without argument to use first line as a header, its
-    values will be used to define field names (example: ``-i 'csv:headers'``).
+  * ``-i csv`` (default value): read lines as comma-separated values, default
+  field names are ``$0``, ``$1``, ``$2`` and so on in expression unless
+  you use the 'headers' option.
+    * use option 'headers' without argument to use first line as header
+	definition: field names will be defined from its value instead of default
+	names (example: ``-i 'csv:headers'``).
     * use option 'headers' with comma-separated arguments to define fixed field
-    names (example: ``-i 'csv:headers=first,second,third'``).
-    * use option 'splits' to change separator character (example:
-    ``-i 'csv:splits=|'``).
+    names (example: ``-i 'csv:headers=first,second,third'`` to name the three
+    first columns of your file ``$first``, ``$second`` and ``$third``).
+    * use option 'splits' to replace default separator character ',' (comma)
+    by any characters list you want (example: ``-i 'csv:splits=|_'`` to split
+    on pipe and underscore characters).
+    * use option 'quotes' to replace default escaping character '"' (double
+    quote) by any characters list you want (example: ``-i 'csv:quotes=`'`` to
+    use backquote as an escape character).
   * ``-i json``: read lines as JSON objects, fields can be referred to as
-  ``row.key`` where ``key`` is a key in JSON object (example: to read values
+  ``$row.key`` where ``key`` is a key in JSON object (example: to read values
   from JSON object ``{"first": 1, "second": [2], "third": {"x": true, "y":
-  false}}`` you can use ``row.first``, ``row.second.0``, ``third.x`` and
-  ``third.y`` in your expressions).
-    * use option 'member' to change the character used to select a member from
-    a sub-object (example: ``-i 'json:member=/'``), default is '.' (dot).
-    * use option 'root' to change the name of root JSON object (example: ``-i
-    'json:root=line'``), default is 'row'.
+  false}}`` you can use ``$row.first``, ``$row.second.0``, ``$row.third.x`` and
+  ``$row.third.y`` in your expressions).
+    * use option 'member' to replace default character '.' (dot) used to
+    select a member from an object or array by any valid column name character
+    (see "Calculator expression" section for details, example: ``-i
+    'json:member=_'`` to use underscore as a member selector).
+    * use option 'root' to replace default name of top-level JSON object 'row'
+    by any name you want (example: ``-i 'json:root=line'`` to use 'line' as
+    the name of the root JSON element).
 
 ### Calculator expression (-e &lt;expression&gt;):
 
 List of values that must be calculated from input stream, as a list of
-column definitions separated by commas (example: ``slice(#0, 0, 10), avg(#1) +
-1, sum(#2)``). As you can notice, column definitions can mix constructions that
+column definitions separated by commas (example: ``slice($0, 0, 10), avg($1) +
+1, sum($2)``). As you can notice, column definitions can mix constructions that
 compute a result for each row (mathematical operators, row functions) and
 instructions that aggregate a result from several combined rows (aggregation
 functions).
@@ -94,14 +103,14 @@ result from them.
 Note that you can aggregate a value computed from either mathematical operators
 and/or row functions, but once you have an aggregated result you can't mix it
 with row-level constructions as it would have no sense. This means
-``avg(max(#0, 5) + 2)`` is valid but ``sum(#0) + #1`` is not.
+``avg(max($0, 5) + 2)`` is valid but ``sum($0) + $1`` is not.
 
 Column definitions can contains:
 
-  * Aggregation functions (example: ``avg(field)``, ``sum(value)``).
-  * Mathematical operators (example: ``field * 2``, ``value + 1``).
-  * Row functions (example: ``max(field, 5)``, ``len("Hello, World!")``).
-  * Field references (example: ``#0``, ``row.key`` ; see 'input stream format'
+  * Aggregation functions (example: ``avg($field)``, ``sum(53)``).
+  * Mathematical operators (example: ``$field * 2``, ``17 + 1``).
+  * Row functions (example: ``max($field, 5)``, ``len("Hello, World!")``).
+  * Field references (example: ``$0``, ``$row.key`` ; see 'input stream format'
   section to know what to use as field names depending on input format).
   * Boolean constants (example: ``true``, ``false``).
   * Numeric constants (example: ``1``, ``42.17``).
@@ -161,8 +170,8 @@ Available row functions are:
   * ``ucase(str)``: returns uppercase conversion of string ``str``.
 
 Column definitions can also declare a name (otherwise their automatic names are
-``#0``, ``#1`` and so on) by appending ``: name`` after it (example: ``sum(#0):
-scores_sum``). Valid characters in names are letters, digits, '#', '_' and '.'.
+``$0``, ``$1`` and so on) by appending ``: name`` after it (example: ``sum($$):
+scores_sum``). Valid characters in names are letters, digits, '_' and '.'.
 
 Note that their are two ``max`` and two ``min`` functions: an aggregation
 function and a row function for each. They differ by the number of arguments
@@ -174,22 +183,32 @@ have very different behaviors.
 
 Apply a filter on each row and use it only if filter is true (see description
 of ``if`` scalar function for details). Syntax for filters is the same than the
-one used for column definitions (example: ``-f '#0 >= 0 & #0 < 8'``).
+one used for column definitions (example: ``-f '$0 >= 0 & $0 < 8'``).
 
 ### Output stream format (-o &lt;format&gt;):
 
 Defines how result is printed to standard output. Valid values for output
 stream format are:
 
+  * ``-o pretty`` (default value): render result as a pretty-printed table.
+    * use option 'margin' to define width in character of the minimum margin
+    between two columns (example: ``-o 'pretty:margin=8'``), default is 4.
+    * use option 'pad' to define width in character of the  padding after
+    each column (example: ``-o 'pretty:pad=2'``), default is 1.
   * ``-o csv``: render result as comma-separated values.
     * use option 'headers' to print headers before result values (example: ``-o
     'csv:headers'``).
+    * use option 'split' to replace default separator character ',' (comma)
+    by any character you want (example: ``-o 'csv:split=_'`` to split fields
+    using an underscore character).
+    * use option 'quote' to replace default escaping character '"' (double
+    quote) by any character you want (example: ``-o 'csv:quote=`'`` to use
+    backquote character as an escaping character).
   * ``-o name``: render result as name-value pairs.
-  * ``-o pretty`` (default value): render result as a pretty-printed table.
 
 ### Examples:
 
-  * ``./tesca -i 'csv' -e '#0: name, sum(#1): score, avg(#1): average_score'
+  * ``./tesca -i 'csv' -e '$0: name, sum($1): score, avg($1): average_score'
   file.csv``
   * ``./tesca -i 'csv:headers=x,y' -e 'x, y, if(x > y * 2, x, y)' points.csv``
   * ``cat bench.json | ./tesca -i 'json' -e 'row.id: identifier, avg(row.time):
@@ -204,5 +223,5 @@ more information. Any contribution would be of course highly welcomed!
 Author
 ------
 
-Rémi Caput (github [at] mirari [dot] fr)
+RÃ©mi Caput (github [at] mirari [dot] fr)
 http://remi.caput.fr/

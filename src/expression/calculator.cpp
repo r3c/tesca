@@ -63,15 +63,14 @@ namespace	Tesca
 					return false;
 
 				// Read column key if any
-				if (lexer.getType () == Lexer::COLON)
+				if (lexer.getType () == Lexer::NAME)
 				{
-					lexer.next ();
+					key = lexer.getCurrent ();
 
-					if (!this->parser.parseKey (lexer, &key))
-						return false;
+					lexer.next ();
 				}
 				else
-					key = string ("#") + string (buffer, Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), this->columns.size ()));
+					key = string (buffer, Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), this->columns.size ()));
 
 				// Build column and add to list
 				this->columns.push_back (Column (key, extractor));

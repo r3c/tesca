@@ -64,17 +64,19 @@ namespace	Tesca
 				{
 					const string&	key = columns[i].getKey ();
 
-					*length = max (*length, ((key.length () + margin) / this->align) * this->align);
+					*length = max (*length, ((key.length () + 2 + margin) / this->align) * this->align);
 
+					writer.write ('[');
 					writer.write (key);
+					writer.write (']');
 
-					for (Int32u j = *length - key.length (); j-- > 0; )
-						writer.write (" ");
+					for (Int32u j = *length - key.length () - 2; j-- > 0; )
+						writer.write (' ');
 
 					++length;
 				}
 
-				writer.write ("\n");
+				writer.write ('\n');
 			}
 
 			for (auto row = table.begin (); row != table.end (); ++row)
@@ -90,13 +92,13 @@ namespace	Tesca
 						output.clear ();
 
 					for (Int32u j = *length - output.length (); j-- > 0; )
-						writer.write (" ");
+						writer.write (' ');
 
 					++length;
 					++value;
 				}
 
-				writer.write ("\n");
+				writer.write ('\n');
 			}
 		}
 	}

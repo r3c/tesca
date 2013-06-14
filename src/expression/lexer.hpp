@@ -16,8 +16,8 @@ namespace	Tesca
 				enum	Lexem
 				{
 					AMPERSAND,
-					COLON,
 					COMMA,
+					CONSTANT,
 					DIFFERENT,
 					DIVIDE,
 					END,
@@ -30,6 +30,7 @@ namespace	Tesca
 					MODULO,
 					MULTIPLY,
 					MINUS,
+					NAME,
 					NOT,
 					NUMBER,
 					PARENTHESIS_BEGIN,

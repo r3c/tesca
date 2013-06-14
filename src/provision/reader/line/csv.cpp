@@ -82,7 +82,7 @@ namespace	Tesca
 				{
 					const string&	key = *i;
 
-					if (key.length () > 1 && key[0] == '#' && Convert::toInteger (&index, key.c_str () + 1, key.length () - 1))
+					if (Convert::toInteger (&index, key.c_str (), key.length ()))
 					{
 						if (index >= this->mapping.size ())
 							this->mapping.resize (index + 1);

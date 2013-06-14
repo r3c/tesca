@@ -309,7 +309,7 @@ namespace	Tesca
 
 		bool	Parser::parseKey (Lexer& lexer, string* output)
 		{
-			if (lexer.getType () != Lexer::IDENTIFIER)
+			if (lexer.getType () != Lexer::CONSTANT)
 				return this->fail (lexer, "invalid column key");
 
 			*output = lexer.getCurrent ();
@@ -340,7 +340,7 @@ namespace	Tesca
 
 			switch (lexer.getType ())
 			{
-				case Lexer::IDENTIFIER:
+				case Lexer::CONSTANT:
 					name = lexer.getCurrent ();
 
 					lexer.next ();
@@ -396,11 +396,18 @@ namespace	Tesca
 							}
 						}
 
-						if (constant)
-							*output = new ConstantExtractor (constant->value);
-						else
-							*output = new FieldExtractor (lookup.store (name));
+						if (!constant)
+							return this->fail (lexer, string ("unknown constant name '") + lexer.getCurrent () + "'");
+
+						*output = new ConstantExtractor (constant->value);
 					}
+
+					break;
+
+				case Lexer::IDENTIFIER:
+					*output = new FieldExtractor (lookup.store (lexer.getCurrent ()));
+
+					lexer.next ();
 
 					break;
 
