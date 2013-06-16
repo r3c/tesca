@@ -78,13 +78,26 @@ namespace	Tesca
 			// Scan identifier
 			if (this->character == '$')
 			{
-				while ((this->read ()) &&
-				       ((this->character >= '0' && this->character <= '9') ||
-				        (this->character >= 'A' && this->character <= 'Z') ||
-				        (this->character >= 'a' && this->character <= 'z') ||
-				        (this->character == '.') ||
-				        (this->character == '_')))
+				if (!this->read ())
+					return false;
+
+				do
+				{
+					if (this->character == '\\')
+					{
+						if (!this->read ())
+							return false;
+					}
+					else if ((this->character < '0' || this->character > '9') &&
+				             (this->character < 'A' || this->character > 'Z') &&
+				             (this->character < 'a' || this->character > 'z') &&
+				             (this->character != '.') &&
+				             (this->character != '_'))
+						break;
+
 					buffer.put (this->character);
+				}
+				while (this->read ());
 
 				this->current = buffer.str ();
 				this->type = IDENTIFIER;
@@ -102,15 +115,23 @@ namespace	Tesca
 				}
 				while (this->character <= ' ');
 
-				buffer.put (this->character);
+				do
+				{
+					if (this->character == '\\')
+					{
+						if (!this->read ())
+							return false;
+					}
+					else if ((this->character < '0' || this->character > '9') &&
+				             (this->character < 'A' || this->character > 'Z') &&
+				             (this->character < 'a' || this->character > 'z') &&
+				             (this->character != '.') &&
+				             (this->character != '_'))
+						break;
 
-				while ((this->read ()) &&
-				       ((this->character >= '0' && this->character <= '9') ||
-				        (this->character >= 'A' && this->character <= 'Z') ||
-				        (this->character >= 'a' && this->character <= 'z') ||
-				        (this->character == '.') ||
-				        (this->character == '_')))
 					buffer.put (this->character);
+				}
+				while (this->read ());
 
 				this->current = buffer.str ();
 				this->type = NAME;
@@ -272,7 +293,7 @@ namespace	Tesca
 
 		bool	Lexer::read ()
 		{
-			if (reader.read (&this->character))
+			if (reader.readType (&this->character))
 			{
 				++this->index;
 

@@ -20,7 +20,7 @@ You can get the total score and average time by player using this command:
 
 	./tesca -e '$0, sum($1), avg($2)' results.csv
 
-So output looks like this:
+Output looks like this:
 
 	[0]     [1]     [2]
 	Dendrob 30000   26.3
@@ -30,8 +30,14 @@ So output looks like this:
 Input text files should contain structured data, one row per line, and use a
 supported format (currently only CSV and JSON, and as soon as MinGW/GCC has a
 decent support for new C++11 &lt;regex&gt; header anything that can be matched
-through regular expressions). Once your input is defined you have to describe
-what kind of data contains each row and what do you want to compute from it.
+through regular expressions). Then you have to define four things:
+
+  * What is the data format in input file (default is CSV) ;
+  * What rows should be filtered from input data (no filtering by default) ;
+  * What should be computed from these data ;
+  * How result should be printed (default is a human-readable format).
+
+See the "Usage" section below for more information about these steps.
 
 Installation
 ------------
@@ -47,8 +53,9 @@ Usage
 -----
 
 Run Tesca on a text stream by either specifying files as command line arguments
-or using stdin. Use following options to control how stream is read and what is
-computed from its rows:
+(e.g. ``./tesca input.csv``) or using stdin (e.g. ``some_program | ./tesca``).
+Use following options to control how stream is read and what is computed from
+its rows:
 
 ### Input stream format (-i &lt;format&gt;):
 
@@ -88,30 +95,39 @@ format are:
 
 ### Calculator expression (-e &lt;expression&gt;):
 
-List of values that must be calculated from input stream, as a list of
-column definitions separated by commas (example: ``slice($0, 0, 10), avg($1) +
-1, sum($2)``). As you can notice, column definitions can mix constructions that
-compute a result for each row (mathematical operators, row functions) and
-instructions that aggregate a result from several combined rows (aggregation
-functions).
+Calculator expression is a comma-separated list of column definitions which
+defines what should be calculated and/or aggregated from input data. Each
+column definition is a single row-level mathematical expression that either
+produces a result for each row, or compute an aggregated value over multiple
+rows. Here is a simple example of calulator expression:
 
-Is previous example, ``avg(n)`` and ``sum(n)`` are aggregation functions. This
-means they'll group all rows sharing the same value for other (non-aggregating)
-columns, which in this case is the first column only, and compute an aggregated
-result from them.
+    $name, slice($hash, 0, 10), avg($value), sum($value) + 1
 
-Note that you can aggregate a value computed from either mathematical operators
-and/or row functions, but once you have an aggregated result you can't mix it
-with row-level constructions as it would have no sense. This means
-``avg(max($0, 5) + 2)`` is valid but ``sum($0) + $1`` is not.
+In this example four columns are defined, and the last two use the ``avg``
+(average) and ``sum`` (sum of values) aggregation functions. This will make
+Tesca compute the average and sum incremented by one for all rows that share
+the same value for all other columns ; in other words it will compute an
+average and a sum for each distinct couple of ``name`` and first 10 characters
+of ``hash`` values (using the ``slice`` function) from input.
+
+Note that you can aggregate a value computed from a row-level sub-expression,
+but you cannot mix result of an aggregation function with other row-level
+constructions as it would have no sense. This means ``avg(max($0, 5) + 2)`` is
+a valid column definition but valid but ``sum($0) + $1`` is not.
+
+As you can notice in previous examples, value of the fields from each input
+row can be used in expression with an ``$`` character followed by desired
+field's name (alphanumeric characters, '.' and '_' are allowed, use a
+backslash to escape any other character, e.g. ``$my\-field``). Field names
+depend on the input format (and parameters) you used, see the "Input stream
+format" section for details.
 
 Column definitions can contains:
 
-  * Aggregation functions (example: ``avg($field)``, ``sum(53)``).
-  * Mathematical operators (example: ``$field * 2``, ``17 + 1``).
-  * Row functions (example: ``max($field, 5)``, ``len("Hello, World!")``).
-  * Field references (example: ``$0``, ``$row.key`` ; see 'input stream format'
-  section to know what to use as field names depending on input format).
+  * Aggregation functions (example: ``avg($score)``, ``sum(53)``).
+  * Mathematical operators (example: ``$power * 2``, ``17 + 1``).
+  * Row-level functions (example: ``max($cost, 5)``, ``len("Hello, World!")``).
+  * Field references (example: ``$0``, ``$row.key``).
   * Boolean constants (example: ``true``, ``false``).
   * Numeric constants (example: ``1``, ``42.17``).
   * String constants (example: ``"Hello, World!"``).
@@ -170,8 +186,9 @@ Available row functions are:
   * ``ucase(str)``: returns uppercase conversion of string ``str``.
 
 Column definitions can also declare a name (otherwise their automatic names are
-``$0``, ``$1`` and so on) by appending ``: name`` after it (example: ``sum($$):
-scores_sum``). Valid characters in names are letters, digits, '_' and '.'.
+``$0``, ``$1`` and so on) by appending ``: name`` after it (example: ``sum($0):
+scores_sum``). Valid characters are the same as in field names, with the same
+escaping rule.
 
 Note that their are two ``max`` and two ``min`` functions: an aggregation
 function and a row function for each. They differ by the number of arguments
@@ -210,15 +227,16 @@ stream format are:
 
   * ``./tesca -i 'csv' -e '$0: name, sum($1): score, avg($1): average_score'
   file.csv``
-  * ``./tesca -i 'csv:headers=x,y' -e 'x, y, if(x > y * 2, x, y)' points.csv``
-  * ``cat bench.json | ./tesca -i 'json' -e 'row.id: identifier, avg(row.time):
-  time'``
+  * ``./tesca -i 'csv:headers=x,y' -e '$x, $y, if($x > $y * 2, $x, $y)'
+  points.csv``
+  * ``cat bench.json | ./tesca -i 'json' -e '$row.id: identifier,
+  avg($row.time): time'``
 
 Licence
 -------
 
-This project is open-source, released under BSD licence. See "LICENSE" file for
-more information. Any contribution would be of course highly welcomed!
+This project is open-source, released under MIT licence. See "LICENSE.md" file
+for more information. Any contribution would be of course highly welcomed!
 
 Author
 ------

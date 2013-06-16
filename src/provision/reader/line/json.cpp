@@ -79,10 +79,11 @@ namespace	Tesca
 
 		bool	JSONLineReader::readValue (Cursor* cursor)
 		{
-			char		buffer[16];
-			bool		comma;
+			char*		buffer;
+			bool		escape;
 			Int32u		field;
 			Int32u		index;
+			char		key[16];
 			Int32u		length;
 			Float64		number;
 			const char*	start;
@@ -98,27 +99,66 @@ namespace	Tesca
 
 			switch (*cursor->buffer)
 			{
+				// Parse JSON string literal
 				case '"':
 					if (--cursor->length < 1)
 						return false;
 
+					escape = false;
+
 					for (start = ++cursor->buffer; cursor->length > 0 && *cursor->buffer != '"'; )
 					{
+						if (*cursor->buffer == '\\' && cursor->length > 1)
+						{
+							++cursor->buffer;
+							--cursor->length;
+
+							escape = true;
+						}
+
 						++cursor->buffer;
-						--cursor->length;					
+						--cursor->length;
 					}
 
 					if (cursor->length < 1)
 						return false;
 
 					if (this->lookup.fetch (&field))
-						this->row.set (field, Variant (start, cursor->buffer - start));
+					{
+						// String contains at least one escaped character which
+						// must be resolved before it's stored in current row
+						if (escape)
+						{
+							buffer = static_cast<char*> (malloc ((cursor->buffer - start - 1) * sizeof (*buffer)));
+							length = 0;
+
+							if (!buffer)
+								return false;
+
+							while (start < cursor->buffer)
+							{
+								if (*start == '\\' && start + 1 < cursor->buffer)
+									++start;
+
+								buffer[length++] = *start++;
+							}
+
+							this->row.set (field, Variant (buffer, length).keep ());
+
+							free (buffer);
+						}
+
+						// String has no escapes and can be stored as is
+						else
+							this->row.set (field, Variant (start, cursor->buffer - start));
+					}
 
 					++cursor->buffer;
 					--cursor->length;
 
 					return true;
 
+				// Parse JSON number literal
 				case '-':
 				case '0':
 				case '1':
@@ -148,18 +188,19 @@ namespace	Tesca
 
 					return true;
 
+				// Parse JSON array
 				case '[':
 					++cursor->buffer;
 					--cursor->length;
 
 					index = 0;
 
-					for (comma = false; !this->readCharacter (cursor, ']'); comma = true)
+					for (bool comma = false; !this->readCharacter (cursor, ']'); comma = true)
 					{
 						if (comma && !this->readCharacter (cursor, ','))
 							return false;
 
-						length = Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), index++);
+						length = Convert::toString (key, sizeof (key) / sizeof (*key), index++);
 
 						if (length < 1)
 							return false;
@@ -168,7 +209,7 @@ namespace	Tesca
 						this->lookup.next (this->member);
 
 						for (Int32u i = 0; i < length; ++i)
-							this->lookup.next (buffer[i]);
+							this->lookup.next (key[i]);
 
 						if (!this->readValue (cursor))
 						{
@@ -182,11 +223,12 @@ namespace	Tesca
 
 					return true;
 
+				// Parse JSON object
 				case '{':
 					++cursor->buffer;
 					--cursor->length;
 
-					for (comma = false; !this->readCharacter (cursor, '}'); comma = true)
+					for (bool comma = false; !this->readCharacter (cursor, '}'); comma = true)
 					{
 						if (comma && !this->readCharacter (cursor, ','))
 							return false;
@@ -199,6 +241,12 @@ namespace	Tesca
 
 						for (start = cursor->buffer; cursor->length > 0 && *cursor->buffer != '"'; )
 						{
+							if (*cursor->buffer == '\\' && cursor->length > 1)
+							{
+								++cursor->buffer;
+								--cursor->length;
+							}
+
 							this->lookup.next (*cursor->buffer);
 
 							++cursor->buffer;
@@ -219,6 +267,7 @@ namespace	Tesca
 
 					return true;
 
+				// Parse "false", "null" or "true" literal constant
 				case 'f':
 				case 'n':
 				case 't':

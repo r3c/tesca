@@ -5,6 +5,7 @@ TODO
 ----
 
 - Handle escaped quotes in CSV format
+- Handle non-printable and unicode escapes in JSON format
 
 DONE
 ----
@@ -27,3 +28,6 @@ DONE
 - Implement JSON reader
 - Change expressions syntax to something like "$row.0: name, avg(max($row.1, 0)): time"
 - Detect inconsistent expressions such as "avg(#0) + #1"
+- Alternative field reference syntax to allow any character
+- Handle basic escapes in JSON format
+- Handle scientific number format in JSON format
