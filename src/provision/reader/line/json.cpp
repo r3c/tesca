@@ -174,6 +174,8 @@ namespace	Tesca
 					for (start = cursor->buffer; cursor->length > 0 &&
 						((*cursor->buffer == '-') ||
 						 (*cursor->buffer >= '0' && *cursor->buffer <= '9') ||
+						 (*cursor->buffer == 'E') ||
+						 (*cursor->buffer == 'e') ||
 						 (*cursor->buffer == '.')); )
 					{
 						++cursor->buffer;
