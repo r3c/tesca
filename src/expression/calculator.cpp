@@ -65,9 +65,10 @@ namespace	Tesca
 				// Read column key if any
 				if (lexer.getType () == Lexer::NAME)
 				{
-					key = lexer.getCurrent ();
-
 					lexer.next ();
+
+					if (!this->parser.parseIdentifier (lexer, &key))
+						return false;
 				}
 				else
 					key = string (buffer, Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), this->columns.size ()));

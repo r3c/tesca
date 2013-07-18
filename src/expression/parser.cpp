@@ -307,10 +307,10 @@ namespace	Tesca
 			}
 		}
 
-		bool	Parser::parseKey (Lexer& lexer, string* output)
+		bool	Parser::parseIdentifier (Lexer& lexer, string* output)
 		{
-			if (lexer.getType () != Lexer::CONSTANT)
-				return this->fail (lexer, "invalid column key");
+			if (lexer.getType () != Lexer::IDENTIFIER)
+				return this->fail (lexer, "expected column identifier");
 
 			*output = lexer.getCurrent ();
 

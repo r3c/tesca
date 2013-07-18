@@ -80,6 +80,18 @@ namespace	Tesca
 			{
 				return new ConstantCompositeExtractor<CountAggregator> ((*slot)++, Variant::empty);
 			}},
+			{"default",	1,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				{
+					bool	test;
+
+					if (values[0].toBoolean (&test) && test)
+						return values[0];
+
+					return count > 1 ? values[1] : Variant::empty;
+				});
+			}},
 			{"find",	2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
 				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)

@@ -186,9 +186,9 @@ Available row functions are:
   * ``ucase(str)``: returns uppercase conversion of string ``str``.
 
 Column definitions can also declare a name (otherwise their automatic names are
-``$0``, ``$1`` and so on) by appending ``: name`` after it (example: ``sum($0):
-scores_sum``). Valid characters are the same as in field names, with the same
-escaping rule.
+``$0``, ``$1`` and so on) by using the naming operator ``:`` after your
+definition, followed by a variable used as column name (example: ``sum($0):
+$scores_sum``).
 
 Note that their are two ``max`` and two ``min`` functions: an aggregation
 function and a row function for each. They differ by the number of arguments
@@ -225,12 +225,12 @@ stream format are:
 
 ### Examples:
 
-  * ``./tesca -i 'csv' -e '$0: name, sum($1): score, avg($1): average_score'
+  * ``./tesca -i 'csv' -e '$0: $name, sum($1): $score, avg($1): $average_score'
   file.csv``
   * ``./tesca -i 'csv:headers=x,y' -e '$x, $y, if($x > $y * 2, $x, $y)'
   points.csv``
-  * ``cat bench.json | ./tesca -i 'json' -e '$row.id: identifier,
-  avg($row.time): time'``
+  * ``cat bench.json | ./tesca -i 'json' -e '$row.id: $identifier,
+  avg($row.time): $time'``
 
 Licence
 -------
