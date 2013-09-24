@@ -161,6 +161,10 @@ Available row functions are:
   * ``at(index, a, b[, c...])``: returns the n-th argument with n = ``index +
   2`` (this function returns ``a`` if ``index = 0``, ``b`` if ``index = 1``,
   etc.).
+  * ``case(x, v1, r1[, v2, r2, ...][, f])``: returns ``r1`` if ``x = v1``,
+  ``r2`` if ``x = v2`` and same for every pair specified in arguments, or
+  ``f`` if ``x`` was not equal to any ``vN``, or ``void`` if no ``f`` value was
+  specified.
   * ``ceil(x)``: returns ``x`` rounded up to a whole number.
   * ``cmp(a, b)``: returns ``-1`` if ``a < b``, ``0`` if ``a = b``, 1 else.
   * ``find(str, search[, start])``: searches for string ``search`` in ``str``

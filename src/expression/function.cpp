@@ -62,6 +62,25 @@ namespace	Tesca
 			{
 				return new ReduceCompositeExtractor<AverageAggregator> ((*slot)++, arguments[0]);
 			}},
+			{"case",	2,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new LazyVectorExtractor (arguments, [] (LazyVectorExtractor::Resolver resolver, Int32u count)
+				{
+					Int32u			index;
+					const Variant&	search = resolver (0);
+
+					for (index = 1; index + 1 < count; index += 2)
+					{
+						if (search.compare (resolver (index)) == 0)
+							return resolver (index + 1);
+					}
+
+					if (index < count)
+						return resolver (index);
+
+					return Variant::empty;
+				});
+			}},
 			{"ceil",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
 				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
