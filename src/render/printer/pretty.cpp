@@ -19,10 +19,10 @@ namespace	Tesca
 			string	align (config.get ("align", ""));
 			string	pad (config.get ("pad", ""));
 
-			if (!Convert::toInteger (&this->align, align.c_str (), align.length ()) || this->align < 1)
+			if (!Convert::toInteger (&this->align, align.data (), align.length ()) || this->align < 1)
 				this->align = 4;
 
-			if (!Convert::toInteger (&this->pad, pad.c_str (), pad.length ()))
+			if (!Convert::toInteger (&this->pad, pad.data (), pad.length ()))
 				this->pad = 1;
 		}
 

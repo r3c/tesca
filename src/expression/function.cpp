@@ -204,6 +204,16 @@ namespace	Tesca
 					return Variant (argument.length ());
 				});
 			}},
+			{"log",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				{
+					if (value <= 0)
+						return Variant::empty;
+
+					return Variant (log (value));
+				});
+			}},
 			{"max",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
 				if (arguments.size () == 1)

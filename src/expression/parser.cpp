@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include "parser.hpp"
 
 #include <sstream>
@@ -340,7 +340,7 @@ namespace	Tesca
 
 			switch (lexer.getType ())
 			{
-				case Lexer::CONSTANT:
+				case Lexer::IDENTIFIER:
 					name = lexer.getCurrent ();
 
 					lexer.next ();
@@ -396,23 +396,16 @@ namespace	Tesca
 							}
 						}
 
-						if (!constant)
-							return this->fail (lexer, string ("unknown constant name '") + lexer.getCurrent () + "'");
-
-						*output = new ConstantExtractor (constant->value);
+						if (constant)
+							*output = new ConstantExtractor (constant->value);
+						else
+							*output = new FieldExtractor (lookup.store (name));
 					}
 
 					break;
 
-				case Lexer::IDENTIFIER:
-					*output = new FieldExtractor (lookup.store (lexer.getCurrent ()));
-
-					lexer.next ();
-
-					break;
-
 				case Lexer::NUMBER:
-					if (!Convert::toFloat (&number, lexer.getCurrent ().c_str (), lexer.getCurrent ().length ()))
+					if (!Convert::toFloat (&number, lexer.getCurrent ().data (), lexer.getCurrent ().length ()))
 						return this->fail (lexer, "invalid number");
 
 					*output = new ConstantExtractor (Variant (number));

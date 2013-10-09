@@ -20,7 +20,9 @@ namespace	Tesca
 
 			for (auto i = lookup.begin (); i != lookup.end (); ++i)
 			{
-				if (Convert::toInt32u (&index, i->first.c_str (), i->first.length ()))
+				const string&	key = *i;
+
+				if (key.length () > 0 && key[0] == '_' && Convert::toInt32u (&index, key.data () + 1, key.length () - 1))
 					this->lookup[group] = i->second;
 
 				buffer.clear ();

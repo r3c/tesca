@@ -69,7 +69,7 @@ namespace	Tesca
 			share (0),
 			type (Variant::STRING)
 		{
-			this->content.string.buffer = string.c_str ();
+			this->content.string.buffer = string.data ();
 			this->content.string.length = string.length ();
 		}
 
@@ -170,8 +170,8 @@ namespace	Tesca
 						if (!this->toString (&string1) || !other.toString (&string2))
 							break;
 
-						buffer1 = string1.c_str ();
-						buffer2 = string2.c_str ();
+						buffer1 = string1.data ();
+						buffer2 = string2.data ();
 						length1 = string1.length ();
 						length2 = string2.length ();
 					}

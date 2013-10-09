@@ -178,7 +178,7 @@ int	main (int argc, char* argv[])
 			.write (")\n");
 	});
 
-	calculatorExpression = "count():$nb_lines";
+	calculatorExpression = "count():nb_lines";
 	filterCondition = "true";
 	inputFormat = "csv";
 	outputFormat = "pretty";

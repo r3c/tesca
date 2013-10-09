@@ -55,32 +55,12 @@ namespace	Tesca
 				}
 			}
 
-			// Scan constant
+			// Scan identifier
 			if ((this->character >= 'A' && this->character <= 'Z') ||
 			    (this->character >= 'a' && this->character <= 'z') ||
-			    (this->character == '_'))
+			    (this->character == '_') ||
+				(this->character == '\\'))
 			{
-				buffer.put (this->character);
-
-				while ((this->read ()) &&
-				       ((this->character >= '0' && this->character <= '9') ||
-				        (this->character >= 'A' && this->character <= 'Z') ||
-				        (this->character >= 'a' && this->character <= 'z') ||
-				        (this->character == '_')))
-					buffer.put (this->character);
-
-				this->current = buffer.str ();
-				this->type = CONSTANT;
-
-				return true;
-			}
-
-			// Scan identifier
-			if (this->character == '$')
-			{
-				if (!this->read ())
-					return false;
-
 				do
 				{
 					if (this->character == '\\')
@@ -106,7 +86,8 @@ namespace	Tesca
 			}
 
 			// Scan number
-			if (this->character >= '0' && this->character <= '9')
+			if ((this->character >= '0' && this->character <= '9') ||
+			    (this->character == '.'))
 			{
 				buffer.put (this->character);
 

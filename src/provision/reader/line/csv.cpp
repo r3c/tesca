@@ -52,7 +52,7 @@ namespace	Tesca
 			{
 				if (headers.length () > 0)
 				{
-					buffer = headers.c_str ();
+					buffer = headers.data ();
 					length = headers.length ();
 				}
 				else if (!this->shift (&buffer, &length))
@@ -82,7 +82,7 @@ namespace	Tesca
 				{
 					const string&	key = *i;
 
-					if (Convert::toInteger (&index, key.c_str (), key.length ()))
+					if (key.length () > 0 && key[0] == '_' && Convert::toInteger (&index, key.data () + 1, key.length () - 1))
 					{
 						if (index >= this->mapping.size ())
 							this->mapping.resize (index + 1);

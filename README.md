@@ -18,7 +18,7 @@ completion times for several players:
 
 You can get the total score and average time by player using this command:
 
-	./tesca -e '$0, sum($1), avg($2)' results.csv
+	./tesca -e '_0, sum(_1), avg(_2)' results.csv
 
 Output looks like this:
 
@@ -66,14 +66,14 @@ specifying options after the format name like this:
 format are:
 
   * ``-i csv`` (default value): read lines as comma-separated values, default
-  field names are ``$0``, ``$1``, ``$2`` and so on in expression unless
+  field names are ``_0``, ``_1``, ``_2`` and so on in expression unless
   you use the 'headers' option.
     * use option 'headers' without argument to use first line as header
 	definition: field names will be defined from its value instead of default
 	names (example: ``-i 'csv:headers'``).
     * use option 'headers' with comma-separated arguments to define fixed field
     names (example: ``-i 'csv:headers=first,second,third'`` to name the three
-    first columns of your file ``$first``, ``$second`` and ``$third``).
+    first columns of your file ``first``, ``second`` and ``third``).
     * use option 'splits' to replace default separator character ',' (comma)
     by any characters list you want (example: ``-i 'csv:splits=|_'`` to split
     on pipe and underscore characters).
@@ -81,10 +81,10 @@ format are:
     quote) by any characters list you want (example: ``-i 'csv:quotes=`'`` to
     use backquote as an escape character).
   * ``-i json``: read lines as JSON objects, fields can be referred to as
-  ``$row.key`` where ``key`` is a key in JSON object (example: to read values
+  ``row.key`` where ``key`` is a key in JSON object (example: to read values
   from JSON object ``{"first": 1, "second": [2], "third": {"x": true, "y":
-  false}}`` you can use ``$row.first``, ``$row.second.0``, ``$row.third.x`` and
-  ``$row.third.y`` in your expressions).
+  false}}`` you can use ``row.first``, ``row.second.0``, ``row.third.x`` and
+  ``row.third.y`` in your expressions).
     * use option 'member' to replace default character '.' (dot) used to
     select a member from an object or array by any valid column name character
     (see "Calculator expression" section for details, example: ``-i
@@ -101,7 +101,7 @@ column definition is a single row-level mathematical expression that either
 produces a result for each row, or compute an aggregated value over multiple
 rows. Here is a simple example of calulator expression:
 
-    $name, slice($hash, 0, 10), avg($value), sum($value) + 1
+    name, slice(hash, 0, 10), avg(value), sum(value) + 1
 
 In this example four columns are defined, and the last two use the ``avg``
 (average) and ``sum`` (sum of values) aggregation functions. This will make
@@ -112,22 +112,22 @@ of ``hash`` values (using the ``slice`` function) from input.
 
 Note that you can aggregate a value computed from a row-level sub-expression,
 but you cannot mix result of an aggregation function with other row-level
-constructions as it would have no sense. This means ``avg(max($0, 5) + 2)`` is
-a valid column definition but valid but ``sum($0) + $1`` is not.
+constructions as it would have no sense. This means ``avg(max(_0, 5) + 2)`` is
+a valid column definition but valid but ``sum(_0) + _1`` is not.
 
-As you can notice in previous examples, value of the fields from each input
-row can be used in expression with an ``$`` character followed by desired
-field's name (alphanumeric characters, '.' and '_' are allowed, use a
-backslash to escape any other character, e.g. ``$my\-field``). Field names
-depend on the input format (and parameters) you used, see the "Input stream
-format" section for details.
+As you can notice in previous examples, expression can contain field names to
+access their values each input row. Only alphanumeric characters, '.' and '_'
+can be used as is in field names, other characters must be escaped with a
+backslash character, e.g. ``my\-field``). Field names depend on the input
+format (and parameters) you used, see the "Input stream format" section for
+details.
 
 Column definitions can contains:
 
-  * Aggregation functions (example: ``avg($score)``, ``sum(53)``).
-  * Mathematical operators (example: ``$power * 2``, ``17 + 1``).
-  * Row-level functions (example: ``max($cost, 5)``, ``len("Hello, World!")``).
-  * Field references (example: ``$0``, ``$row.key``).
+  * Aggregation functions (example: ``avg(score)``, ``sum(53)``).
+  * Mathematical operators (example: ``power * 2``, ``17 + 1``).
+  * Row-level functions (example: ``max(cost, 5)``, ``len("Hello, World!")``).
+  * Field references (example: ``_0``, ``row.key``).
   * Boolean constants (example: ``true``, ``false``).
   * Numeric constants (example: ``1``, ``42.17``).
   * String constants (example: ``"Hello, World!"``).
@@ -167,6 +167,8 @@ Available row functions are:
   specified.
   * ``ceil(x)``: returns ``x`` rounded up to a whole number.
   * ``cmp(a, b)``: returns ``-1`` if ``a < b``, ``0`` if ``a = b``, 1 else.
+  * ``default(a[, b])``: return ``a`` if ``a`` is true of equivalent (non-empty
+  string or non-zero number), ``b`` else (or ``void`` if missing).
   * ``find(str, search[, start])``: searches for string ``search`` in ``str``
   from offset ``start`` (or 0 if missing) and returns position of the first
   character if found, or ``void`` else.
@@ -177,6 +179,7 @@ Available row functions are:
   ``a``, ``b``, ``c`` or any following value, or ``false`` else.
   * ``lcase(str)``: returns lowercase conversion of string ``str``.
   * ``len(str)``: returns number of characters in string ``str``.
+  * ``log(a)``: returns the natural logarithm of ``a``.
   * ``max(a, b, [, c...])``: returns highest value among ``a``, ``b``, ``c``
   and following.
   * ``min(a, b, [, c...])``: returns lowest value among ``a``, ``b``, ``c`` and
@@ -190,9 +193,9 @@ Available row functions are:
   * ``ucase(str)``: returns uppercase conversion of string ``str``.
 
 Column definitions can also declare a name (otherwise their automatic names are
-``$0``, ``$1`` and so on) by using the naming operator ``:`` after your
-definition, followed by a variable used as column name (example: ``sum($0):
-$scores_sum``).
+``_0``, ``_1`` and so on) by using the naming operator ``:`` after your
+definition, followed by a variable used as column name (example: ``sum(_0):
+scores_sum``).
 
 Note that their are two ``max`` and two ``min`` functions: an aggregation
 function and a row function for each. They differ by the number of arguments
@@ -204,7 +207,7 @@ have very different behaviors.
 
 Apply a filter on each row and use it only if filter is true (see description
 of ``if`` scalar function for details). Syntax for filters is the same than the
-one used for column definitions (example: ``-f '$0 >= 0 & $0 < 8'``).
+one used for column definitions (example: ``-f '_0 >= 0 & _0 < 8'``).
 
 ### Output stream format (-o &lt;format&gt;):
 
@@ -229,12 +232,12 @@ stream format are:
 
 ### Examples:
 
-  * ``./tesca -i 'csv' -e '$0: $name, sum($1): $score, avg($1): $average_score'
+  * ``./tesca -i 'csv' -e '_0: name, sum(_1): score, avg(_1): average_score'
   file.csv``
-  * ``./tesca -i 'csv:headers=x,y' -e '$x, $y, if($x > $y * 2, $x, $y)'
+  * ``./tesca -i 'csv:headers=x,y' -e 'x, y, if(x > y * 2, x, y)'
   points.csv``
-  * ``cat bench.json | ./tesca -i 'json' -e '$row.id: $identifier,
-  avg($row.time): $time'``
+  * ``cat bench.json | ./tesca -i 'json' -e 'row.id: identifier,
+  avg(row.time): time'``
 
 Licence
 -------

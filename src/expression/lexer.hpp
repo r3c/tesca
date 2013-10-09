@@ -17,7 +17,6 @@ namespace	Tesca
 				{
 					AMPERSAND,
 					COMMA,
-					CONSTANT,
 					DIFFERENT,
 					DIVIDE,
 					END,
