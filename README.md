@@ -18,7 +18,7 @@ completion times for several players:
 
 You can get the total score and average time by player using this command:
 
-	./tesca -e '_0, sum(_1), avg(_2)' results.csv
+	./tesca '_0, sum(_1), avg(_2)' results.csv
 
 Output looks like this:
 
@@ -53,53 +53,18 @@ Usage
 -----
 
 Run Tesca on a text stream by either specifying files as command line arguments
-(e.g. ``./tesca input.csv``) or using stdin (e.g. ``some_program | ./tesca``).
-Use following options to control how stream is read and what is computed from
-its rows:
+(``./tesca 'expr' input.csv``) or from stdin when no file is specified
+(``some_program | ./tesca expr``). Use following options to control how stream
+is read and what is computed from its rows:
 
-### Input stream format (-i &lt;format&gt;):
+### Calculator expression:
 
-Defines how values are extracted from each line of input file and which name
-should be used to access them in expressions. Formats can be cutomized by
-specifying options after the format name like this:
-``-i 'format:option1=value1;option2=value2'``. Valid values for input stream
-format are:
-
-  * ``-i csv`` (default value): read lines as comma-separated values, default
-  field names are ``_0``, ``_1``, ``_2`` and so on in expression unless
-  you use the 'headers' option.
-    * use option 'headers' without argument to use first line as header
-	definition: field names will be defined from its value instead of default
-	names (example: ``-i 'csv:headers'``).
-    * use option 'headers' with comma-separated arguments to define fixed field
-    names (example: ``-i 'csv:headers=first,second,third'`` to name the three
-    first columns of your file ``first``, ``second`` and ``third``).
-    * use option 'splits' to replace default separator character ',' (comma)
-    by any characters list you want (example: ``-i 'csv:splits=|_'`` to split
-    on pipe and underscore characters).
-    * use option 'quotes' to replace default escaping character '"' (double
-    quote) by any characters list you want (example: ``-i 'csv:quotes=`'`` to
-    use backquote as an escape character).
-  * ``-i json``: read lines as JSON objects, fields can be referred to as
-  ``row.key`` where ``key`` is a key in JSON object (example: to read values
-  from JSON object ``{"first": 1, "second": [2], "third": {"x": true, "y":
-  false}}`` you can use ``row.first``, ``row.second.0``, ``row.third.x`` and
-  ``row.third.y`` in your expressions).
-    * use option 'member' to replace default character '.' (dot) used to
-    select a member from an object or array by any valid column name character
-    (see "Calculator expression" section for details, example: ``-i
-    'json:member=_'`` to use underscore as a member selector).
-    * use option 'root' to replace default name of top-level JSON object 'row'
-    by any name you want (example: ``-i 'json:root=line'`` to use 'line' as
-    the name of the root JSON element).
-
-### Calculator expression (-e &lt;expression&gt;):
-
-Calculator expression is a comma-separated list of column definitions which
-defines what should be calculated and/or aggregated from input data. Each
-column definition is a single row-level mathematical expression that either
-produces a result for each row, or compute an aggregated value over multiple
-rows. Here is a simple example of calulator expression:
+The only mandatory parameter for Tesca is a comma-separated list of column
+definitions which define what should be calculated and/or aggregated from
+input data. Each column definition is a single row-level mathematical
+expression that either produces a result for each row, or compute an
+aggregated value over multiple rows. Here is a simple example of calulator
+expression:
 
     name, slice(hash, 0, 10), avg(value), sum(value) + 1
 
@@ -112,8 +77,10 @@ of ``hash`` values (using the ``slice`` function) from input.
 
 Note that you can aggregate a value computed from a row-level sub-expression,
 but you cannot mix result of an aggregation function with other row-level
-constructions as it would have no sense. This means ``avg(max(_0, 5) + 2)`` is
-a valid column definition but valid but ``sum(_0) + _1`` is not.
+constructions. This means ``avg(max(_0, 5) + 2)`` is a valid column definition
+but valid but ``sum(_0) + _1`` is not: Tesca streams data in one pass and
+cannot compute the sum of some value for all rows and the value of a specific
+row.
 
 As you can notice in previous examples, expression can contain field names to
 access their values each input row. Only alphanumeric characters, '.' and '_'
@@ -209,6 +176,42 @@ Apply a filter on each row and use it only if filter is true (see description
 of ``if`` scalar function for details). Syntax for filters is the same than the
 one used for column definitions (example: ``-f '_0 >= 0 & _0 < 8'``).
 
+### Input stream format (-i &lt;format&gt;):
+
+Defines how values are extracted from each line of input file and which name
+should be used to access them in expressions. Formats can be cutomized by
+specifying options after the format name like this:
+``-i 'format:option1=value1;option2=value2'``. Valid values for input stream
+format are:
+
+  * ``-i csv`` (default value): read lines as comma-separated values, default
+  field names are ``_0``, ``_1``, ``_2`` and so on in expression unless
+  you use the 'headers' option.
+    * use option 'headers' without argument to use first line as header
+	definition: field names will be defined from its value instead of default
+	names (example: ``-i 'csv:headers'``).
+    * use option 'headers' with comma-separated arguments to define fixed field
+    names (example: ``-i 'csv:headers=first,second,third'`` to name the three
+    first columns of your file ``first``, ``second`` and ``third``).
+    * use option 'splits' to replace default separator character ',' (comma)
+    by any characters list you want (example: ``-i 'csv:splits=|_'`` to split
+    on pipe and underscore characters).
+    * use option 'quotes' to replace default escaping character '"' (double
+    quote) by any characters list you want (example: ``-i 'csv:quotes=`'`` to
+    use backquote as an escape character).
+  * ``-i json``: read lines as JSON objects, fields can be referred to as
+  ``row.key`` where ``key`` is a key in JSON object (example: to read values
+  from JSON object ``{"first": 1, "second": [2], "third": {"x": true, "y":
+  false}}`` you can use ``row.first``, ``row.second.0``, ``row.third.x`` and
+  ``row.third.y`` in your expressions).
+    * use option 'member' to replace default character '.' (dot) used to
+    select a member from an object or array by any valid column name character
+    (see "Calculator expression" section for details, example: ``-i
+    'json:member=_'`` to use underscore as a member selector).
+    * use option 'root' to replace default name of top-level JSON object 'row'
+    by any name you want (example: ``-i 'json:root=line'`` to use 'line' as
+    the name of the root JSON element).
+
 ### Output stream format (-o &lt;format&gt;):
 
 Defines how result is printed to standard output. Valid values for output
@@ -232,12 +235,11 @@ stream format are:
 
 ### Examples:
 
-  * ``./tesca -i 'csv' -e '_0: name, sum(_1): score, avg(_1): average_score'
+  * ``./tesca -i 'csv' '_0: name, sum(_1): score, avg(_1): average_score'
   file.csv``
-  * ``./tesca -i 'csv:headers=x,y' -e 'x, y, if(x > y * 2, x, y)'
-  points.csv``
-  * ``cat bench.json | ./tesca -i 'json' -e 'row.id: identifier,
-  avg(row.time): time'``
+  * ``./tesca -i 'csv:headers=x,y' 'x, y, if(x > y * 2, x, y)' points.csv``
+  * ``cat bench.json | ./tesca -i 'json' 'row.id: identifier, avg(row.time):
+  time'``
 
 Licence
 -------

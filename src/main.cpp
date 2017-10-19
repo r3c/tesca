@@ -1,4 +1,5 @@
 
+#include <getopt.h>
 #include "arithmetic/table.hpp"
 #include "expression/calculator.hpp"
 #include "expression/filter.hpp"
@@ -10,6 +11,16 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Tesca;
+
+struct option longOptions[] =
+{
+	{"filter",		required_argument,	0,	'f' },
+	{"help",		no_argument,		0,	'h' },
+	{"input",		required_argument,	0,	'i' },
+	{"output",		required_argument,	0,	'o' },
+	{"progress",	no_argument,		0,	'p' },
+	{0,				0,					0,	0 }
+};
 
 void	initialize (Arithmetic::Table& table, const Expression::Filter& filter, Expression::Calculator& calculator)
 {
@@ -89,10 +100,9 @@ void	process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 					writer
 						.write ("warning: reader error(")
 						.write (error)
-						.write(")\n");
+						.write (")\n");
 				});
 
-				
 				reader->onRead ().bind ([&] (const Provision::Reader::Progress& progress)
 				{
 					if (status > 0 && progress.size > 0)
@@ -138,11 +148,11 @@ int	main (int argc, char* argv[])
 	Provision::Input		input;
 	const char*				inputFormat;
 	Provision::Lookup		lookup;
+	int						option;
 	Render::Output			output;
 	const char*				outputFormat;
 	Render::Printer*		printer;
 	bool					progress;
-	int						start;
 	Arithmetic::Table		table;
 	FormatWriter			writer (err);
 
@@ -184,88 +194,74 @@ int	main (int argc, char* argv[])
 	outputFormat = "pretty";
 	progress = false;
 
-	for (start = 1; start < argc && argv[start][0] == '-'; ++start)
+	while (true)
 	{
-		for (const char* argument = argv[start] + 1; *argument != '\0'; ++argument)
+		option = getopt_long (argc, argv, "f:hi:o:p", longOptions, NULL);
+
+		if (option == -1)
+			break;
+
+		switch (option)
 		{
-			switch (*argument)
-			{
-				case 'c':
-					if (++start >= argc)
-					{
-						writer.write ("error: missing filter condition\n");
+			case 'f':
+				filterCondition = optarg;
 
-						return 1;
-					}
+				break;
 
-					filterCondition = argv[start];
+			case 'h':
+				console
+					.write ("usage: tesca [-f <filter>] [-h] [-i <format>] [-o <format>] [-p] <expr> [<file> [<file>...]]\n")
+					.write ("  -f: filter condition, e.g. 'len(_0) >= 3'\n")
+					.write ("  -h: display help and exit")
+					.write ("  -i: input stream format, e.g. 'csv'\n")
+					.write ("  -o: output stream format, e.g. 'csv'\n")
+					.write ("  -p: display progress bar\n")
+					.write ("  <expr>: calculator expression, e.g. '_0: name, sum(_1): duration'\n")
+					.write ("  <file>: path to input file(s)\n");
 
-					break;
+				return 0;
 
-				case 'e':
-					if (++start >= argc)
-					{
-						writer.write ("error: missing calculator expression\n");
+			case 'i':
+				inputFormat = optarg;
 
-						return 1;
-					}
+				break;
 
-					calculatorExpression = argv[start];
+			case 'o':
+				outputFormat = optarg;
 
-					break;
+				break;
 
-				case 'h':
-					console
-						.write ("usage: ")
-						.write (argv[0])
-						.write (" [-i <format>] [-o <printer>] [-c <condition>] [-e <expression>] [<file> [<file>...]]\n")
-						.write ("  -c: filter condition, e.g. 'len(#0) >= 3'\n")
-						.write ("  -e: calculator expression, e.g. '#0: name, sum(#1): duration'\n")
-						.write ("  -i: input stream format, e.g. 'csv'\n")
-						.write ("  -o: output stream format, e.g. 'csv'\n")
-						.write ("  -p: display progress bar\n");
+			case 'p':
+				progress = true;
 
-					return 0;
+				break;
 
-				case 'i':
-					if (++start >= argc)
-					{
-						writer.write ("error: missing input stream format\n");
+			case ':':
+				writer
+					.write ("error: missing argument for option '")
+					.write (argv[optind])
+					.write ("'\n");
 
-						return 1;
-					}
+				return 1;
 
-					inputFormat = argv[start];
+			default:
+				writer
+					.write ("error: unknown option '")
+					.write (argv[optind])
+					.write ("'\n");
 
-					break;
-
-				case 'o':
-					if (++start >= argc)
-					{
-						writer.write ("error: missing output stream format\n");
-
-						return 1;
-					}
-
-					outputFormat = argv[start];
-
-					break;
-
-				case 'p':
-					progress = true;
-
-					break;
-
-				default:
-					writer
-						.write ("error: unknown option '")
-						.write (*argument)
-						.write ("'\n");
-
-					return 1;
-			}
+				return 1;
 		}
 	}
+
+	if (optind >= argc)
+	{
+		writer.write ("error: missing calculator expression\n");
+
+		return 1;
+	}
+
+	calculatorExpression = argv[optind++];
 
 	if (!calculator.parse (lookup, calculatorExpression) ||
 	    !filter.parse (lookup, filterCondition) ||
@@ -283,7 +279,7 @@ int	main (int argc, char* argv[])
 	}
 
 	initialize (table, filter, calculator);
-	process (table, input, lookup, progress, argv + start, argc - start);
+	process (table, input, lookup, progress, argv + optind, argc - optind);
 
 	printer->print (out, table);
 

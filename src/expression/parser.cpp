@@ -1,6 +1,7 @@
 #include <iostream>
 #include "parser.hpp"
 
+#include <cmath>
 #include <sstream>
 #include <stack>
 #include "../arithmetic/column.hpp"
