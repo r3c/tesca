@@ -10,14 +10,14 @@ using namespace Glay::System;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
 		PrettyPrinter::PrettyPrinter (const Config& config)
 		{
-			string	align (config.get ("align", ""));
-			string	pad (config.get ("pad", ""));
+			string align (config.get ("align", ""));
+			string pad (config.get ("pad", ""));
 
 			if (!Convert::toInteger (&this->align, align.data (), align.length ()) || this->align < 1)
 				this->align = 4;
@@ -26,16 +26,16 @@ namespace	Tesca
 				this->pad = 1;
 		}
 
-		void	PrettyPrinter::print (OStream& stream, const Table& table) const
+		void PrettyPrinter::print (OStream& stream, const Table& table) const
 		{
-			const Table::Columns&	columns (table.getColumns ());
-			Int32u*					length;
-			Int32u					lengths[table.getWidth ()];
-			string					output;
-			Int32u					margin;
-			Variant*				value;
-			Int32u					width (table.getWidth ());
-			FormatWriter			writer (stream);
+			const Table::Columns& columns (table.getColumns ());
+			Int32u* length;
+			Int32u lengths[table.getWidth ()];
+			string output;
+			Int32u margin;
+			Variant* value;
+			Int32u width (table.getWidth ());
+			FormatWriter writer (stream);
 
 			memset (lengths, 0, width * sizeof (*lengths));
 
@@ -62,7 +62,7 @@ namespace	Tesca
 
 				for (Int32u i = 0; i < width; ++i)
 				{
-					const string&	key = columns[i].getKey ();
+					const string& key = columns[i].getKey ();
 
 					*length = max (*length, ((key.length () + 2 + margin) / this->align) * this->align);
 

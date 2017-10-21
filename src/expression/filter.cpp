@@ -6,9 +6,9 @@ using namespace Glay;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
 		Filter::Filter () :
 			condition (0)
@@ -20,26 +20,26 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		const Extractor*	Filter::getCondition () const
+		const Extractor* Filter::getCondition () const
 		{
 			return this->condition;
 		}
 
-		const Filter::Error&	Filter::onError () const
+		const Filter::Error& Filter::onError () const
 		{
 			return this->parser.onError ();
 		}
 
-		Filter::Error&	Filter::onError ()
+		Filter::Error& Filter::onError ()
 		{
 			return this->parser.onError ();
 		}
 
-		bool	Filter::parse (Lookup& lookup, const char* input)
+		bool Filter::parse (Lookup& lookup, const char* input)
 		{
-			Int32u	slots;
+			Int32u slots;
 
-			Lexer	lexer (input);
+			Lexer lexer (input);
 
 			if (!this->parser.parseExpression (lexer, lookup, &slots, &this->condition))
 				return false;
@@ -47,7 +47,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	Filter::reset ()
+		void Filter::reset ()
 		{
 			this->condition = 0;
 			this->parser.reset ();

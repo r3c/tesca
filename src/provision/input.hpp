@@ -9,31 +9,31 @@
 #include "lookup.hpp"
 #include "reader.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	Input
+		class Input
 		{
 			public:
-				typedef Glay::Design::Event<const std::string&>	Error;
+				typedef Glay::Design::Event<const std::string&> Error;
 
 				Input (const Input&);
 				Input ();
-				virtual	~Input ();
+				virtual ~Input ();
 
-				Input&	operator = (const Input&);
+				Input& operator = (const Input&);
 
-				const Error&	onError () const;
-				Error&			onError ();
+				const Error& onError () const;
+				Error& onError ();
 
-				Reader*	create (Glay::Pipe::SeekIStream*, const Lookup&) const;
-				bool	parse (const char*);
+				Reader* create (Glay::Pipe::SeekIStream*, const Lookup&) const;
+				bool parse (const char*);
 
 			private:
-				Storage::Config	config;
-				Error			error;
-				const Format*	format;
+				Storage::Config config;
+				Error error;
+				const Format* format;
 		};
 	}
 }

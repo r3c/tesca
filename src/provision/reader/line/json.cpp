@@ -9,14 +9,14 @@ using namespace Tesca::Storage;
 
 namespace
 {
-	struct	Literal
+	struct Literal
 	{
-		const char*				name;
-		Glay::Int32u			length;
-		Tesca::Storage::Variant	value;
+		const char* name;
+		Glay::Int32u length;
+		Tesca::Storage::Variant value;
 	};
 
-	static Literal	literals[] =
+	static Literal literals[] =
 	{
 		{"false",	5,	Tesca::Storage::Variant (false)},
 		{"null",	4,	Tesca::Storage::Variant::empty},
@@ -25,17 +25,17 @@ namespace
 	};
 }
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		JSONLineReader::JSONLineReader (SeekIStream* input, const Lookup& lookup, const Config& config) :
 			LineReader (input, 1024 * 10),
 			lookup (lookup),
 			row (lookup.count ())
 		{
-			string	member (config.get ("member", ""));
-			string	root (config.get ("root", "row"));
+			string member (config.get ("member", ""));
+			string root (config.get ("root", "row"));
 
 			for (auto i = root.begin (); i != root.end (); ++i)
 				this->lookup.next (*i);
@@ -43,14 +43,14 @@ namespace	Tesca
 			this->member = member.length () > 0 ? member[0] : '.';
 		}
 
-		const Row&	JSONLineReader::current () const
+		const Row& JSONLineReader::current () const
 		{
 			return this->row;
 		}
 
-		bool	JSONLineReader::parse (const char* line, Int32u length)
+		bool JSONLineReader::parse (const char* line, Int32u length)
 		{
-			Cursor	cursor;
+			Cursor cursor;
 
 			this->row.clear ();			
 
@@ -60,7 +60,7 @@ namespace	Tesca
 			return this->readValue (&cursor);
 		}
 
-		bool	JSONLineReader::readCharacter (Cursor* cursor, char expected)
+		bool JSONLineReader::readCharacter (Cursor* cursor, char expected)
 		{
 			while (cursor->length > 0 && *cursor->buffer <= ' ')
 			{
@@ -77,16 +77,16 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	JSONLineReader::readValue (Cursor* cursor)
+		bool JSONLineReader::readValue (Cursor* cursor)
 		{
-			char*		buffer;
-			bool		escape;
-			Int32u		field;
-			Int32u		index;
-			char		key[16];
-			Int32u		length;
-			Float64		number;
-			const char*	start;
+			char* buffer;
+			bool escape;
+			Int32u field;
+			Int32u index;
+			char key[16];
+			Int32u length;
+			Float64 number;
+			const char* start;
 
 			while (cursor->length > 0 && *cursor->buffer <= ' ')
 			{

@@ -7,18 +7,18 @@
 #include "../storage/config.hpp"
 #include "printer.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
-		struct	Format
+		struct Format
 		{
-			typedef std::function<Printer* (const Storage::Config&)>	Builder;
+			typedef std::function<Printer* (const Storage::Config&)> Builder;
 
-			static const Format	formats[];
+			static const Format formats[];
 
-			const char*	name;
-			Builder		builder;
+			const char* name;
+			Builder builder;
 		};
 	}
 }

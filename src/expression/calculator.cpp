@@ -7,9 +7,9 @@ using namespace Glay::System;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
 		Calculator::Calculator () :
 			slots (0)
@@ -21,34 +21,34 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		const Calculator::Columns&	Calculator::getColumns () const
+		const Calculator::Columns& Calculator::getColumns () const
 		{
 			return this->columns;
 		}
 
-		Int32u	Calculator::getSlots () const
+		Int32u Calculator::getSlots () const
 		{
 			return this->slots;
 		}
 
-		const Calculator::Error&	Calculator::onError () const
+		const Calculator::Error& Calculator::onError () const
 		{
 			return this->parser.onError ();
 		}
 
-		Calculator::Error&	Calculator::onError ()
+		Calculator::Error& Calculator::onError ()
 		{
 			return this->parser.onError ();
 		}
 
-		bool	Calculator::parse (Lookup& lookup, const char* input)
+		bool Calculator::parse (Lookup& lookup, const char* input)
 		{
-			char				buffer[32];
-			Column				column;
-			const Extractor*	extractor;
-			string				key;
-			Lexer				lexer (input);
-			bool				next;
+			char buffer[32];
+			Column column;
+			const Extractor* extractor;
+			string key;
+			Lexer lexer (input);
+			bool next;
 
 			this->reset ();
 
@@ -80,7 +80,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	Calculator::reset ()
+		void Calculator::reset ()
 		{
 			this->columns.clear ();	
 			this->parser.reset ();

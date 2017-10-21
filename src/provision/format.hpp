@@ -8,18 +8,18 @@
 #include "lookup.hpp"
 #include "reader.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		struct	Format
+		struct Format
 		{
-			typedef std::function<Reader* (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&)>	Builder;
+			typedef std::function<Reader* (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&)> Builder;
 
-			static const Format	formats[];
+			static const Format formats[];
 
-			const char*	name;
-			Builder		builder;
+			const char* name;
+			Builder builder;
 		};
 	}
 }

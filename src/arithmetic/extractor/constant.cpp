@@ -5,9 +5,9 @@ using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		ConstantExtractor::ConstantExtractor (const Variant& value) :
 			value (value)
@@ -15,17 +15,17 @@ namespace	Tesca
 			this->value.keep ();
 		}
 
-		Int32u	ConstantExtractor::getFlags () const
+		Int32u ConstantExtractor::getFlags () const
 		{
 			return COMPOSITE | SCALAR;
 		}
 
-		Variant	ConstantExtractor::compute (const Aggregator* const*) const
+		Variant ConstantExtractor::compute (const Aggregator* const*) const
 		{
 			return this->value;
 		}
 
-		Variant	ConstantExtractor::extract (const Row&) const
+		Variant ConstantExtractor::extract (const Row&) const
 		{
 			return this->value;
 		}

@@ -4,21 +4,21 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		LastAggregator::LastAggregator () :
 			last ()
 		{
 		}
 
-		Variant	LastAggregator::compute () const
+		Variant LastAggregator::compute () const
 		{
 			return this->last;
 		}
 
-		bool	LastAggregator::push (const Variant& value)
+		bool LastAggregator::push (const Variant& value)
 		{
 			this->last = value;
 			this->last.keep ();
@@ -26,7 +26,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	LastAggregator::reset ()
+		void LastAggregator::reset ()
 		{
 			this->last = Variant::empty;
 		}

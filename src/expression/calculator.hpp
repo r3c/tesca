@@ -6,35 +6,35 @@
 #include <vector>
 #include "parser.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		class	Calculator
+		class Calculator
 		{
 			public:
-				typedef std::vector<Arithmetic::Column>	Columns;
-				typedef Parser::Error					Error;
+				typedef std::vector<Arithmetic::Column> Columns;
+				typedef Parser::Error Error;
 
 				Calculator (const Calculator&);
 				Calculator ();
 				~Calculator ();
 
-				Calculator&	operator = (const Calculator&);
+				Calculator& operator = (const Calculator&);
 
-				const Columns&	getColumns () const;
-				Glay::Int32u	getSlots () const;
+				const Columns& getColumns () const;
+				Glay::Int32u getSlots () const;
 
-				const Error&	onError () const;
-				Error&			onError ();
+				const Error& onError () const;
+				Error& onError ();
 
-				bool	parse (Provision::Lookup&, const char*);
-				void	reset ();
+				bool parse (Provision::Lookup&, const char*);
+				void reset ();
 
 			private:
-				Columns			columns;
-				Parser			parser;
-				Glay::Int32u	slots;
+				Columns columns;
+				Parser parser;
+				Glay::Int32u slots;
 
 		};
 	}

@@ -7,9 +7,9 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		Input::Input () :
 			format (0)
@@ -20,17 +20,17 @@ namespace	Tesca
 		{
 		}
 
-		const Input::Error&	Input::onError () const
+		const Input::Error& Input::onError () const
 		{
 			return this->error;
 		}
 
-		Input::Error&	Input::onError ()
+		Input::Error& Input::onError ()
 		{
 			return this->error;
 		}
 
-		Reader*	Input::create (SeekIStream* stream, const Lookup& lookup) const
+		Reader* Input::create (SeekIStream* stream, const Lookup& lookup) const
 		{
 			if (this->format != 0)
 				return this->format->builder (stream, lookup, this->config);
@@ -38,10 +38,10 @@ namespace	Tesca
 			return 0;
 		}
 
-		bool	Input::parse (const char* expression)
+		bool Input::parse (const char* expression)
 		{
-			const char*	begin;
-			string		key;
+			const char* begin;
+			string key;
 
 			for (begin = expression; *expression != '\0' && *expression != ':'; )
 				++expression;

@@ -4,9 +4,9 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		MinAggregator::MinAggregator () :
 			empty (true),
@@ -14,7 +14,7 @@ namespace	Tesca
 		{
 		}
 
-		Variant	MinAggregator::compute () const
+		Variant MinAggregator::compute () const
 		{
 			if (this->empty)
 				return Variant::empty;
@@ -22,9 +22,9 @@ namespace	Tesca
 			return Variant (this->min);
 		}
 
-		bool	MinAggregator::push (const Variant& value)
+		bool MinAggregator::push (const Variant& value)
 		{
-			Float64	current;
+			Float64 current;
 
 			if (!value.toNumber (&current))
 				return false;
@@ -38,7 +38,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	MinAggregator::reset ()
+		void MinAggregator::reset ()
 		{
 			this->empty = true;
 			this->min = 0;

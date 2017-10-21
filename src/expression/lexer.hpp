@@ -6,14 +6,14 @@
 #include <string>
 #include "../../lib/glay/src/include.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		class	Lexer
+		class Lexer
 		{
 			public:
-				enum	Lexem
+				enum Lexem
 				{
 					AMPERSAND,
 					COMMA,
@@ -42,22 +42,22 @@ namespace	Tesca
 
 				Lexer (const char*);
 
-				const std::string&	getCurrent () const;
-				Glay::Int32u		getIndex () const;
-				Lexem				getType () const;
+				const std::string& getCurrent () const;
+				Glay::Int32u getIndex () const;
+				Lexem getType () const;
 
-				bool	next ();
+				bool next ();
 
 			private:
-				bool	read ();
+				bool read ();
 
-				char						character;
-				std::string					current;
-				bool						eof;
-				Glay::Int32u				index;
-				Glay::Pipe::BinaryReader	reader;
-				Glay::Pipe::MemoryIStream	stream;
-				Lexem						type;
+				char character;
+				std::string current;
+				bool eof;
+				Glay::Int32u index;
+				Glay::Pipe::BinaryReader reader;
+				Glay::Pipe::MemoryIStream stream;
+				Lexem type;
 		};
 	}
 }

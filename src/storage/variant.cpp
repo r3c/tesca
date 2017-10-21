@@ -10,7 +10,7 @@ using namespace Glay::System;
 namespace
 {
 	template<typename T>
-	static inline Int32s	typeCompare (T a, T b)
+	static inline Int32s typeCompare (T a, T b)
 	{
 		if (a < b)
 			return -1;
@@ -21,11 +21,11 @@ namespace
 	}
 }
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Storage
+	namespace Storage
 	{
-		const Variant	Variant::empty = Variant ();
+		const Variant Variant::empty = Variant ();
 
 		Variant::Variant (const Variant& other) :
 			type (Variant::NONE)
@@ -83,7 +83,7 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		Variant&	Variant::operator = (const Variant& other)
+		Variant& Variant::operator = (const Variant& other)
 		{
 			if (this != &other)
 			{
@@ -120,19 +120,19 @@ namespace	Tesca
 			return *this;
 		}
 
-		Int32s	Variant::compare (const Variant& other) const
+		Int32s Variant::compare (const Variant& other) const
 		{
-			bool		boolean1;
-			bool		boolean2;
-			const char*	buffer1;
-			const char*	buffer2;
-			Int32u		compare;
-			Int32u		length1;
-			Int32u		length2;
-			Float64		number1;
-			Float64		number2;
-			string		string1;
-			string		string2;
+			bool boolean1;
+			bool boolean2;
+			const char* buffer1;
+			const char* buffer2;
+			Int32u compare;
+			Int32u length1;
+			Int32u length2;
+			Float64 number1;
+			Float64 number2;
+			string string1;
+			string string2;
 
 			switch (min (this->type, other.type))
 			{
@@ -197,10 +197,10 @@ namespace	Tesca
 			return typeCompare (this->type, other.type);
 		}
 
-		Variant&	Variant::keep ()
+		Variant& Variant::keep ()
 		{
-			Int32u	length;
-			char*	target;
+			Int32u length;
+			char* target;
 
 			switch (this->type)
 			{
@@ -232,7 +232,7 @@ namespace	Tesca
 			return *this;
 		}
 
-		void	Variant::reset ()
+		void Variant::reset ()
 		{
 			switch (this->type)
 			{
@@ -252,7 +252,7 @@ namespace	Tesca
 			this->type = Variant::NONE;
 		}
 
-		bool	Variant::toBoolean (bool* output) const
+		bool Variant::toBoolean (bool* output) const
 		{
 			switch (this->type)
 			{
@@ -276,7 +276,7 @@ namespace	Tesca
 			}
 		}
 
-		bool	Variant::toNumber (Float64* output) const
+		bool Variant::toNumber (Float64* output) const
 		{
 			switch (this->type)
 			{
@@ -298,10 +298,10 @@ namespace	Tesca
 			}
 		}
 
-		bool	Variant::toString (string* output) const
+		bool Variant::toString (string* output) const
 		{
-			char	buffer[64];
-			Int32u	length;
+			char buffer[64];
+			Int32u length;
 
 			switch (this->type)
 			{
@@ -330,32 +330,32 @@ namespace	Tesca
 			}
 		}
 
-		bool	operator == (const Variant& lhs, const Variant& rhs)
+		bool operator == (const Variant& lhs, const Variant& rhs)
 		{
 			return lhs.compare (rhs) == 0;
 		}
 
-		bool	operator != (const Variant& lhs, const Variant& rhs)
+		bool operator != (const Variant& lhs, const Variant& rhs)
 		{
 			return lhs.compare (rhs) != 0;
 		}
 
-		bool	operator <= (const Variant& lhs, const Variant& rhs)
+		bool operator <= (const Variant& lhs, const Variant& rhs)
 		{
 			return lhs.compare (rhs) <= 0;
 		}
 
-		bool	operator < (const Variant& lhs, const Variant& rhs)
+		bool operator < (const Variant& lhs, const Variant& rhs)
 		{
 			return lhs.compare (rhs) < 0;
 		}
 
-		bool	operator >= (const Variant& lhs, const Variant& rhs)
+		bool operator >= (const Variant& lhs, const Variant& rhs)
 		{
 			return lhs.compare (rhs) >= 0;
 		}
 		
-		bool	operator > (const Variant& lhs, const Variant& rhs)
+		bool operator > (const Variant& lhs, const Variant& rhs)
 		{
 			return lhs.compare (rhs) > 0;
 		}

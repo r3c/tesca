@@ -4,9 +4,9 @@
 using namespace std;
 using namespace Glay;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
 		Lexer::Lexer (const char* input) :
 			eof (false),
@@ -19,24 +19,24 @@ namespace	Tesca
 			this->next ();
 		}
 
-		const string&	Lexer::getCurrent () const
+		const string& Lexer::getCurrent () const
 		{
 			return this->current;
 		}
 
-		Int32u	Lexer::getIndex () const
+		Int32u Lexer::getIndex () const
 		{
 			return this->index;
 		}
 
-		Lexer::Lexem	Lexer::getType () const
+		Lexer::Lexem Lexer::getType () const
 		{
 			return this->type;
 		}
 
-		bool	Lexer::next ()
+		bool Lexer::next ()
 		{
-			stringstream	buffer;
+			stringstream buffer;
 
 			if (this->eof)
 			{
@@ -244,7 +244,7 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	Lexer::read ()
+		bool Lexer::read ()
 		{
 			if (reader.readType (&this->character))
 			{

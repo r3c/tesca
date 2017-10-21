@@ -4,9 +4,9 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		NumberBinaryExtractor::NumberBinaryExtractor (const Extractor* lhs, const Extractor* rhs, Callback callback) :
 			BinaryExtractor (lhs, rhs),
@@ -14,10 +14,10 @@ namespace	Tesca
 		{
 		}
 
-		Variant	NumberBinaryExtractor::evaluate (const Variant& lhs, const Variant& rhs) const
+		Variant NumberBinaryExtractor::evaluate (const Variant& lhs, const Variant& rhs) const
 		{
-			Float64	a;
-			Float64	b;
+			Float64 a;
+			Float64 b;
 
 			if (lhs.toNumber (&a) && rhs.toNumber (&b))
 				return this->callback (a, b);

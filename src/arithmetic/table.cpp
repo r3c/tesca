@@ -7,9 +7,9 @@ using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		Table::iterator::iterator (const Columns& columns, const Groups& groups, Groups::const_iterator inner) :
 			columns (columns),
@@ -26,7 +26,7 @@ namespace	Tesca
 			delete [] this->values;
 		}
 
-		Table::iterator&	Table::iterator::operator ++ ()
+		Table::iterator& Table::iterator::operator ++ ()
 		{
 			if (++this->inner != this->groups.end ())
 				this->update ();
@@ -34,27 +34,27 @@ namespace	Tesca
 			return *this;
 		}
 
-		bool	Table::iterator::operator == (const iterator& other)
+		bool Table::iterator::operator == (const iterator& other)
 		{
 			return this->inner == other.inner;
 		}
 
-		bool	Table::iterator::operator != (const iterator& other)
+		bool Table::iterator::operator != (const iterator& other)
 		{
 			return this->inner != other.inner;
 		}
 
-		Storage::Variant*&	Table::iterator::operator * ()
+		Storage::Variant*& Table::iterator::operator * ()
 		{
 			return this->values;
 		}
 
-		void	Table::iterator::update ()
+		void Table::iterator::update ()
 		{
-			const Aggregator* const*	aggregators = this->inner->second;
-			const Bucket&				bucket = this->inner->first;
-			Int32u						from;
-			Int32u						to;
+			const Aggregator* const* aggregators = this->inner->second;
+			const Bucket& bucket = this->inner->first;
+			Int32u from;
+			Int32u to;
 
 			from = 0;
 			to = 0;
@@ -83,27 +83,27 @@ namespace	Tesca
 			this->clear ();
 		}
 
-		const Table::Columns&	Table::getColumns () const
+		const Table::Columns& Table::getColumns () const
 		{
 			return this->columns;
 		}
 
-		Int32u	Table::getWidth () const
+		Int32u Table::getWidth () const
 		{
 			return this->columns.size ();
 		}
 
-		Table::iterator	Table::begin () const
+		Table::iterator Table::begin () const
 		{
 			return iterator (this->columns, this->groups, this->groups.begin ());
 		}
 
-		Table::iterator	Table::end () const
+		Table::iterator Table::end () const
 		{
 			return iterator (this->columns, this->groups, this->groups.end ());
 		}
 
-		void	Table::clear ()
+		void Table::clear ()
 		{
 			for (auto i = this->groups.begin (); i != this->groups.end (); ++i)
 			{
@@ -124,11 +124,11 @@ namespace	Tesca
 			this->keys.clear ();
 		}
 
-		void	Table::push (const Row& row)
+		void Table::push (const Row& row)
 		{
-			Aggregator**	aggregators;		
-			Bucket			bucket (this->keys.size ());
-			bool			filter;
+			Aggregator** aggregators;		
+			Bucket bucket (this->keys.size ());
+			bool filter;
 
 			// Select row or exit if it should be discarded
 			if (!this->condition->extract (row).toBoolean (&filter) || !filter)
@@ -139,7 +139,7 @@ namespace	Tesca
 				bucket.set (i, this->keys[i]->extract (row));
 
 			// Retrieve group from bucket or create it
-			auto	found = this->groups.find (bucket);
+			auto found = this->groups.find (bucket);
 
 			if (found == this->groups.end ())
 			{
@@ -158,13 +158,13 @@ namespace	Tesca
 				this->composites[i]->store (aggregators, row);
 		}
 
-		void	Table::reset (const Extractor* condition, const Columns& columns, Int32u slots)
+		void Table::reset (const Extractor* condition, const Columns& columns, Int32u slots)
 		{
 			this->clear ();
 
 			for (auto i = columns.begin (); i != columns.end (); ++i)
 			{
-				const Extractor*	extractor = i->getExtractor ();
+				const Extractor* extractor = i->getExtractor ();
 
 				if (extractor->getFlags () & Extractor::COMPOSITE)
 					this->composites.push_back (extractor);

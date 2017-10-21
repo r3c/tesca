@@ -3,11 +3,11 @@
 
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		const Constant	Constant::constants[] =
+		const Constant Constant::constants[] =
 		{
 			{"false",	Variant (false)},
 			{"true",	Variant (true)},

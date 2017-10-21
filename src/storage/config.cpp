@@ -5,22 +5,22 @@
 
 using namespace std;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Storage
+	namespace Storage
 	{
 		Config::Config ()
 		{
 		}
 
-		void	Config::clear ()
+		void Config::clear ()
 		{
 			this->values.clear ();
 		}
 
-		const string&	Config::get (const string& key, const string& fallback) const
+		const string& Config::get (const string& key, const string& fallback) const
 		{
-			auto	i = this->values.find (key);
+			auto i = this->values.find (key);
 
 			if (i == this->values.end ())
 				return fallback;
@@ -28,9 +28,9 @@ namespace	Tesca
 			return i->second;
 		}
 
-		bool	Config::get (const string& key, string* value) const
+		bool Config::get (const string& key, string* value) const
 		{
-			auto	i = this->values.find (key);
+			auto i = this->values.find (key);
 
 			if (i == this->values.end ())
 				return false;
@@ -41,10 +41,10 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	Config::parse (const string& input)
+		bool Config::parse (const string& input)
 		{
-			stringstream	buffer;
-			string			key;
+			stringstream buffer;
+			string key;
 
 			this->clear ();
 

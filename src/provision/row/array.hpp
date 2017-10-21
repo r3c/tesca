@@ -5,28 +5,28 @@
 #include <array>
 #include "../row.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	ArrayRow : public Row
+		class ArrayRow : public Row
 		{
 			public:
 				ArrayRow (const ArrayRow&);
 				ArrayRow (Glay::Int32u);
-				virtual	~ArrayRow ();
+				virtual ~ArrayRow ();
 
-				ArrayRow&						operator = (const ArrayRow&);
-				virtual const Storage::Variant&	operator [] (Glay::Int32u) const;
+				ArrayRow& operator = (const ArrayRow&);
+				virtual const Storage::Variant& operator [] (Glay::Int32u) const;
 
-				virtual Glay::Int32u	getLength () const;
+				virtual Glay::Int32u getLength () const;
 
-				void	clear ();
-				bool	set (Glay::Int32u, const Storage::Variant&);
+				void clear ();
+				bool set (Glay::Int32u, const Storage::Variant&);
 
 			private:
-				Glay::Int32u		length;
-				Storage::Variant*	values;
+				Glay::Int32u length;
+				Storage::Variant* values;
 		};
 	}
 }

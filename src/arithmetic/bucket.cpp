@@ -4,14 +4,14 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		Bucket::Bucket (const Bucket& other) :
 			length (other.length)
 		{
-			Variant*	buffer;
+			Variant* buffer;
 
 			buffer = new Variant[other.length];
 
@@ -32,17 +32,17 @@ namespace	Tesca
 			delete [] this->buffer;
 		}
 
-		const Variant&	Bucket::operator [] (Int32u index) const
+		const Variant& Bucket::operator [] (Int32u index) const
 		{
 			return this->buffer[index];
 		}
 
-		Int32u	Bucket::getLength () const
+		Int32u Bucket::getLength () const
 		{
 			return this->length;
 		}
 
-		Int16s	Bucket::compare (const Bucket& other) const
+		Int16s Bucket::compare (const Bucket& other) const
 		{
 			if (this->length < other.length)
 				return -1;
@@ -51,8 +51,8 @@ namespace	Tesca
 
 			for (Int32u index = 0; index < this->length; ++index)
 			{
-				const Variant&	lhs = this->buffer[index];
-				const Variant&	rhs = other.buffer[index];
+				const Variant& lhs = this->buffer[index];
+				const Variant& rhs = other.buffer[index];
 
 				if (lhs < rhs)
 					return -1;
@@ -63,7 +63,7 @@ namespace	Tesca
 			return 0;
 		}
 
-		Bucket&	Bucket::keep ()
+		Bucket& Bucket::keep ()
 		{
 			for (Int32u index = this->length; index-- > 0; )
 				this->buffer[index].keep ();
@@ -71,12 +71,12 @@ namespace	Tesca
 			return *this;
 		}
 
-		void	Bucket::set (Int32u index, const Variant& value)
+		void Bucket::set (Int32u index, const Variant& value)
 		{
 			this->buffer[index] = value;
 		}
 
-		bool	operator < (const Bucket& lhs, const Bucket& rhs)
+		bool operator < (const Bucket& lhs, const Bucket& rhs)
 		{
 			return lhs.compare (rhs) < 0;
 		}

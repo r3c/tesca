@@ -9,21 +9,21 @@ using namespace Glay::Pipe;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
 		NamePrinter::NamePrinter (const Config&)
 		{
 		}
 
-		void	NamePrinter::print (OStream& stream, const Table& table) const
+		void NamePrinter::print (OStream& stream, const Table& table) const
 		{
-			const Table::Columns&	columns (table.getColumns ());
-			string					output;
-			Variant*				value;
-			Int32u					width (table.getWidth ());
-			FormatWriter			writer (stream);
+			const Table::Columns& columns (table.getColumns ());
+			string output;
+			Variant* value;
+			Int32u width (table.getWidth ());
+			FormatWriter writer (stream);
 
 			for (auto row = table.begin (); row != table.end (); ++row)
 			{

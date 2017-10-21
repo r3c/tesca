@@ -4,23 +4,23 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		SumAggregator::SumAggregator ()
 		{
 			this->reset ();
 		}
 
-		Variant	SumAggregator::compute () const
+		Variant SumAggregator::compute () const
 		{
 			return Variant (this->sum);
 		}
 
-		bool	SumAggregator::push (const Variant& value)
+		bool SumAggregator::push (const Variant& value)
 		{
-			Float64	number;
+			Float64 number;
 
 			if (!value.toNumber (&number))
 				return false;
@@ -30,7 +30,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	SumAggregator::reset ()
+		void SumAggregator::reset ()
 		{
 			this->sum = 0;
 		}

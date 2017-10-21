@@ -4,26 +4,26 @@
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		UnaryExtractor::UnaryExtractor (const Extractor* operand) :
 			operand (operand)
 		{
 		}
 
-		Variant	UnaryExtractor::compute (const Aggregator* const* aggregators) const
+		Variant UnaryExtractor::compute (const Aggregator* const* aggregators) const
 		{
 			return this->evaluate (this->operand->compute (aggregators));
 		}
 
-		Variant	UnaryExtractor::extract (const Row& row) const
+		Variant UnaryExtractor::extract (const Row& row) const
 		{
 			return this->evaluate (this->operand->extract (row));
 		}
 
-		void	UnaryExtractor::recurse (RecurseCallback callback) const
+		void UnaryExtractor::recurse (RecurseCallback callback) const
 		{
 			callback (this->operand);
 		}

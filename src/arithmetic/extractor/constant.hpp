@@ -4,22 +4,22 @@
 
 #include "../extractor.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	ConstantExtractor : public Extractor
+		class ConstantExtractor : public Extractor
 		{
 			public:
 				ConstantExtractor (const Storage::Variant&);
 
-				virtual Glay::Int32u	getFlags () const;
+				virtual Glay::Int32u getFlags () const;
 
-				virtual Storage::Variant	compute (const Aggregator* const*) const;
-				virtual Storage::Variant	extract (const Provision::Row&) const;
+				virtual Storage::Variant compute (const Aggregator* const*) const;
+				virtual Storage::Variant extract (const Provision::Row&) const;
 
 			private:
-				Storage::Variant	value;
+				Storage::Variant value;
 		};
 	}
 }

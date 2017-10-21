@@ -7,25 +7,25 @@
 #include "../storage/variant.hpp"
 #include "extractor.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	Column
+		class Column
 		{
 			public:
 				Column (const Column&);
 				Column (const std::string&, const Extractor*);
 				Column ();
 
-				Column&	operator = (const Column&);
+				Column& operator = (const Column&);
 
-				const Extractor*	getExtractor () const;
-				const std::string&	getKey () const;
+				const Extractor* getExtractor () const;
+				const std::string& getKey () const;
 
 			private:
-				const Extractor*	extractor;
-				std::string			key;
+				const Extractor* extractor;
+				std::string key;
 		};
 	}
 }

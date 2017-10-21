@@ -3,9 +3,9 @@
 
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		VariantBinaryExtractor::VariantBinaryExtractor (const Extractor* lhs, const Extractor* rhs, Callback callback) :
 			BinaryExtractor (lhs, rhs),
@@ -13,7 +13,7 @@ namespace	Tesca
 		{
 		}
 
-		Variant	VariantBinaryExtractor::evaluate (const Variant& lhs, const Variant& rhs) const
+		Variant VariantBinaryExtractor::evaluate (const Variant& lhs, const Variant& rhs) const
 		{
 			return this->callback (lhs, rhs);
 		}

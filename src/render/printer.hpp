@@ -5,20 +5,20 @@
 #include "../../lib/glay/src/include.hpp"
 #include "../arithmetic/table.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
-		class	Printer
+		class Printer
 		{
 			public:
 						Printer (const Printer&);
 						Printer ();
-				virtual	~Printer ();
+				virtual ~Printer ();
 
-				Printer&	operator = (const Printer&);
+				Printer& operator = (const Printer&);
 
-				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) const = 0;
+				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const = 0;
 		};
 	}
 }

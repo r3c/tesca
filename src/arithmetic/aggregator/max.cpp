@@ -4,9 +4,9 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		MaxAggregator::MaxAggregator () :
 			empty (true),
@@ -14,7 +14,7 @@ namespace	Tesca
 		{
 		}
 
-		Variant	MaxAggregator::compute () const
+		Variant MaxAggregator::compute () const
 		{
 			if (this->empty)
 				return Variant::empty;
@@ -22,9 +22,9 @@ namespace	Tesca
 			return Variant (this->max);
 		}
 
-		bool	MaxAggregator::push (const Variant& value)
+		bool MaxAggregator::push (const Variant& value)
 		{
-			Float64	current;
+			Float64 current;
 
 			if (!value.toNumber (&current))
 				return false;
@@ -38,7 +38,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	MaxAggregator::reset ()
+		void MaxAggregator::reset ()
 		{
 			this->empty = true;
 			this->max = 0;

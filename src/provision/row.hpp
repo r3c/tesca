@@ -5,21 +5,21 @@
 #include "../../lib/glay/src/include.hpp"
 #include "../storage/variant.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	Row
+		class Row
 		{
 			public:
 				Row (const Row&);
 				Row ();
-				virtual	~Row ();
+				virtual ~Row ();
 
-				Row&							operator = (const Row&);
-				virtual const Storage::Variant&	operator [] (Glay::Int32u) const = 0;
+				Row& operator = (const Row&);
+				virtual const Storage::Variant& operator [] (Glay::Int32u) const = 0;
 
-				virtual Glay::Int32u	getLength () const = 0;
+				virtual Glay::Int32u getLength () const = 0;
 		};
 	}
 }

@@ -7,20 +7,20 @@
 #include "../../lib/glay/src/include.hpp"
 #include "../arithmetic/extractor.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		struct	Function
+		struct Function
 		{
-			typedef std::function<Arithmetic::Extractor* (const std::vector<const Arithmetic::Extractor*>&, Glay::Int32u*)>	Builder;
+			typedef std::function<Arithmetic::Extractor* (const std::vector<const Arithmetic::Extractor*>&, Glay::Int32u*)> Builder;
 
-			static const Function	functions[];
+			static const Function functions[];
 
-			const char*		name;
-			Glay::Int32u	min;
-			Glay::Int32u	max;
-			Builder			builder;
+			const char* name;
+			Glay::Int32u min;
+			Glay::Int32u max;
+			Builder builder;
 		};
 	}
 }

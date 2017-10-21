@@ -13,40 +13,40 @@
 #include "../provision/lookup.hpp"
 #include "lexer.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		class	Parser
+		class Parser
 		{
 			public:
-				typedef Glay::Design::Event<const std::string&>	Error;
+				typedef Glay::Design::Event<const std::string&> Error;
 
 				Parser (const Parser&);
 				Parser ();
 				~Parser ();
 
-				Parser&	operator = (const Parser&);
+				Parser& operator = (const Parser&);
 
-				const Error&	onError () const;
-				Error&			onError ();
+				const Error& onError () const;
+				Error& onError ();
 
-				bool	parseExpression (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
-				bool	parseIdentifier (Lexer&, std::string*);
-				bool	parseType (Lexer&, Lexer::Lexem, const char*);
-				bool	parseValue (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
+				bool parseExpression (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
+				bool parseIdentifier (Lexer&, std::string*);
+				bool parseType (Lexer&, Lexer::Lexem, const char*);
+				bool parseValue (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
 
-				void	reset ();
+				void reset ();
 
 			private:
-				typedef std::vector<const Arithmetic::Extractor*>															Extractors;
-				typedef std::function<Arithmetic::Extractor* (const Arithmetic::Extractor*, const Arithmetic::Extractor*)>	Generator;
-				typedef std::pair<Glay::Int32u, Generator>																	BinaryOp;
+				typedef std::vector<const Arithmetic::Extractor*> Extractors;
+				typedef std::function<Arithmetic::Extractor* (const Arithmetic::Extractor*, const Arithmetic::Extractor*)> Generator;
+				typedef std::pair<Glay::Int32u, Generator> BinaryOp;
 
-				bool	fail (const Lexer&, const std::string&);
+				bool fail (const Lexer&, const std::string&);
 
-				Extractors	extractors;
-				Error		error;
+				Extractors extractors;
+				Error error;
 		};
 	}
 }

@@ -4,22 +4,22 @@
 
 #include "../storage/variant.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	Aggregator
+		class Aggregator
 		{
 			public:
 				Aggregator (const Aggregator&);
 				Aggregator ();
-				virtual	~Aggregator ();
+				virtual ~Aggregator ();
 
-				Aggregator&	operator = (const Aggregator&);
+				Aggregator& operator = (const Aggregator&);
 
-				virtual Storage::Variant	compute () const = 0;
-				virtual bool				push (const Storage::Variant&) = 0;
-				virtual void				reset () = 0;
+				virtual Storage::Variant compute () const = 0;
+				virtual bool push (const Storage::Variant&) = 0;
+				virtual void reset () = 0;
 		};
 	}
 }

@@ -6,9 +6,9 @@
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		IfExtractor::IfExtractor (const Extractor* condition, const Extractor* onTrue, const Extractor* onFalse) :
 			condition (condition),
@@ -24,9 +24,9 @@ namespace	Tesca
 		{
 		}
 
-		Variant	IfExtractor::compute (const Aggregator* const* aggregators) const
+		Variant IfExtractor::compute (const Aggregator* const* aggregators) const
 		{
-			bool	test;
+			bool test;
 
 			if (this->condition->compute (aggregators).toBoolean (&test) && test)
 				return this->onTrue->compute (aggregators);
@@ -34,9 +34,9 @@ namespace	Tesca
 				return this->onFalse->compute (aggregators);
 		}
 
-		Variant	IfExtractor::extract (const Row& row) const
+		Variant IfExtractor::extract (const Row& row) const
 		{
-			bool	test;
+			bool test;
 
 			if (this->condition->extract (row).toBoolean (&test) && test)
 				return this->onTrue->extract (row);
@@ -44,7 +44,7 @@ namespace	Tesca
 				return this->onFalse->extract (row);
 		}
 
-		void	IfExtractor::recurse (RecurseCallback callback) const
+		void IfExtractor::recurse (RecurseCallback callback) const
 		{
 			callback (this->condition);
 			callback (this->onFalse);

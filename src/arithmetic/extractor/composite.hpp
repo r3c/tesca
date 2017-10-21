@@ -6,16 +6,16 @@
 #include "../../../lib/glay/src/include.hpp"
 #include "../extractor.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	CompositeExtractor : public Extractor
+		class CompositeExtractor : public Extractor
 		{
 			public:
-				virtual Glay::Int32u	getFlags () const;
+				virtual Glay::Int32u getFlags () const;
 
-				virtual Storage::Variant	extract (const Provision::Row&) const;
+				virtual Storage::Variant extract (const Provision::Row&) const;
 		};
 	}
 }

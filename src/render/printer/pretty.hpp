@@ -7,23 +7,23 @@
 #include "../../storage/config.hpp"
 #include "../printer.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
-		class	PrettyPrinter : public Printer
+		class PrettyPrinter : public Printer
 		{
 			public:
 				PrettyPrinter (const PrettyPrinter&);
 				PrettyPrinter (const Storage::Config&);
 
-				PrettyPrinter&	operator = (const PrettyPrinter&);
+				PrettyPrinter& operator = (const PrettyPrinter&);
 
-				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
+				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
 
 			private:
-				Glay::Int32u	align;
-				Glay::Int32u	pad;
+				Glay::Int32u align;
+				Glay::Int32u pad;
 		};
 	}
 }

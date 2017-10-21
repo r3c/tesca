@@ -6,9 +6,9 @@ using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		CallbackVectorExtractor::CallbackVectorExtractor (const vector<const Extractor*>& extractors, Callback callback) :
 			VectorExtractor (extractors),
@@ -16,9 +16,9 @@ namespace	Tesca
 		{
 		}
 
-		Variant	CallbackVectorExtractor::compute (const Aggregator* const* aggregators) const
+		Variant CallbackVectorExtractor::compute (const Aggregator* const* aggregators) const
 		{
-			Variant	values[this->length];
+			Variant values[this->length];
 
 			for (auto i = this->length; i-- > 0; )
 				values[i] = this->extractors[i]->compute (aggregators);
@@ -26,9 +26,9 @@ namespace	Tesca
 			return this->callback (values, this->length);
 		}
 
-		Variant	CallbackVectorExtractor::extract (const Row& row) const
+		Variant CallbackVectorExtractor::extract (const Row& row) const
 		{
-			Variant	values[this->length];
+			Variant values[this->length];
 
 			for (auto i = this->length; i-- > 0; )
 				values[i] = this->extractors[i]->extract (row);

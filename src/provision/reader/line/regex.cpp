@@ -7,20 +7,20 @@ using namespace Glay::Pipe;
 using namespace Glay::System;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		RegexLineReader::RegexLineReader (SeekIStream* input, const Lookup& lookup, const Config&) :
 			LineReader (input),
 			regex ("FIXME"),
 			row (lookup.count ())
 		{
-			Int32u	group;
+			Int32u group;
 
 			for (auto i = lookup.begin (); i != lookup.end (); ++i)
 			{
-				const string&	key = *i;
+				const string& key = *i;
 
 				if (key.length () > 0 && key[0] == '_' && Convert::toInt32u (&index, key.data () + 1, key.length () - 1))
 					this->lookup[group] = i->second;
@@ -29,14 +29,14 @@ namespace	Tesca
 			}
 		}
 
-		const Row&	RegexLineReader::current () const
+		const Row& RegexLineReader::current () const
 		{
 			return this->row;
 		}
 
-		bool	RegexLineReader::parse (const std::string& line)
+		bool RegexLineReader::parse (const std::string& line)
 		{
-			smatch	match;
+			smatch match;
 
 			this->row.clear ();
 

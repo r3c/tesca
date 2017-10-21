@@ -1,9 +1,9 @@
 
 #include "aggregator.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		Aggregator::Aggregator ()
 		{

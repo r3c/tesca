@@ -5,22 +5,22 @@
 #include "../../../lib/glay/src/include.hpp"
 #include "../aggregator.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	MaxAggregator : public Aggregator
+		class MaxAggregator : public Aggregator
 		{
 			public:
 				MaxAggregator ();
 
-				virtual Storage::Variant	compute () const;
-				virtual bool				push (const Storage::Variant&);
-				virtual void				reset ();
+				virtual Storage::Variant compute () const;
+				virtual bool push (const Storage::Variant&);
+				virtual void reset ();
 
 			private:
-				bool			empty;
-				Glay::Float64	max;
+				bool empty;
+				Glay::Float64 max;
 		};
 	}
 }

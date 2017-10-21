@@ -5,32 +5,32 @@
 #include <string>
 #include "parser.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		class	Filter
+		class Filter
 		{
 			public:
-				typedef Parser::Error	Error;
+				typedef Parser::Error Error;
 
 				Filter (const Filter&);
 				Filter ();
 				~Filter ();
 
-				Filter&	operator = (const Filter&);
+				Filter& operator = (const Filter&);
 
-				const Arithmetic::Extractor*	getCondition () const;
+				const Arithmetic::Extractor* getCondition () const;
 
-				const Error&	onError () const;
-				Error&			onError ();
+				const Error& onError () const;
+				Error& onError ();
 
-				bool	parse (Provision::Lookup&, const char*);
-				void	reset ();
+				bool parse (Provision::Lookup&, const char*);
+				void reset ();
 
 			private:
-				const Arithmetic::Extractor*	condition;
-				Parser						parser;
+				const Arithmetic::Extractor* condition;
+				Parser parser;
 
 		};
 	}

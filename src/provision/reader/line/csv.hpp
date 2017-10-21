@@ -10,32 +10,32 @@
 #include "../../lookup.hpp"
 #include "../line.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	CSVLineReader : public LineReader
+		class CSVLineReader : public LineReader
 		{
 			public:
 				CSVLineReader (const CSVLineReader&);
 				CSVLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
 
-				CSVLineReader&	operator = (const CSVLineReader&);
+				CSVLineReader& operator = (const CSVLineReader&);
 
-				virtual const Row&	current () const;
+				virtual const Row& current () const;
 
 			protected:
-				virtual bool	parse (const char*, Glay::Int32u);
+				virtual bool parse (const char*, Glay::Int32u);
 
 			private:
-				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
-				typedef std::vector<Glay::Int32u>										Mapping;
+				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)> Callback;
+				typedef std::vector<Glay::Int32u> Mapping;
 
-				void	split (const char*, Glay::Int32u, Callback);
+				void split (const char*, Glay::Int32u, Callback);
 
-				Mapping		mapping;
-				ArrayRow	row;
-				char*		types;
+				Mapping mapping;
+				ArrayRow row;
+				char* types;
 		};
 	}
 }

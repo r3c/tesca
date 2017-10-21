@@ -11,38 +11,38 @@
 #include "../../lookup.hpp"
 #include "../line.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	JSONLineReader : public LineReader
+		class JSONLineReader : public LineReader
 		{
 			public:
 				JSONLineReader (const JSONLineReader&);
 				JSONLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
 
-				JSONLineReader&	operator = (const JSONLineReader&);
+				JSONLineReader& operator = (const JSONLineReader&);
 
-				virtual const Row&	current () const;
+				virtual const Row& current () const;
 
 			protected:
-				virtual bool	parse (const char*, Glay::Int32u);
+				virtual bool parse (const char*, Glay::Int32u);
 
 			private:
-				struct	Cursor
+				struct Cursor
 				{
-					const char*		buffer;
-					Glay::Int32u	length;
+					const char* buffer;
+					Glay::Int32u length;
 				};
 
-				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)>	Callback;
+				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)> Callback;
 
-				bool	readCharacter (Cursor*, char);
-				bool	readValue (Cursor*);
+				bool readCharacter (Cursor*, char);
+				bool readValue (Cursor*);
 
-				Lookup		lookup;
-				char		member;
-				ArrayRow	row;
+				Lookup lookup;
+				char member;
+				ArrayRow row;
 		};
 	}
 }

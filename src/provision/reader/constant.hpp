@@ -7,26 +7,26 @@
 #include "../lookup.hpp"
 #include "../reader.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	ConstantReader : public Reader
+		class ConstantReader : public Reader
 		{
 			public:
 				ConstantReader (const ConstantReader&);
 				ConstantReader (const Lookup&, Glay::Int32u);
 
-				ConstantReader&	operator = (const ConstantReader&);
+				ConstantReader& operator = (const ConstantReader&);
 
-				bool				assign (const std::string&, const Storage::Variant&);
-				virtual const Row&	current () const;
-				virtual bool		next ();
+				bool assign (const std::string&, const Storage::Variant&);
+				virtual const Row& current () const;
+				virtual bool next ();
 
 			private:
-				Glay::Int32u	count;
-				Lookup			lookup;
-				ArrayRow		row;
+				Glay::Int32u count;
+				Lookup lookup;
+				ArrayRow row;
 		};
 	}
 }

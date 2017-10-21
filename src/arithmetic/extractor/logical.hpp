@@ -4,27 +4,27 @@
 
 #include "../extractor.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	LogicalExtractor : public Extractor
+		class LogicalExtractor : public Extractor
 		{
 			public:
 				LogicalExtractor (const Extractor*, const Extractor*);
 
 			protected:
-				bool	computeLHS (const Aggregator* const*) const;
-				bool	computeRHS (const Aggregator* const*) const;
+				bool computeLHS (const Aggregator* const*) const;
+				bool computeRHS (const Aggregator* const*) const;
 
-				bool	extractLHS (const Provision::Row&) const;
-				bool	extractRHS (const Provision::Row&) const;
+				bool extractLHS (const Provision::Row&) const;
+				bool extractRHS (const Provision::Row&) const;
 
-				virtual void	recurse (RecurseCallback) const;
+				virtual void recurse (RecurseCallback) const;
 
 			private:
-				const Extractor*	lhs;
-				const Extractor*	rhs;
+				const Extractor* lhs;
+				const Extractor* rhs;
 		};
 	}
 }

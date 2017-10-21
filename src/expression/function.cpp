@@ -27,11 +27,11 @@ using namespace Glay;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		const Function	Function::functions[] =
+		const Function Function::functions[] =
 		{
 			{"abs",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -44,8 +44,8 @@ namespace	Tesca
 			{
 				return new LazyVectorExtractor (arguments, [] (LazyVectorExtractor::Resolver resolver, Int32u count)
 				{
-					Int32u	index;
-					Float64	value;
+					Int32u index;
+					Float64 value;
 
 					if (resolver (0).toNumber (&value) && value >= 0)
 					{
@@ -66,8 +66,8 @@ namespace	Tesca
 			{
 				return new LazyVectorExtractor (arguments, [] (LazyVectorExtractor::Resolver resolver, Int32u count)
 				{
-					Int32u			index;
-					const Variant&	search = resolver (0);
+					Int32u index;
+					const Variant& search = resolver (0);
 
 					for (index = 1; index + 1 < count; index += 2)
 					{
@@ -103,7 +103,7 @@ namespace	Tesca
 			{
 				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					bool	test;
+					bool test;
 
 					if (values[0].toBoolean (&test) && test)
 						return values[0];
@@ -115,11 +115,11 @@ namespace	Tesca
 			{
 				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					size_t	position;
-					string	source;
-					string	search;
-					Int32u	start;
-					Float64	value;
+					size_t position;
+					string source;
+					string search;
+					Int32u start;
+					Float64 value;
 
 					if (!values[0].toString (&source) || !values[1].toString (&search))
 						return Variant::empty;
@@ -161,7 +161,7 @@ namespace	Tesca
 			{
 				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					const Variant*	search;
+					const Variant* search;
 
 					search = values++;
 
@@ -182,8 +182,8 @@ namespace	Tesca
 			{
 				return new StringUnaryExtractor (arguments[0], [] (const string& argument)
 				{
-					char*	buffer;
-					Variant	lower;
+					char* buffer;
+					Variant lower;
 
 					buffer = new char[argument.length ()];
 
@@ -221,9 +221,9 @@ namespace	Tesca
 
 				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					Float64	current;
-					bool	empty;
-					Float64	max;
+					Float64 current;
+					bool empty;
+					Float64 max;
 
 					empty = false;
 					max = 0;
@@ -247,9 +247,9 @@ namespace	Tesca
 
 				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					Float64	current;
-					bool	empty;
-					Float64	min;
+					Float64 current;
+					bool empty;
+					Float64 min;
 
 					empty = false;
 					min = 0;
@@ -284,10 +284,10 @@ namespace	Tesca
 			{
 				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
 				{
-					Int32u	length;
-					string	source;
-					Int32u	start;
-					Float64	value;
+					Int32u length;
+					string source;
+					Int32u start;
+					Float64 value;
 
 					if (!values[0].toString (&source) || !values[1].toNumber (&value))
 						return Variant::empty;
@@ -318,8 +318,8 @@ namespace	Tesca
 			{
 				return new StringUnaryExtractor (arguments[0], [] (const string& argument)
 				{
-					char*	buffer;
-					Variant	upper;
+					char* buffer;
+					Variant upper;
 
 					buffer = new char[argument.length ()];
 

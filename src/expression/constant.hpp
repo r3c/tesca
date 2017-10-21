@@ -4,16 +4,16 @@
 
 #include "../storage/variant.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
-		struct	Constant
+		struct Constant
 		{
-			static const Constant	constants[];
+			static const Constant constants[];
 
-			const char*			name;
-			Storage::Variant	value;
+			const char* name;
+			Storage::Variant value;
 		};
 	}
 }

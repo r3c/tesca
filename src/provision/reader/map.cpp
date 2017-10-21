@@ -5,9 +5,9 @@ using namespace std;
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		MapReader::MapReader (const Fields* fields) :
 			fields (fields),
@@ -21,12 +21,12 @@ namespace	Tesca
 				delete [] *i;
 		}
 
-		bool	MapReader::assign (const string& identifier, const Variant& value)
+		bool MapReader::assign (const string& identifier, const Variant& value)
 		{
-			Variant		copy;
-			Variant*	line;
+			Variant copy;
+			Variant* line;
 
-			auto	field = this->fields->find (identifier);
+			auto field = this->fields->find (identifier);
 
 			if (field == this->fields->end () || this->lines.empty ())
 				return false;
@@ -40,14 +40,14 @@ namespace	Tesca
 			return true;
 		}
 
-		const Row&	MapReader::current () const
+		const Row& MapReader::current () const
 		{
 			return this->row;
 		}
 
-		bool	MapReader::next ()
+		bool MapReader::next ()
 		{
-			Variant*	values;
+			Variant* values;
 
 			this->row.clear ();
 
@@ -66,7 +66,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	MapReader::push ()
+		void MapReader::push ()
 		{
 			this->lines.push_back (new Variant[this->fields->size ()]);
 		}

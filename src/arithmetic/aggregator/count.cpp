@@ -4,28 +4,28 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		CountAggregator::CountAggregator ()
 		{
 			this->reset ();
 		}
 
-		Variant	CountAggregator::compute () const
+		Variant CountAggregator::compute () const
 		{
 			return Variant (this->count);
 		}
 
-		bool	CountAggregator::push (const Variant&)
+		bool CountAggregator::push (const Variant&)
 		{
 			++this->count;
 
 			return true;
 		}
 
-		void	CountAggregator::reset ()
+		void CountAggregator::reset ()
 		{
 			this->count = 0;
 		}

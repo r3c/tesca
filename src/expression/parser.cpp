@@ -25,9 +25,9 @@ using namespace Tesca::Arithmetic;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Expression
+	namespace Expression
 	{
 		Parser::Parser ()
 		{
@@ -38,19 +38,19 @@ namespace	Tesca
 			this->reset ();
 		}
 
-		const Parser::Error&	Parser::onError () const
+		const Parser::Error& Parser::onError () const
 		{
 			return this->error;
 		}
 
-		Parser::Error&	Parser::onError ()
+		Parser::Error& Parser::onError ()
 		{
 			return this->error;
 		}
 
-		bool	Parser::fail (const Lexer& lexer, const string& error)
+		bool Parser::fail (const Lexer& lexer, const string& error)
 		{
-			stringstream	stream;
+			stringstream stream;
 
 			stream << error << " at index " << lexer.getIndex ();
 
@@ -59,12 +59,12 @@ namespace	Tesca
 			return false;
 		}
 
-		bool	Parser::parseExpression (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
+		bool Parser::parseExpression (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
 		{
-			BinaryOp				binaryOp;
-			stack<BinaryOp>			binaryOps;
-			stack<const Extractor*>	operands;
-			const Extractor*		value;
+			BinaryOp binaryOp;
+			stack<BinaryOp> binaryOps;
+			stack<const Extractor*> operands;
+			const Extractor* value;
 
 			while (true)
 			{
@@ -308,7 +308,7 @@ namespace	Tesca
 			}
 		}
 
-		bool	Parser::parseIdentifier (Lexer& lexer, string* output)
+		bool Parser::parseIdentifier (Lexer& lexer, string* output)
 		{
 			if (lexer.getType () != Lexer::IDENTIFIER)
 				return this->fail (lexer, "expected column identifier");
@@ -320,7 +320,7 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	Parser::parseType (Lexer& lexer, Lexer::Lexem type, const char* expected)
+		bool Parser::parseType (Lexer& lexer, Lexer::Lexem type, const char* expected)
 		{
 			if (lexer.getType () != type)
 				return this->fail (lexer, string ("expected ") + expected);
@@ -330,14 +330,14 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	Parser::parseValue (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
+		bool Parser::parseValue (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
 		{
-			const Extractor*	argument;
-			Extractors			arguments;
-			const Constant*		constant;
-			const Function*		function;
-			string				name;
-			Float64				number;
+			const Extractor* argument;
+			Extractors arguments;
+			const Constant* constant;
+			const Function* function;
+			string name;
+			Float64 number;
 
 			switch (lexer.getType ())
 			{
@@ -433,7 +433,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	Parser::reset ()
+		void Parser::reset ()
 		{
 			for (auto i = this->extractors.begin (); i != this->extractors.end (); ++i)
 				delete *i;

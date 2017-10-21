@@ -8,32 +8,32 @@
 #include "../row/array.hpp"
 #include "../reader.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	MapReader : public Reader
+		class MapReader : public Reader
 		{
 			public:
-				typedef std::map<std::string, Glay::Int32u>	Fields;
+				typedef std::map<std::string, Glay::Int32u> Fields;
 
 				MapReader (const MapReader&);
 				MapReader (const Fields*);
-				virtual	~MapReader ();
+				virtual ~MapReader ();
 
-				MapReader&	operator = (const MapReader&);
+				MapReader& operator = (const MapReader&);
 
-				bool				assign (const std::string&, const Storage::Variant&);
-				virtual const Row&	current () const;
-				virtual bool		next ();
-				void				push ();
+				bool assign (const std::string&, const Storage::Variant&);
+				virtual const Row& current () const;
+				virtual bool next ();
+				void push ();
 
 			private:
-				typedef std::list<Storage::Variant*>	Lines;
+				typedef std::list<Storage::Variant*> Lines;
 
-				const Fields*	fields;
-				Lines			lines;
-				ArrayRow		row;
+				const Fields* fields;
+				Lines lines;
+				ArrayRow row;
 		};
 	}
 }

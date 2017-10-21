@@ -3,9 +3,9 @@
 
 using namespace std;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		VectorExtractor::VectorExtractor (const vector<const Extractor*>& extractors) :
 			extractors (new const Extractor*[extractors.size ()]),
@@ -20,7 +20,7 @@ namespace	Tesca
 			delete [] this->extractors;
 		}
 
-		void	VectorExtractor::recurse (RecurseCallback callback) const
+		void VectorExtractor::recurse (RecurseCallback callback) const
 		{
 			for (auto i = this->length; i-- > 0; )
 				callback (this->extractors[i]);

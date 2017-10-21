@@ -5,22 +5,22 @@
 #include <string>
 #include "../../lib/glay/src/include.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Storage
+	namespace Storage
 	{
-		class	Variant
+		class Variant
 		{
 			public:
-				static const Variant	empty;
+				static const Variant empty;
 
-				struct	String
+				struct String
 				{
-					const char*		buffer;
-					Glay::Int32u	length;
+					const char* buffer;
+					Glay::Int32u length;
 				};
 
-				enum	Type
+				enum Type
 				{
 					NONE,
 					BOOLEAN,
@@ -38,35 +38,35 @@ namespace	Tesca
 				Variant ();
 				~Variant ();
 
-				Variant&	operator = (const Variant&);
+				Variant& operator = (const Variant&);
 
-				Glay::Int32s	compare (const Variant&) const;
-				Variant&		keep ();
-				void			reset ();
+				Glay::Int32s compare (const Variant&) const;
+				Variant& keep ();
+				void reset ();
 
-				bool	toBoolean (bool*) const;
-				bool	toNumber (Glay::Float64*) const;
-				bool	toString (std::string*) const;
+				bool toBoolean (bool*) const;
+				bool toNumber (Glay::Float64*) const;
+				bool toString (std::string*) const;
 
 			private:
-				union	Value
+				union Value
 				{
-					bool			boolean;
-					Glay::Float64	number;
-					String			string;
+					bool boolean;
+					Glay::Float64 number;
+					String string;
 				};
 
-				Value			content;
-				Glay::Int32u*	share;
-				Type			type;
+				Value content;
+				Glay::Int32u* share;
+				Type type;
 		};
 
-		bool	operator == (const Variant&, const Variant&);
-		bool	operator != (const Variant&, const Variant&);
-		bool	operator <= (const Variant&, const Variant&);
-		bool	operator < (const Variant&, const Variant&);
-		bool	operator >= (const Variant&, const Variant&);
-		bool	operator > (const Variant&, const Variant&);
+		bool operator == (const Variant&, const Variant&);
+		bool operator != (const Variant&, const Variant&);
+		bool operator <= (const Variant&, const Variant&);
+		bool operator < (const Variant&, const Variant&);
+		bool operator >= (const Variant&, const Variant&);
+		bool operator > (const Variant&, const Variant&);
 	}
 }
 

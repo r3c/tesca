@@ -4,17 +4,17 @@
 
 #include "../logical.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	AndLogicalExtractor : public LogicalExtractor
+		class AndLogicalExtractor : public LogicalExtractor
 		{
 			public:
 				AndLogicalExtractor (const Extractor*, const Extractor*);
 
-				virtual Storage::Variant	compute (const Aggregator* const*) const;
-				virtual Storage::Variant	extract (const Provision::Row&) const;
+				virtual Storage::Variant compute (const Aggregator* const*) const;
+				virtual Storage::Variant extract (const Provision::Row&) const;
 		};
 	}
 }

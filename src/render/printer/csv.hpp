@@ -7,26 +7,26 @@
 #include "../../storage/config.hpp"
 #include "../printer.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
-		class	CSVPrinter : public Printer
+		class CSVPrinter : public Printer
 		{
 			public:
 				CSVPrinter (const CSVPrinter&);
 				CSVPrinter (const Storage::Config&);
 
-				CSVPrinter&	operator = (const CSVPrinter&);
+				CSVPrinter& operator = (const CSVPrinter&);
 
-				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
+				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
 
 			private:
-				void	write (Glay::Pipe::FormatWriter&, const std::string&) const;
+				void write (Glay::Pipe::FormatWriter&, const std::string&) const;
 
-				bool		headers;
-				std::string	quote;
-				std::string	split;
+				bool headers;
+				std::string quote;
+				std::string split;
 		};
 	}
 }

@@ -5,21 +5,21 @@
 #include <functional>
 #include "../binary.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	VariantBinaryExtractor : public BinaryExtractor
+		class VariantBinaryExtractor : public BinaryExtractor
 		{
 			public:
-				typedef	std::function<Storage::Variant (const Storage::Variant&, const Storage::Variant&)>	Callback;
+				typedef std::function<Storage::Variant (const Storage::Variant&, const Storage::Variant&)> Callback;
 
 				VariantBinaryExtractor (const Extractor*, const Extractor*, Callback);
 
-				virtual Storage::Variant	evaluate (const Storage::Variant&, const Storage::Variant&) const;
+				virtual Storage::Variant evaluate (const Storage::Variant&, const Storage::Variant&) const;
 
 			private:
-				Callback	callback;
+				Callback callback;
 		};
 	}
 }

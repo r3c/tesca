@@ -5,21 +5,21 @@
 #include <functional>
 #include "../unary.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	NumberUnaryExtractor : public UnaryExtractor
+		class NumberUnaryExtractor : public UnaryExtractor
 		{
 			public:
-				typedef	std::function<Storage::Variant (Glay::Float64)>	Callback;
+				typedef std::function<Storage::Variant (Glay::Float64)> Callback;
 
 				NumberUnaryExtractor (const Extractor*, Callback);
 
-				virtual Storage::Variant	evaluate (const Storage::Variant&) const;
+				virtual Storage::Variant evaluate (const Storage::Variant&) const;
 
 			private:
-				Callback	callback;
+				Callback callback;
 		};
 	}
 }

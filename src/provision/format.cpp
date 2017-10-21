@@ -8,11 +8,11 @@ using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		const Format	Format::formats[] =
+		const Format Format::formats[] =
 		{
 			{"csv",		[] (SeekIStream* stream, const Lookup& lookup, const Config& config) -> Reader*
 			{

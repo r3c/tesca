@@ -9,9 +9,9 @@ using namespace Glay::Pipe;
 using namespace Tesca::Arithmetic;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
 		CSVPrinter::CSVPrinter (const Config& config) :
 			headers (config.get ("headers", 0)),
@@ -20,13 +20,13 @@ namespace	Tesca
 		{
 		}
 
-		void	CSVPrinter::print (OStream& stream, const Table& table) const
+		void CSVPrinter::print (OStream& stream, const Table& table) const
 		{
-			const Table::Columns&	columns (table.getColumns ());
-			string					output;
-			Variant*				value;
-			Int32u					width (table.getWidth ());
-			FormatWriter			writer (stream);
+			const Table::Columns& columns (table.getColumns ());
+			string output;
+			Variant* value;
+			Int32u width (table.getWidth ());
+			FormatWriter writer (stream);
 
 			if (this->headers)
 			{
@@ -60,9 +60,9 @@ namespace	Tesca
 			}
 		}
 
-		void	CSVPrinter::write (FormatWriter& writer, const string& value) const
+		void CSVPrinter::write (FormatWriter& writer, const string& value) const
 		{
-			bool	escape;
+			bool escape;
 
 			escape = value.find (this->quote) != string::npos || value.find (this->split) != string::npos;
 

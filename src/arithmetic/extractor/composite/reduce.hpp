@@ -4,26 +4,26 @@
 
 #include "../composite.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		template<typename T>
-		class	ReduceCompositeExtractor : public CompositeExtractor
+		class ReduceCompositeExtractor : public CompositeExtractor
 		{
 			public:
 				ReduceCompositeExtractor (Glay::Int32u, const Extractor*);
 
-				virtual Storage::Variant	compute (const Aggregator* const*) const;
-				virtual void				populate (Aggregator**) const;
-				virtual void				store (Aggregator**, const Provision::Row&) const;
+				virtual Storage::Variant compute (const Aggregator* const*) const;
+				virtual void populate (Aggregator**) const;
+				virtual void store (Aggregator**, const Provision::Row&) const;
 
 			protected:
-				virtual void	recurse (RecurseCallback) const;
+				virtual void recurse (RecurseCallback) const;
 
 			private:
-				const Extractor*	operand;
-				Glay::Int32u		slot;
+				const Extractor* operand;
+				Glay::Int32u slot;
 		};
 	}
 }

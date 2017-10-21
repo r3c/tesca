@@ -4,9 +4,9 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		ArrayRow::ArrayRow (Int32u length) :
 			length (length),
@@ -19,7 +19,7 @@ namespace	Tesca
 			delete [] this->values;
 		}
 
-		const Variant&	ArrayRow::operator [] (Int32u key) const
+		const Variant& ArrayRow::operator [] (Int32u key) const
 		{
 			if (key < this->length)
 				return this->values[key];
@@ -27,18 +27,18 @@ namespace	Tesca
 			return Variant::empty;
 		}
 
-		Int32u	ArrayRow::getLength () const
+		Int32u ArrayRow::getLength () const
 		{
 			return this->length;
 		}
 
-		void	ArrayRow::clear ()
+		void ArrayRow::clear ()
 		{
 			for (auto i = this->length; i-- > 0; )
 				this->values[i] = Variant::empty;
 		}
 
-		bool	ArrayRow::set (Int32u key, const Variant& value)
+		bool ArrayRow::set (Int32u key, const Variant& value)
 		{
 			if (key >= this->length)
 				return false;

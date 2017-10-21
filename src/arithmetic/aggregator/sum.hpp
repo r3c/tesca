@@ -5,21 +5,21 @@
 #include "../../../lib/glay/src/include.hpp"
 #include "../aggregator.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	SumAggregator : public Aggregator
+		class SumAggregator : public Aggregator
 		{
 			public:
 				SumAggregator ();
 
-				virtual Storage::Variant	compute () const;
-				virtual bool				push (const Storage::Variant&);
-				virtual void				reset ();
+				virtual Storage::Variant compute () const;
+				virtual bool push (const Storage::Variant&);
+				virtual void reset ();
 
 			private:
-				Glay::Float64	sum;
+				Glay::Float64 sum;
 		};
 	}
 }

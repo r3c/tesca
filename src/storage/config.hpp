@@ -5,25 +5,25 @@
 #include <map>
 #include <string>
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Storage
+	namespace Storage
 	{
-		class	Config
+		class Config
 		{
 			public:
 				Config (const Config&);
 				Config ();
 
-				Config&	operator = (const Config&);
+				Config& operator = (const Config&);
 
-				void				clear ();
-				const std::string&	get (const std::string&, const std::string&) const;
-				bool				get (const std::string&, std::string*) const;
-				bool				parse (const std::string&);
+				void clear ();
+				const std::string& get (const std::string&, const std::string&) const;
+				bool get (const std::string&, std::string*) const;
+				bool parse (const std::string&);
 
 			private:
-				std::map<std::string, std::string>	values;
+				std::map<std::string, std::string> values;
 		};
 	}
 }

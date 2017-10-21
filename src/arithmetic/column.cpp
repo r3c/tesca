@@ -5,9 +5,9 @@ using namespace std;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		Column::Column (const Column& other) :
 			extractor (other.extractor),
@@ -27,7 +27,7 @@ namespace	Tesca
 		{
 		}
 
-		Column&	Column::operator = (const Column& other)
+		Column& Column::operator = (const Column& other)
 		{
 			this->extractor = other.extractor;
 			this->key = other.key;
@@ -35,12 +35,12 @@ namespace	Tesca
 			return *this;
 		}
 
-		const Extractor*	Column::getExtractor () const
+		const Extractor* Column::getExtractor () const
 		{
 			return this->extractor;
 		}
 
-		const string&	Column::getKey () const
+		const string& Column::getKey () const
 		{
 			return this->key;
 		}

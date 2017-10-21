@@ -4,26 +4,26 @@
 
 #include "../extractor.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	IfExtractor : public Extractor
+		class IfExtractor : public Extractor
 		{
 			public:
 				IfExtractor (const Extractor*, const Extractor*, const Extractor*);
 				IfExtractor (const Extractor*, const Extractor*);
 
-				virtual Storage::Variant	compute (const Aggregator* const*) const;
-				virtual Storage::Variant	extract (const Provision::Row&) const;
+				virtual Storage::Variant compute (const Aggregator* const*) const;
+				virtual Storage::Variant extract (const Provision::Row&) const;
 
 			protected:
-				virtual void	recurse (RecurseCallback) const;
+				virtual void recurse (RecurseCallback) const;
 
 			private:
-				const Extractor*	condition;
-				const Extractor*	onFalse;
-				const Extractor*	onTrue;
+				const Extractor* condition;
+				const Extractor* onFalse;
+				const Extractor* onTrue;
 		};
 	}
 }

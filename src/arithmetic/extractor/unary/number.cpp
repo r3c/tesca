@@ -5,9 +5,9 @@ using namespace std;
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		NumberUnaryExtractor::NumberUnaryExtractor (const Extractor* source, Callback callback) :
 			UnaryExtractor (source),
@@ -15,9 +15,9 @@ namespace	Tesca
 		{
 		}
 
-		Variant	NumberUnaryExtractor::evaluate (const Variant& argument) const
+		Variant NumberUnaryExtractor::evaluate (const Variant& argument) const
 		{
-			Float64	value;
+			Float64 value;
 
 			if (argument.toNumber (&value))
 				return this->callback (value);

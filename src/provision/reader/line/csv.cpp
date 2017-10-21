@@ -9,25 +9,25 @@ using namespace Tesca::Storage;
 
 namespace
 {
-	static const char	TYPE_BLANK = 1;
-	static const char	TYPE_QUOTE = 2;
-	static const char	TYPE_SPLIT = 3;
+	static const char TYPE_BLANK = 1;
+	static const char TYPE_QUOTE = 2;
+	static const char TYPE_SPLIT = 3;
 }
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		CSVLineReader::CSVLineReader (SeekIStream* input, const Lookup& lookup, const Config& config) :
 			LineReader (input, 1024 * 10),
 			row (lookup.count ())
 		{
-			const char*	buffer;
-			string		characters;
-			string		headers;
-			Int32u		index;
-			Int32u		length;
-			Int32u		value;
+			const char* buffer;
+			string characters;
+			string headers;
+			Int32u index;
+			Int32u length;
+			Int32u value;
 
 			// Read special character types from configuration
 			this->types = static_cast<char*> (calloc (1 << (sizeof (*this->types) * 8), sizeof (*this->types)));
@@ -63,7 +63,7 @@ namespace	Tesca
 
 				this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
 				{
-					Int32u	value;
+					Int32u value;
 
 					if (lookup.find (string (buffer, length), &value))
 					{
@@ -80,7 +80,7 @@ namespace	Tesca
 
 				for (auto i = lookup.begin (); i != lookup.end (); ++i)
 				{
-					const string&	key = *i;
+					const string& key = *i;
 
 					if (key.length () > 0 && key[0] == '_' && Convert::toInteger (&index, key.data () + 1, key.length () - 1))
 					{
@@ -95,18 +95,18 @@ namespace	Tesca
 			}
 		}
 
-		const Row&	CSVLineReader::current () const
+		const Row& CSVLineReader::current () const
 		{
 			return this->row;
 		}
 
-		bool	CSVLineReader::parse (const char* line, Int32u length)
+		bool CSVLineReader::parse (const char* line, Int32u length)
 		{
 			this->row.clear ();
 
 			this->split (line, length, [&] (Int32u index, const char* buffer, Int32u length)
 			{
-				Int32u	key;
+				Int32u key;
 
 				key = index < this->mapping.size () ? this->mapping[index] : 0;
 
@@ -117,12 +117,12 @@ namespace	Tesca
 			return true;
 		}
 
-		void	CSVLineReader::split (const char* line, Int32u length, Callback callback)
+		void CSVLineReader::split (const char* line, Int32u length, Callback callback)
 		{
-			Int32u		index;
-			const char*	skip;
-			const char*	start;
-			const char*	stop;
+			Int32u index;
+			const char* skip;
+			const char* start;
+			const char* stop;
 
 			start = line;
 

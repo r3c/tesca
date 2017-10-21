@@ -6,19 +6,19 @@
 #include "../../storage/config.hpp"
 #include "../printer.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
-		class	NamePrinter : public Printer
+		class NamePrinter : public Printer
 		{
 			public:
 				NamePrinter (const NamePrinter&);
 				NamePrinter (const Storage::Config&);
 
-				NamePrinter&	operator = (const NamePrinter&);
+				NamePrinter& operator = (const NamePrinter&);
 
-				virtual void	print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
+				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
 		};
 	}
 }

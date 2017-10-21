@@ -3,17 +3,17 @@
 
 using namespace Glay;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		Extractor::~Extractor ()
 		{
 		}
 
-		Int32u	Extractor::getFlags () const
+		Int32u Extractor::getFlags () const
 		{
-			Int32u	flags;
+			Int32u flags;
 
 			flags = ~0;
 
@@ -25,11 +25,11 @@ namespace	Tesca
 			return flags;
 		}
 
-		void	Extractor::recurse (RecurseCallback) const
+		void Extractor::recurse (RecurseCallback) const
 		{
 		}
 
-		void	Extractor::populate (Aggregator** aggregators) const
+		void Extractor::populate (Aggregator** aggregators) const
 		{
 			this->recurse ([aggregators] (const Extractor* child)
 			{
@@ -37,7 +37,7 @@ namespace	Tesca
 			});
 		}
 
-		void	Extractor::store (Aggregator** aggregators, const Provision::Row& row) const
+		void Extractor::store (Aggregator** aggregators, const Provision::Row& row) const
 		{
 			this->recurse ([aggregators, &row] (const Extractor* child)
 			{

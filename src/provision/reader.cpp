@@ -4,9 +4,9 @@
 using namespace Glay;
 using namespace Glay::Design;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		Reader::Progress::Progress (Int64u read, Int64u size) :
 			read (read),
@@ -22,22 +22,22 @@ namespace	Tesca
 		{
 		}
 
-		const Reader::Error&	Reader::onError () const
+		const Reader::Error& Reader::onError () const
 		{
 			return this->error;
 		}
 
-		Reader::Error&	Reader::onError ()
+		Reader::Error& Reader::onError ()
 		{
 			return this->error;
 		}
 
-		const Reader::Read&	Reader::onRead () const
+		const Reader::Read& Reader::onRead () const
 		{
 			return this->read;
 		}
 
-		Reader::Read&	Reader::onRead ()
+		Reader::Read& Reader::onRead ()
 		{
 			return this->read;
 		}

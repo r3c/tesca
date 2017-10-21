@@ -6,21 +6,21 @@
 #include "../../../lib/glay/src/include.hpp"
 #include "../extractor.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
-		class	VectorExtractor : public Extractor
+		class VectorExtractor : public Extractor
 		{
 			public:
 				VectorExtractor (const std::vector<const Extractor*>&);
-				virtual	~VectorExtractor ();
+				virtual ~VectorExtractor ();
 
 			protected:
-				virtual void	recurse (RecurseCallback) const;
+				virtual void recurse (RecurseCallback) const;
 
-				const Extractor**	extractors;
-				Glay::Int32u		length;
+				const Extractor** extractors;
+				Glay::Int32u length;
 		};
 	}
 }

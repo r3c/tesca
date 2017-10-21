@@ -22,18 +22,18 @@ struct option longOptions[] =
 	{0,				0,					0,	0 }
 };
 
-void	initialize (Arithmetic::Table& table, const Expression::Filter& filter, Expression::Calculator& calculator)
+void initialize (Arithmetic::Table& table, const Expression::Filter& filter, Expression::Calculator& calculator)
 {
 	table.reset (filter.getCondition (), calculator.getColumns (), calculator.getSlots ());
 }
 
-void	loading (FormatWriter& writer, const char* caption, const Provision::Reader::Progress& progress)
+void loading (FormatWriter& writer, const char* caption, const Provision::Reader::Progress& progress)
 {
-	static const Int32u	captionWidth = 30;
-	static const Int32u	meterWidth = 25;
+	static const Int32u captionWidth = 30;
+	static const Int32u meterWidth = 25;
 
-	Int32u	i;
-	Int32u	u;
+	Int32u i;
+	Int32u u;
 
 	writer.write ('\r');
 
@@ -61,13 +61,13 @@ void	loading (FormatWriter& writer, const char* caption, const Provision::Reader
 		.flush ();
 }
 
-void	process (Arithmetic::Table& table, const Provision::Input& input, const Provision::Lookup& lookup, bool progress, char* sources[], int length)
+void process (Arithmetic::Table& table, const Provision::Input& input, const Provision::Lookup& lookup, bool progress, char* sources[], int length)
 {
-	const char*			caption;
-	Provision::Reader*	reader;
-	FileIStream			source;
-	Int8u				status;
-	FormatWriter		writer (err);
+	const char* caption;
+	Provision::Reader* reader;
+	FileIStream source;
+	Int8u status;
+	FormatWriter writer (err);
 
 	status = progress ? 1 : 0;
 
@@ -138,23 +138,23 @@ void	process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 	}
 }
 
-int	main (int argc, char* argv[])
+int main (int argc, char* argv[])
 {
-	Expression::Calculator	calculator;
-	const char*				calculatorExpression;
-	FormatWriter			console (out);
-	Expression::Filter		filter;
-	const char*				filterCondition;
-	Provision::Input		input;
-	const char*				inputFormat;
-	Provision::Lookup		lookup;
-	int						option;
-	Render::Output			output;
-	const char*				outputFormat;
-	Render::Printer*		printer;
-	bool					progress;
-	Arithmetic::Table		table;
-	FormatWriter			writer (err);
+	Expression::Calculator calculator;
+	const char* calculatorExpression;
+	FormatWriter console (out);
+	Expression::Filter filter;
+	const char* filterCondition;
+	Provision::Input input;
+	const char* inputFormat;
+	Provision::Lookup lookup;
+	int option;
+	Render::Output output;
+	const char* outputFormat;
+	Render::Printer* printer;
+	bool progress;
+	Arithmetic::Table table;
+	FormatWriter writer (err);
 
 	calculator.onError ().bind ([&] (const string& message)
 	{

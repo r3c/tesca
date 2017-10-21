@@ -4,16 +4,16 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		AverageAggregator::AverageAggregator ()
 		{
 			this->reset ();
 		}
 
-		Variant	AverageAggregator::compute () const
+		Variant AverageAggregator::compute () const
 		{
 			if (this->count > 0)
 				return Variant (this->sum / this->count);
@@ -21,9 +21,9 @@ namespace	Tesca
 			return Variant::empty;
 		}
 
-		bool	AverageAggregator::push (const Variant& value)
+		bool AverageAggregator::push (const Variant& value)
 		{
-			Float64	number;
+			Float64 number;
 
 			if (!value.toNumber (&number))
 				return false;
@@ -35,7 +35,7 @@ namespace	Tesca
 			return true;
 		}
 
-		void	AverageAggregator::reset ()
+		void AverageAggregator::reset ()
 		{
 			this->count = 0;
 			this->sum = 0;

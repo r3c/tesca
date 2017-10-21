@@ -5,9 +5,9 @@ using namespace std;
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		ConstantReader::ConstantReader (const Lookup& lookup, Int32u count) :
 			count (count),
@@ -16,9 +16,9 @@ namespace	Tesca
 		{
 		}
 
-		bool	ConstantReader::assign (const string& identifier, const Variant& value)
+		bool ConstantReader::assign (const string& identifier, const Variant& value)
 		{
-			Int32u	field;
+			Int32u field;
 
 			if (!this->lookup.find (identifier, &field))
 				return false;
@@ -28,12 +28,12 @@ namespace	Tesca
 			return true;
 		}
 
-		const Row&	ConstantReader::current () const
+		const Row& ConstantReader::current () const
 		{
 			return this->row;
 		}
 
-		bool	ConstantReader::next ()
+		bool ConstantReader::next ()
 		{
 			if (this->count <= 0)
 				return false;

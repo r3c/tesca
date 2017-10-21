@@ -6,9 +6,9 @@
 using namespace std;
 using namespace Glay;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
 		LineReader::LineReader (Pipe::SeekIStream* input, Int32u reserve) :
 			buffer (0),
@@ -31,17 +31,17 @@ namespace	Tesca
 				free (this->buffer);
 		}
 
-		bool	LineReader::next ()
+		bool LineReader::next ()
 		{
-			const char*	buffer;
-			Int32u		length;
+			const char* buffer;
+			Int32u length;
 
 			if (!this->shift (&buffer, &length))
 				return false;
 
 			if (!this->parse (buffer, length))
 			{
-				stringstream	stream;
+				stringstream stream;
 
 				stream << "could not parse invalid line #" << this->line;
 
@@ -51,10 +51,10 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	LineReader::fetch ()
+		bool LineReader::fetch ()
 		{
-			Int32u	count;
-			char*	swap;
+			Int32u count;
+			char* swap;
 
 			// Nothing to fetch if eof of file has already been reached last time
 			if (this->eof)
@@ -105,10 +105,10 @@ namespace	Tesca
 			return true;
 		}
 
-		bool	LineReader::shift (const char** line, Int32u* length)
+		bool LineReader::shift (const char** line, Int32u* length)
 		{
-			const char*	head;
-			const char*	tail;
+			const char* head;
+			const char* tail;
 
 			// Capture characters until next line break
 			while (true)

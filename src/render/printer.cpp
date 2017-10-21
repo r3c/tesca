@@ -1,9 +1,9 @@
 
 #include "printer.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
 		Printer::Printer ()
 		{

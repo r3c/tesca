@@ -9,29 +9,29 @@
 #include "../../lookup.hpp"
 #include "../line.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Provision
+	namespace Provision
 	{
-		class	RegexLineReader : public LineReader
+		class RegexLineReader : public LineReader
 		{
 			public:
 				RegexLineReader (const RegexLineReader&);
 				RegexLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
 
-				RegexLineReader&	operator = (const RegexLineReader&);
+				RegexLineReader& operator = (const RegexLineReader&);
 
-				virtual const Row&	current () const;
+				virtual const Row& current () const;
 
 			protected:
-				virtual bool	parse (const std::string&);
+				virtual bool parse (const std::string&);
 
 			private:
-				typedef std::map<Glay::Int32u, Glay::Int32u>	Lookup;
+				typedef std::map<Glay::Int32u, Glay::Int32u> Lookup;
 
-				Lookup		lookup;
-				std::regex	regex;
-				ArrayRow	row;
+				Lookup lookup;
+				std::regex regex;
+				ArrayRow row;
 
 
 		};

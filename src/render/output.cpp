@@ -6,9 +6,9 @@
 using namespace std;
 using namespace Glay;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
 		Output::Output () :
 			format (0)
@@ -19,17 +19,17 @@ namespace	Tesca
 		{
 		}
 
-		const Output::Error&	Output::onError () const
+		const Output::Error& Output::onError () const
 		{
 			return this->error;
 		}
 
-		Output::Error&	Output::onError ()
+		Output::Error& Output::onError ()
 		{
 			return this->error;
 		}
 
-		Printer*	Output::create () const
+		Printer* Output::create () const
 		{
 			if (this->format != 0)
 				return this->format->builder (this->config);
@@ -37,10 +37,10 @@ namespace	Tesca
 			return 0;
 		}
 
-		bool	Output::parse (const char* expression)
+		bool Output::parse (const char* expression)
 		{
-			const char*	begin;
-			string		key;
+			const char* begin;
+			string key;
 
 			for (begin = expression; *expression != '\0' && *expression != ':'; )
 				++expression;

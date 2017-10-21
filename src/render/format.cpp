@@ -8,11 +8,11 @@
 using namespace Glay;
 using namespace Tesca::Storage;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
-		const Format	Format::formats[] =
+		const Format Format::formats[] =
 		{
 			{"csv",		[] (const Config& config) -> Printer*
 			{

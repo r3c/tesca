@@ -8,31 +8,31 @@
 #include "format.hpp"
 #include "printer.hpp"
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Render
+	namespace Render
 	{
-		class	Output
+		class Output
 		{
 			public:
-				typedef Glay::Design::Event<const std::string&>	Error;
+				typedef Glay::Design::Event<const std::string&> Error;
 
 						Output (const Output&);
 						Output ();
-				virtual	~Output ();
+				virtual ~Output ();
 
-				Output&	operator = (const Output&);
+				Output& operator = (const Output&);
 
-				const Error&	onError () const;
-				Error&			onError ();
+				const Error& onError () const;
+				Error& onError ();
 
-				Printer*	create () const;
-				bool		parse (const char*);
+				Printer* create () const;
+				bool parse (const char*);
 
 			private:
-				Storage::Config	config;
-				Error			error;
-				const Format*	format;
+				Storage::Config config;
+				Error error;
+				const Format* format;
 		};
 	}
 }
