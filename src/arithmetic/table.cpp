@@ -53,11 +53,8 @@ namespace Tesca
 		{
 			const Aggregator* const* aggregators = this->inner->second;
 			const Bucket& bucket = this->inner->first;
-			Int32u from;
-			Int32u to;
-
-			from = 0;
-			to = 0;
+			Int32u from = 0;
+			Int32u to = 0;
 
 			for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
 			{

@@ -27,7 +27,7 @@ void initialize (Arithmetic::Table& table, const Expression::Filter& filter, Exp
 	table.reset (filter.getCondition (), calculator.getColumns (), calculator.getSlots ());
 }
 
-void loading (FormatWriter& writer, const char* caption, const Provision::Reader::Progress& progress)
+void loading (FormatWriter& error, const char* caption, const Provision::Reader::Progress& progress)
 {
 	static const Int32u captionWidth = 30;
 	static const Int32u meterWidth = 25;
@@ -35,26 +35,26 @@ void loading (FormatWriter& writer, const char* caption, const Provision::Reader
 	Int32u i;
 	Int32u u;
 
-	writer.write ('\r');
+	error.write ('\r');
 
 	for (i = 0; i < captionWidth && *caption != '\0'; ++i)
-		writer.write (*caption++);
+		error.write (*caption++);
 
 	for (; i < captionWidth; ++i)
-		writer.write (' ');
+		error.write (' ');
 
-	writer
+	error
 		.write (" [");
 
 	u = progress.read * meterWidth / progress.size;
 
 	for (i = 0; i < u; ++i)
-		writer.write ('#');
+		error.write ('#');
 
 	for (i = u; i < meterWidth; ++i)
-		writer.write ('-');
+		error.write ('-');
 
-	writer
+	error
 		.write ("] ")
 		.write (progress.read * 100 / progress.size)
 		.write ('%')
@@ -67,7 +67,7 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 	Provision::Reader* reader;
 	FileIStream source;
 	Int8u status;
-	FormatWriter writer (err);
+	FormatWriter error (err);
 
 	status = progress ? 1 : 0;
 
@@ -92,14 +92,14 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 
 			if (reader)
 			{
-				reader->onError ().bind ([&] (const string& error)
+				reader->onError ().bind ([&] (const string& message)
 				{
 					if (status > 1)
-						writer.write ("\n");
+						error.write ("\n");
 
-					writer
+					error
 						.write ("warning: reader error(")
-						.write (error)
+						.write (message)
 						.write (")\n");
 				});
 
@@ -107,7 +107,7 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 				{
 					if (status > 0 && progress.size > 0)
 					{
-						loading (writer, caption, progress);
+						loading (error, caption, progress);
 
 						status = 2;
 					}
@@ -118,7 +118,7 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 
 				if (status > 1)
 				{
-					writer
+					error
 						.write ("\n")
 						.flush ();
 				}
@@ -126,11 +126,11 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 				delete reader;
 			}
 			else
-				writer.write ("error: cannot create reader\n");
+				error.write ("error: cannot create reader\n");
 		}
 		else
 		{
-			writer
+			error
 				.write ("error: cannot open '")
 				.write (caption)
 				.write ("' for reading\n");
@@ -140,63 +140,25 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 
 int main (int argc, char* argv[])
 {
-	Expression::Calculator calculator;
-	const char* calculatorExpression;
 	FormatWriter console (out);
+	FormatWriter error (err);
+
+	Expression::Calculator calculator;
 	Expression::Filter filter;
-	const char* filterCondition;
 	Provision::Input input;
-	const char* inputFormat;
 	Provision::Lookup lookup;
-	int option;
 	Render::Output output;
-	const char* outputFormat;
 	Render::Printer* printer;
-	bool progress;
 	Arithmetic::Table table;
-	FormatWriter writer (err);
 
-	calculator.onError ().bind ([&] (const string& message)
-	{
-		writer
-			.write ("error: invalid calculator expression (")
-			.write (message)
-			.write (")\n");
-	});
-
-	filter.onError ().bind ([&] (const string& message)
-	{
-		writer
-			.write ("error: invalid filter condition (")
-			.write (message)
-			.write (")\n");
-	});
-
-	input.onError ().bind ([&] (const string& message)
-	{
-		writer
-			.write ("error: invalid input format (")
-			.write (message)
-			.write (")\n");
-	});
-
-	output.onError ().bind ([&] (const string& message)
-	{
-		writer
-			.write ("error: invalid output format (")
-			.write (message)
-			.write (")\n");
-	});
-
-	calculatorExpression = "count():nb_lines";
-	filterCondition = "true";
-	inputFormat = "csv";
-	outputFormat = "pretty";
-	progress = false;
+	const char* filterCondition = "true";
+	const char* inputFormat = "csv";
+	const char* outputFormat = "pretty";
+	bool progress = false;
 
 	while (true)
 	{
-		option = getopt_long (argc, argv, "f:hi:o:p", longOptions, NULL);
+		int option = getopt_long (argc, argv, "f:hi:o:p", longOptions, NULL);
 
 		if (option == -1)
 			break;
@@ -237,7 +199,7 @@ int main (int argc, char* argv[])
 				break;
 
 			case ':':
-				writer
+				error
 					.write ("error: missing argument for option '")
 					.write (argv[optind])
 					.write ("'\n");
@@ -245,8 +207,8 @@ int main (int argc, char* argv[])
 				return 1;
 
 			default:
-				writer
-					.write ("error: unknown option '")
+				error
+					.write ("error: unrecognized option '")
 					.write (argv[optind])
 					.write ("'\n");
 
@@ -256,14 +218,44 @@ int main (int argc, char* argv[])
 
 	if (optind >= argc)
 	{
-		writer.write ("error: missing calculator expression\n");
+		error.write ("error: missing calculator expression\n");
 
 		return 1;
 	}
 
-	calculatorExpression = argv[optind++];
+	calculator.onError ().bind ([&] (const string& message)
+	{
+		error
+			.write ("error: invalid calculator expression (")
+			.write (message)
+			.write (")\n");
+	});
 
-	if (!calculator.parse (lookup, calculatorExpression) ||
+	filter.onError ().bind ([&] (const string& message)
+	{
+		error
+			.write ("error: invalid filter condition (")
+			.write (message)
+			.write (")\n");
+	});
+
+	input.onError ().bind ([&] (const string& message)
+	{
+		error
+			.write ("error: invalid input format (")
+			.write (message)
+			.write (")\n");
+	});
+
+	output.onError ().bind ([&] (const string& message)
+	{
+		error
+			.write ("error: invalid output format (")
+			.write (message)
+			.write (")\n");
+	});
+
+	if (!calculator.parse (lookup, argv[optind++]) ||
 	    !filter.parse (lookup, filterCondition) ||
 	    !input.parse (inputFormat) ||
 	    !output.parse (outputFormat))
@@ -273,7 +265,7 @@ int main (int argc, char* argv[])
 
 	if (!printer)
 	{
-		writer.write ("error: cannot create printer\n");
+		error.write ("error: cannot create printer\n");
 
 		return 1;
 	}
