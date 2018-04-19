@@ -129,14 +129,14 @@ namespace Tesca
 						if (!values[2].toNumber (&value) || value < 0)
 							return Variant::empty;
 
-						start = std::min ((Int32u)value, source.length ());
+						start = std::min ((size_t)value, source.length ());
 					}
 					else
 						start = 0;
 
 					position = source.find (search, start);
 
-					return position != string::npos ? Variant (position) : Variant::empty;
+					return position != string::npos ? Variant ((Int32u)position) : Variant::empty;
 				});
 			}},
 			{"first",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
@@ -201,7 +201,7 @@ namespace Tesca
 			{
 				return new StringUnaryExtractor (arguments[0], [] (const string& argument)
 				{
-					return Variant (argument.length ());
+					return Variant ((Int32u)argument.length ());
 				});
 			}},
 			{"log",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
@@ -293,16 +293,16 @@ namespace Tesca
 						return Variant::empty;
 
 					if (value < 0)
-						start = std::min (source.length () + (Int32u)value, source.length ());
+						start = std::min (source.length () + (size_t)value, source.length ());
 					else
-						start = std::min ((Int32u)value, source.length ());
+						start = std::min ((size_t)value, source.length ());
 
 					if (count > 2)
 					{
 						if (!values[2].toNumber (&value) || value < 0)
 							return Variant::empty;
 
-						length = std::min ((Int32u)value, source.length () - start);
+						length = std::min ((size_t)value, source.length () - start);
 					}
 					else
 						length = source.length () - start;

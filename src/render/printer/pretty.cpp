@@ -29,8 +29,8 @@ namespace Tesca
 		void PrettyPrinter::print (OStream& stream, const Table& table) const
 		{
 			const Table::Columns& columns (table.getColumns ());
-			Int32u* length;
-			Int32u lengths[table.getWidth ()];
+			size_t* length;
+			size_t lengths[table.getWidth ()];
 			string output;
 			Int32u margin;
 			Variant* value;
@@ -49,7 +49,7 @@ namespace Tesca
 				for (Int32u i = 0; i < width; ++i)
 				{
 					if (value->toString (&output))
-						*length = max (*length, ((output.length () + margin) / this->align) * this->align);
+						*length = std::max (*length, ((output.length () + margin) / this->align) * this->align);
 
 					++length;
 					++value;

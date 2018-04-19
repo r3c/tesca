@@ -1,6 +1,8 @@
 
 #include "json.hpp"
 
+#include <cstring>
+
 using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
