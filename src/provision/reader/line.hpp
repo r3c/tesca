@@ -36,6 +36,7 @@ namespace Tesca
 				Glay::Int32u line;
 				Glay::Int32u start;
 				Glay::Int32u stop;
+				Glay::Int32u streamMark;
 				Glay::Int32u streamRead;
 				Glay::Int32u streamSize;
 		};

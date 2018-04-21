@@ -7,6 +7,11 @@
 using namespace std;
 using namespace Glay;
 
+namespace
+{
+	const Int32u READ_UPDATE = 1024 * 1024;
+}
+
 namespace Tesca
 {
 	namespace Provision
@@ -22,6 +27,7 @@ namespace Tesca
 			start (0),
 			stop (0)
 		{
+			this->streamMark = 0;
 			this->streamRead = 0;
 			this->streamSize = input->getSize ();
 		}
@@ -101,7 +107,12 @@ namespace Tesca
 			this->bufferOffset += count;
 			this->streamRead += count;
 
-			this->read.fire (Progress (this->streamRead, this->streamSize));
+			// Send progress event
+			if (this->streamMark + READ_UPDATE < this->streamRead || this->streamRead == this->streamSize)
+			{
+				this->read.fire (Progress (this->streamRead, this->streamSize));
+				this->streamMark = this->streamRead;
+			}
 
 			return true;
 		}
