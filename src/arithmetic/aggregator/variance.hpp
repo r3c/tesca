@@ -19,7 +19,7 @@ namespace Tesca
 				virtual void reset ();
 
 			private:
-				Glay::Int32u count;
+				Glay::Int64u count;
 				Glay::Float64 mean;
 				Glay::Float64 sum;
 		};

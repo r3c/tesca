@@ -26,7 +26,7 @@ namespace Tesca
 			return this->current;
 		}
 
-		Int32u Lexer::getIndex () const
+		Size Lexer::getIndex () const
 		{
 			return this->index;
 		}

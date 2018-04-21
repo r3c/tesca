@@ -92,7 +92,7 @@ namespace Tesca
 			{
 				return new VariantBinaryExtractor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
 				{
-					return Variant (a.compare (b));
+					return Variant ((Int64s)a.compare (b));
 				});
 			}},
 			{"count",	0,	0,	[] (const vector<const Extractor*>&, Int32u* slot) -> Extractor*
@@ -136,7 +136,7 @@ namespace Tesca
 
 					position = source.find (search, start);
 
-					return position != string::npos ? Variant ((Int32u)position) : Variant::empty;
+					return position != string::npos ? Variant ((Int64u)position) : Variant::empty;
 				});
 			}},
 			{"first",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
@@ -201,7 +201,7 @@ namespace Tesca
 			{
 				return new StringUnaryExtractor (arguments[0], [] (const string& argument)
 				{
-					return Variant ((Int32u)argument.length ());
+					return Variant ((Int64u)argument.length ());
 				});
 			}},
 			{"log",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*

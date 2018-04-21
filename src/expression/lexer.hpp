@@ -43,7 +43,7 @@ namespace Tesca
 				Lexer (const char*);
 
 				const std::string& getCurrent () const;
-				Glay::Int32u getIndex () const;
+				Glay::Size getIndex () const;
 				Lexem getType () const;
 
 				bool next ();
@@ -54,7 +54,7 @@ namespace Tesca
 				char character;
 				std::string current;
 				bool eof;
-				Glay::Int32u index;
+				Glay::Size index;
 				Glay::Pipe::BinaryReader reader;
 				Glay::Pipe::MemoryIStream stream;
 				Lexem type;

@@ -14,7 +14,7 @@ namespace
 	struct Literal
 	{
 		const char* name;
-		Glay::Int32u length;
+		Glay::Size length;
 		Tesca::Storage::Variant value;
 	};
 
@@ -50,7 +50,7 @@ namespace Tesca
 			return this->row;
 		}
 
-		bool JSONLineReader::parse (const char* line, Int32u length)
+		bool JSONLineReader::parse (const char* line, Size length)
 		{
 			Cursor cursor;
 
@@ -86,7 +86,7 @@ namespace Tesca
 			Int32u field;
 			Int32u index;
 			char key[16];
-			Int32u length;
+			Size length;
 			Float64 number;
 			const char* start;
 
@@ -212,7 +212,7 @@ namespace Tesca
 						this->lookup.enter ();
 						this->lookup.next (this->member);
 
-						for (Int32u i = 0; i < length; ++i)
+						for (Size i = 0; i < length; ++i)
 							this->lookup.next (key[i]);
 
 						if (!this->readValue (cursor))

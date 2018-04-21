@@ -26,16 +26,16 @@ namespace Tesca
 				virtual const Row& current () const;
 
 			protected:
-				virtual bool parse (const char*, Glay::Int32u);
+				virtual bool parse (const char*, Glay::Size);
 
 			private:
 				struct Cursor
 				{
 					const char* buffer;
-					Glay::Int32u length;
+					Glay::Size length;
 				};
 
-				typedef std::function<void (Glay::Int32u, const char*, Glay::Int32u)> Callback;
+				typedef std::function<void (Glay::Int32u, const char*, Glay::Size)> Callback;
 
 				bool readCharacter (Cursor*, char);
 				bool readValue (Cursor*);

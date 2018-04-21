@@ -26,7 +26,7 @@ namespace Tesca
 			string characters;
 			string headers;
 			Int32u index;
-			Int32u length;
+			Size length;
 			Int32u value;
 
 			// Read special character types from configuration
@@ -61,7 +61,7 @@ namespace Tesca
 					length = 0;
 				}
 
-				this->split (buffer, length, [&] (Int32u index, const char* buffer, Int32u length)
+				this->split (buffer, length, [&] (Int32u index, const char* buffer, Size length)
 				{
 					Int32u value;
 
@@ -100,11 +100,11 @@ namespace Tesca
 			return this->row;
 		}
 
-		bool CSVLineReader::parse (const char* line, Int32u length)
+		bool CSVLineReader::parse (const char* line, Size length)
 		{
 			this->row.clear ();
 
-			this->split (line, length, [&] (Int32u index, const char* buffer, Int32u length)
+			this->split (line, length, [&] (Int32u index, const char* buffer, Size length)
 			{
 				Int32u key;
 
@@ -117,9 +117,9 @@ namespace Tesca
 			return true;
 		}
 
-		void CSVLineReader::split (const char* line, Int32u length, Callback callback)
+		void CSVLineReader::split (const char* line, Size length, Callback callback)
 		{
-			Int32u index;
+			Size index;
 			const char* skip;
 			const char* start;
 			const char* stop;
@@ -129,14 +129,14 @@ namespace Tesca
 			for (index = 0; ; ++index)
 			{
 				// Skip leading characters to ignore
-				while (length > 0 && this->types[(Int32u)*start] == TYPE_BLANK)
+				while (length > 0 && this->types[(Int8u)*start] == TYPE_BLANK)
 				{
 					--length;
 					++start;
 				}
 
 				// Field is enclosed between quotes
-				if (length > 0 && this->types[(Int32u)*start] == TYPE_QUOTE)
+				if (length > 0 && this->types[(Int8u)*start] == TYPE_QUOTE)
 				{
 					--length;
 					++start;
@@ -145,14 +145,14 @@ namespace Tesca
 
 					while (true)
 					{
-						while (length > 0 && this->types[(Int32u)*stop] != TYPE_QUOTE)
+						while (length > 0 && this->types[(Int8u)*stop] != TYPE_QUOTE)
 						{
 							--length;
 							++stop;
 						}
 
 						// FIXME: resolve escaped quotes
-						if (length < 2 || this->types[(Int32u)*(stop + 1)] != TYPE_QUOTE)
+						if (length < 2 || this->types[(Int8u)*(stop + 1)] != TYPE_QUOTE)
 							break;
 
 						length -= 2;
@@ -161,7 +161,7 @@ namespace Tesca
 
 					callback (index, start, stop - start);
 
-					while (length > 0 && this->types[(Int32u)*stop] != TYPE_SPLIT)
+					while (length > 0 && this->types[(Int8u)*stop] != TYPE_SPLIT)
 					{
 						--length;
 						++stop;
@@ -177,10 +177,10 @@ namespace Tesca
 
 					for (stop = start; length > 0; stop = skip)
 					{
-						for (skip = stop; length > 0 && this->types[(Int32u)*skip] == TYPE_BLANK; ++skip)
+						for (skip = stop; length > 0 && this->types[(Int8u)*skip] == TYPE_BLANK; ++skip)
 							--length;
 
-						if (length == 0 || this->types[(Int32u)*skip] == TYPE_SPLIT)
+						if (length == 0 || this->types[(Int8u)*skip] == TYPE_SPLIT)
 							break;
 
 						--length;

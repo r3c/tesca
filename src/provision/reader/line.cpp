@@ -9,14 +9,14 @@ using namespace Glay;
 
 namespace
 {
-	const Int32u READ_UPDATE = 1024 * 1024;
+	static const Size READ_UPDATE = 1024 * 1024;
 }
 
 namespace Tesca
 {
 	namespace Provision
 	{
-		LineReader::LineReader (Pipe::SeekIStream* input, Int32u reserve) :
+		LineReader::LineReader (Pipe::SeekIStream* input, Size reserve) :
 			buffer (0),
 			bufferOffset (0),
 			bufferReserve (reserve),
@@ -41,7 +41,7 @@ namespace Tesca
 		bool LineReader::next ()
 		{
 			const char* buffer;
-			Int32u length;
+			Size length;
 
 			if (!this->shift (&buffer, &length))
 				return false;
@@ -60,7 +60,7 @@ namespace Tesca
 
 		bool LineReader::fetch ()
 		{
-			Int32u count;
+			Size count;
 			char* swap;
 
 			// Nothing to fetch if eof of file has already been reached last time
@@ -117,7 +117,7 @@ namespace Tesca
 			return true;
 		}
 
-		bool LineReader::shift (const char** line, Int32u* length)
+		bool LineReader::shift (const char** line, Size* length)
 		{
 			const char* head;
 			const char* tail;

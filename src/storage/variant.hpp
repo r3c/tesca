@@ -17,7 +17,7 @@ namespace Tesca
 				struct String
 				{
 					const char* buffer;
-					Glay::Int32u length;
+					Glay::Size length;
 				};
 
 				enum Type
@@ -31,9 +31,9 @@ namespace Tesca
 				Variant (const Variant&);
 				Variant (bool);
 				Variant (Glay::Float64);
-				Variant (Glay::Int32s);
-				Variant (Glay::Int32u);
-				Variant (const char*, Glay::Int32u);
+				Variant (Glay::Int64s);
+				Variant (Glay::Int64u);
+				Variant (const char*, Glay::Size);
 				Variant (const std::string&);
 				Variant ();
 				~Variant ();

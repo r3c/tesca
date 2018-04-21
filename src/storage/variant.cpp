@@ -45,19 +45,19 @@ namespace Tesca
 			this->content.number = number;
 		}
 
-		Variant::Variant (Int32s integer) :
+		Variant::Variant (Int64s integer) :
 			type (Variant::NUMBER)
 		{
 			this->content.number = integer;
 		}
 
-		Variant::Variant (Int32u integer) :
+		Variant::Variant (Int64u integer) :
 			type (Variant::NUMBER)
 		{
 			this->content.number = integer;
 		}
 
-		Variant::Variant (const char* buffer, Int32u length) :
+		Variant::Variant (const char* buffer, Size length) :
 			share (0),
 			type (Variant::STRING)
 		{
@@ -126,9 +126,9 @@ namespace Tesca
 			bool boolean2;
 			const char* buffer1;
 			const char* buffer2;
-			Int32u compare;
-			Int32u length1;
-			Int32u length2;
+			Size compare;
+			Size length1;
+			Size length2;
 			Float64 number1;
 			Float64 number2;
 			string string1;
@@ -199,7 +199,7 @@ namespace Tesca
 
 		Variant& Variant::keep ()
 		{
-			Int32u length;
+			Size length;
 			char* target;
 
 			switch (this->type)
@@ -301,7 +301,7 @@ namespace Tesca
 		bool Variant::toString (string* output) const
 		{
 			char buffer[64];
-			Int32u length;
+			Size length;
 
 			switch (this->type)
 			{

@@ -13,9 +13,7 @@ namespace Tesca
 
 		Int32u Extractor::getFlags () const
 		{
-			Int32u flags;
-
-			flags = ~0;
+			Int32u flags = ~0;
 
 			this->recurse ([&] (const Extractor* accessor)
 			{
