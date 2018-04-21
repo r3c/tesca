@@ -3,7 +3,7 @@
 #define __TESCA_RENDER_PRINTER_PRETTY_HPP
 
 #include <cstring>
-#include "../../../lib/glay/src/include.hpp"
+#include "../../../lib/glay/src/glay.hpp"
 #include "../../storage/config.hpp"
 #include "../printer.hpp"
 

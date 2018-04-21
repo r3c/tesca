@@ -2,7 +2,7 @@
 #ifndef __TESCA_AGGREGATOR_AVERAGE_HPP
 #define __TESCA_AGGREGATOR_AVERAGE_HPP
 
-#include "../../../lib/glay/src/include.hpp"
+#include "../../../lib/glay/src/glay.hpp"
 #include "../aggregator.hpp"
 
 namespace Tesca

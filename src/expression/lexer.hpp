@@ -4,7 +4,7 @@
 
 #include <sstream>
 #include <string>
-#include "../../lib/glay/src/include.hpp"
+#include "../../lib/glay/src/glay.hpp"
 
 namespace Tesca
 {

@@ -3,7 +3,7 @@
 #define __TESCA_STORAGE_VARIANT_HPP
 
 #include <string>
-#include "../../lib/glay/src/include.hpp"
+#include "../../lib/glay/src/glay.hpp"
 
 namespace Tesca
 {

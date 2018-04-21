@@ -2,7 +2,7 @@
 #ifndef __TESCA_RENDER_PRINTER_NAME_HPP
 #define __TESCA_RENDER_PRINTER_NAME_HPP
 
-#include "../../../lib/glay/src/include.hpp"
+#include "../../../lib/glay/src/glay.hpp"
 #include "../../storage/config.hpp"
 #include "../printer.hpp"
 

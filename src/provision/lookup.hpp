@@ -6,7 +6,7 @@
 #include <stack>
 #include <string>
 #include <vector>
-#include "../../lib/glay/src/include.hpp"
+#include "../../lib/glay/src/glay.hpp"
 
 namespace Tesca
 {

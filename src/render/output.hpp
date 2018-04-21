@@ -3,7 +3,7 @@
 #define __TESCA_RENDER_OUTPUT_HPP
 
 #include <string>
-#include "../../lib/glay/src/include.hpp"
+#include "../../lib/glay/src/glay.hpp"
 #include "../storage/config.hpp"
 #include "format.hpp"
 #include "printer.hpp"

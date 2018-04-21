@@ -3,7 +3,7 @@
 #define __TESCA_ARITHMETIC_EXTRACTOR_BINARY_NUMBER_HPP
 
 #include <functional>
-#include "../../../../lib/glay/src/include.hpp"
+#include "../../../../lib/glay/src/glay.hpp"
 #include "../binary.hpp"
 
 namespace Tesca

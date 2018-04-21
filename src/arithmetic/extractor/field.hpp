@@ -3,7 +3,7 @@
 #define __TESCA_ARITHMETIC_EXTRACTOR_FIELD_HPP
 
 #include <string>
-#include "../../../lib/glay/src/include.hpp"
+#include "../../../lib/glay/src/glay.hpp"
 #include "../extractor.hpp"
 
 namespace Tesca
