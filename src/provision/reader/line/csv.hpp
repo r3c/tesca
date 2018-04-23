@@ -31,7 +31,7 @@ namespace Tesca
 				typedef std::function<void (Glay::Int32u, const char*, Glay::Size)> Callback;
 				typedef std::vector<Glay::Int32u> Mapping;
 
-				void split (const char*, Glay::Int32u, Callback);
+				void split (const char*, Glay::Size, Callback);
 
 				Mapping mapping;
 				ArrayRow row;
