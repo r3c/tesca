@@ -40,6 +40,8 @@ namespace Tesca
 
 				Variant& operator = (const Variant&);
 
+				Type getType () const;
+
 				Glay::Int32s compare (const Variant&) const;
 				Variant& keep ();
 				void reset ();

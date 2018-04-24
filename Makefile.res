@@ -44,6 +44,7 @@ SOURCE	= \
 	src/arithmetic/extractor/unary/boolean.cpp \
 	src/arithmetic/extractor/unary/number.cpp \
 	src/arithmetic/extractor/unary/string.cpp \
+	src/arithmetic/extractor/unary/variant.cpp \
 	src/arithmetic/extractor/unary.cpp \
 	src/arithmetic/extractor/vector/callback.cpp \
 	src/arithmetic/extractor/vector/lazy.cpp \

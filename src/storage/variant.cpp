@@ -197,6 +197,11 @@ namespace Tesca
 			return typeCompare (this->type, other.type);
 		}
 
+		Variant::Type Variant::getType () const
+		{
+			return this->type;
+		}
+
 		Variant& Variant::keep ()
 		{
 			Size length;

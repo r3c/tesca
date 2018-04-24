@@ -19,6 +19,7 @@
 #include "../arithmetic/extractor/if.hpp"
 #include "../arithmetic/extractor/unary/number.hpp"
 #include "../arithmetic/extractor/unary/string.hpp"
+#include "../arithmetic/extractor/unary/variant.hpp"
 #include "../arithmetic/extractor/vector/callback.hpp"
 #include "../arithmetic/extractor/vector/lazy.hpp"
 
@@ -90,9 +91,9 @@ namespace Tesca
 			}},
 			{"cmp",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new VariantBinaryExtractor (arguments[0], arguments[1], [] (const Variant& a, const Variant& b)
+				return new VariantBinaryExtractor (arguments[0], arguments[1], [] (const Variant& lhs, const Variant& rhs)
 				{
-					return Variant ((Int64s)a.compare (b));
+					return Variant ((Int64s)lhs.compare (rhs));
 				});
 			}},
 			{"count",	0,	0,	[] (const vector<const Extractor*>&, Int32u* slot) -> Extractor*
@@ -313,6 +314,26 @@ namespace Tesca
 			{"sum",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
 				return new ReduceCompositeExtractor<SumAggregator> ((*slot)++, arguments[0]);
+			}},
+			{"type",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
+			{
+				return new VariantUnaryExtractor (arguments[0], [] (const Variant& argument)
+				{
+					switch (argument.getType ())
+					{
+						case Variant::Type::BOOLEAN:
+							return Variant ("boolean", 7);
+
+						case Variant::Type::NUMBER:
+							return Variant ("number", 6);
+
+						case Variant::Type::STRING:
+							return Variant ("string", 6);
+
+						default:
+							return Variant ("none", 4);
+					}
+				});
 			}},
 			{"ucase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{

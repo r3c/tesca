@@ -126,37 +126,39 @@ Available row functions are:
 
   * ``abs(x)``: returns absolute value of ``x``.
   * ``at(index, a, b[, c...])``: returns the n-th argument with n = ``index +
-  2`` (this function returns ``a`` if ``index = 0``, ``b`` if ``index = 1``,
-  etc.).
+    2`` (this function returns ``a`` if ``index = 0``, ``b`` if ``index = 1``,
+    etc.).
   * ``case(x, v1, r1[, v2, r2, ...][, f])``: returns ``r1`` if ``x = v1``,
   ``r2`` if ``x = v2`` and same for every pair specified in arguments, or
   ``f`` if ``x`` was not equal to any ``vN``, or ``void`` if no ``f`` value was
-  specified.
+    specified.
   * ``ceil(x)``: returns ``x`` rounded up to a whole number.
   * ``cmp(a, b)``: returns ``-1`` if ``a < b``, ``0`` if ``a = b``, 1 else.
   * ``default(a[, b])``: return ``a`` if ``a`` is true of equivalent (non-empty
-  string or non-zero number), ``b`` else (or ``void`` if missing).
+    string or non-zero number), ``b`` else (or ``void`` if missing).
   * ``find(str, search[, start])``: searches for string ``search`` in ``str``
-  from offset ``start`` (or 0 if missing) and returns position of the first
-  character if found, or ``void`` else.
+    from offset ``start`` (or 0 if missing) and returns position of the first
+    character if found, or ``void`` else.
   * ``floor(x)``: returns ``x`` rounded down to a whole number.
   * ``if(test, a[, b])``: returns ``a`` if ``test`` is true or equivalent
-  (non-empty string or non-zero number), ``b`` else (or ``void`` if missing).
+    (non-empty string or non-zero number), ``b`` else (or ``void`` if missing).
   * ``in(search, a, b, [, c...])``: returns ``true`` if ``search`` is equal to
-  ``a``, ``b``, ``c`` or any following value, or ``false`` else.
+    ``a``, ``b``, ``c`` or any following value, or ``false`` else.
   * ``lcase(str)``: returns lowercase conversion of string ``str``.
   * ``len(str)``: returns number of characters in string ``str``.
   * ``log(a)``: returns the natural logarithm of ``a``.
   * ``max(a, b, [, c...])``: returns highest value among ``a``, ``b``, ``c``
-  and following.
+    and following.
   * ``min(a, b, [, c...])``: returns lowest value among ``a``, ``b``, ``c`` and
-  following.
+    following.
   * ``pow(base, exponent)``: returns ``base`` to the power of ``exponent``.
   * ``round(x)``: returns ``x`` rounded to the nearest integral value.
   * ``slice(str, start, [, length])``: returns up to ``length`` characters (or
-  all remaining characters if ``length`` is missing) from string ``str``,
-  starting at index ``start`` (use a negative ``start`` index to start at the
+    all remaining characters if ``length`` is missing) from string ``str``,
+    starting at index ``start`` (use a negative ``start`` index to start at the
   ``len(str) + start``-th character).
+  * ``type(x)``: returns type of ``x`` as a string, can be either "boolean",
+    "number", "string" or "none".
   * ``ucase(str)``: returns uppercase conversion of string ``str``.
 
 Column definitions can also declare a name (otherwise their automatic names are
