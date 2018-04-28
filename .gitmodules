@@ -1,3 +1,6 @@
 [submodule "lib/glay"]
 	path = lib/glay
 	url = https://github.com/r3c/glay-cpp.git
+[submodule "lib/cxxopts"]
+	path = lib/cxxopts
+	url = git@github.com:jarro2783/cxxopts.git

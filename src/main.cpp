@@ -1,5 +1,7 @@
 
-#include <getopt.h>
+#include <string>
+#include <vector>
+#include "../lib/cxxopts/include/cxxopts.hpp"
 #include "arithmetic/table.hpp"
 #include "expression/calculator.hpp"
 #include "expression/filter.hpp"
@@ -11,16 +13,6 @@ using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Tesca;
-
-struct option longOptions[] =
-{
-	{"filter",		required_argument,	0,	'f' },
-	{"help",		no_argument,		0,	'h' },
-	{"input",		required_argument,	0,	'i' },
-	{"output",		required_argument,	0,	'o' },
-	{"progress",	no_argument,		0,	'p' },
-	{0,				0,					0,	0 }
-};
 
 void initialize (Arithmetic::Table& table, const Expression::Filter& filter, Expression::Calculator& calculator)
 {
@@ -61,7 +53,7 @@ void loading (FormatWriter& error, const char* caption, const Provision::Reader:
 		.flush ();
 }
 
-void process (Arithmetic::Table& table, const Provision::Input& input, const Provision::Lookup& lookup, bool progress, char* sources[], int length)
+void process (Arithmetic::Table& table, const Provision::Input& input, const Provision::Lookup& lookup, bool progress, const vector<string>& sources)
 {
 	const char* caption;
 	Provision::Reader* reader;
@@ -71,13 +63,15 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 
 	status = progress ? 1 : 0;
 
-	for (int index = 0; index < length || index == 0; ++index)
+	for (Size index = 0; index < sources.size () || index == 0; ++index)
 	{
-		if (index < length)
+		if (index < sources.size ())
 		{
-			source.open (sources[index]);
+			const char* path = sources[index].c_str ();
 
-			caption = sources[index];
+			source.open (path);
+
+			caption = path;
 		}
 		else
 		{
@@ -151,78 +145,6 @@ int main (int argc, char* argv[])
 	Render::Printer* printer;
 	Arithmetic::Table table;
 
-	const char* filterCondition = "true";
-	const char* inputFormat = "csv";
-	const char* outputFormat = "pretty";
-	bool progress = false;
-
-	while (true)
-	{
-		int option = getopt_long (argc, argv, "f:hi:o:p", longOptions, NULL);
-
-		if (option == -1)
-			break;
-
-		switch (option)
-		{
-			case 'f':
-				filterCondition = optarg;
-
-				break;
-
-			case 'h':
-				console
-					.write ("usage: tesca [-f <filter>] [-h] [-i <format>] [-o <format>] [-p] <expr> [<file> [<file>...]]\n")
-					.write ("  -f: filter condition, e.g. 'len(_0) >= 3'\n")
-					.write ("  -h: display help and exit")
-					.write ("  -i: input stream format, e.g. 'csv'\n")
-					.write ("  -o: output stream format, e.g. 'csv'\n")
-					.write ("  -p: display progress bar\n")
-					.write ("  <expr>: calculator expression, e.g. '_0: name, sum(_1): duration'\n")
-					.write ("  <file>: path to input file(s)\n");
-
-				return 0;
-
-			case 'i':
-				inputFormat = optarg;
-
-				break;
-
-			case 'o':
-				outputFormat = optarg;
-
-				break;
-
-			case 'p':
-				progress = true;
-
-				break;
-
-			case ':':
-				error
-					.write ("error: missing argument for option '")
-					.write (argv[optind])
-					.write ("'\n");
-
-				return 1;
-
-			default:
-				error
-					.write ("error: unrecognized option '")
-					.write (argv[optind])
-					.write ("'\n");
-
-				return 1;
-		}
-	}
-
-	if (optind >= argc)
-	{
-		error.write ("error: missing calculator expression\n");
-
-		return 1;
-	}
-
 	calculator.onError ().bind ([&] (const string& message)
 	{
 		error
@@ -255,11 +177,48 @@ int main (int argc, char* argv[])
 			.write (")\n");
 	});
 
-	if (!calculator.parse (lookup, argv[optind++]) ||
-	    !filter.parse (lookup, filterCondition) ||
-	    !input.parse (inputFormat) ||
-	    !output.parse (outputFormat))
-		return 1;
+	bool progress;
+	vector<string> sources;
+
+	{
+		cxxopts::Options options ("Tesca", "Text Stream Calculator");
+
+		options.add_options ()
+			("expression", "Calculator expression", cxxopts::value<string> ())
+			("sources", "Input file names (read from stdin if none specified)", cxxopts::value<vector<string>> ())
+			("f,filter", "Filter rows with predicate, e.g. 'len(_0) >= 3'", cxxopts::value<string> ()->default_value ("true"))
+			("h,help", "Display help and exit")
+			("i,input", "Set input format and options, e.g. 'json'", cxxopts::value<string> ()->default_value ("csv"))
+			("o,output", "Set output format and options, e.g. 'csv'", cxxopts::value<string> ()->default_value ("pretty"))
+			("p,progress", "Display progress bar (when reading from files)", cxxopts::value<bool> ()->default_value ("false"));
+
+		options.parse_positional ({"expression", "sources"});
+
+		auto result = options.parse (argc, argv);
+
+		if (result.count ("help") > 0)
+		{
+			error.write (options.help ());
+
+			return 0;
+		}
+
+		if (result.count ("expression") <= 0)
+		{
+			error.write ("error: no expression specified, use '-h' option for help\n");
+
+			return 1;
+		}
+
+		if (!calculator.parse (lookup, result["expression"].as<string> ().c_str ()) ||
+			!filter.parse (lookup, result["filter"].as<string> ().c_str ()) ||
+			!input.parse (result["input"].as<string> ().c_str ()) ||
+			!output.parse (result["output"].as<string> ().c_str ()))
+			return 1;
+
+		progress = result["progress"].as<bool> ();
+		sources = result.count ("sources") > 0 ? result["sources"].as<vector<string>> () : vector<string> ();
+	}
 
 	printer = output.create ();
 
@@ -271,7 +230,7 @@ int main (int argc, char* argv[])
 	}
 
 	initialize (table, filter, calculator);
-	process (table, input, lookup, progress, argv + optind, argc - optind);
+	process (table, input, lookup, progress, sources);
 
 	printer->print (out, table);
 
