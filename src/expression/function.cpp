@@ -12,8 +12,7 @@
 #include "../arithmetic/aggregator/min.hpp"
 #include "../arithmetic/aggregator/sum.hpp"
 #include "../arithmetic/aggregator/variance.hpp"
-#include "../arithmetic/extractor/binary/number.hpp"
-#include "../arithmetic/extractor/binary/variant.hpp"
+#include "../arithmetic/extractor/binary.hpp"
 #include "../arithmetic/extractor/composite/constant.hpp"
 #include "../arithmetic/extractor/composite/reduce.hpp"
 #include "../arithmetic/extractor/if.hpp"
@@ -91,7 +90,7 @@ namespace Tesca
 			}},
 			{"cmp",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new VariantBinaryExtractor (arguments[0], arguments[1], "cmp", [] (const Variant& lhs, const Variant& rhs)
+				return new BinaryExtractor (arguments[0], arguments[1], "cmp", [] (const Variant& lhs, const Variant& rhs)
 				{
 					return Variant ((Int64s)lhs.compare (rhs));
 				});
@@ -269,9 +268,12 @@ namespace Tesca
 			}},
 			{"pow",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberBinaryExtractor (arguments[0], arguments[1], "pow", [] (Float64 base, Float64 exponent)
+				return new BinaryExtractor (arguments[0], arguments[1], "pow", [] (Variant base, Variant exponent)
 				{
-					return Variant (pow (base, exponent));
+					Float64 baseValue;
+					Float64 exponentValue;
+
+					return base.toNumber (&baseValue) && exponent.toNumber (&exponentValue) ? Variant (pow (baseValue, exponentValue)) : Variant::empty;
 				});
 			}},
 			{"round",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*

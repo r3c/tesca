@@ -9,10 +9,10 @@
 #include "provision/lookup.hpp"
 #include "render/output.hpp"
 
-using namespace std;
 using namespace Glay;
 using namespace Glay::Pipe;
 using namespace Tesca;
+using namespace std;
 
 void initialize (Arithmetic::Table& table, const Expression::Filter& filter, Expression::Calculator& calculator)
 {

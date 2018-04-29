@@ -10,7 +10,8 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		BinaryExtractor::BinaryExtractor (const Extractor* lhs, const Extractor* rhs, const string& infix) :
+		BinaryExtractor::BinaryExtractor (const Extractor* lhs, const Extractor* rhs, const string& infix, Callback callback) :
+			callback (callback),
 			infix (infix),
 			lhs (lhs),
 			rhs (rhs)
@@ -24,12 +25,12 @@ namespace Tesca
 
 		Variant BinaryExtractor::compute (const Aggregator* const* aggregators) const
 		{
-			return this->evaluate (this->lhs->compute (aggregators), this->rhs->compute (aggregators));
+			return this->callback (this->lhs->compute (aggregators), this->rhs->compute (aggregators));
 		}
 
 		Variant BinaryExtractor::extract (const Row& row) const
 		{
-			return this->evaluate (this->lhs->extract (row), this->rhs->extract (row));
+			return this->callback (this->lhs->extract (row), this->rhs->extract (row));
 		}
 
 		void BinaryExtractor::recurse (RecurseCallback callback) const

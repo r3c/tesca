@@ -31,8 +31,6 @@ SOURCE	= \
 	src/arithmetic/aggregator.cpp \
 	src/arithmetic/bucket.cpp \
 	src/arithmetic/column.cpp \
-	src/arithmetic/extractor/binary/number.cpp \
-	src/arithmetic/extractor/binary/variant.cpp \
 	src/arithmetic/extractor/binary.cpp \
 	src/arithmetic/extractor/composite.cpp \
 	src/arithmetic/extractor/constant.cpp \
