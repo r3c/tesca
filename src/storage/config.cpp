@@ -2,8 +2,17 @@
 #include "config.hpp"
 
 #include <sstream>
+#include "../../lib/glay/src/glay.hpp"
 
 using namespace std;
+using namespace Glay;
+
+namespace
+{
+	static const Int8u ESCAPE = '\\';
+	static const Int8u PARAMETER = ':';
+	static const Int8u VALUE = '=';
+}
 
 namespace Tesca
 {
@@ -41,21 +50,21 @@ namespace Tesca
 			return true;
 		}
 
-		bool Config::parse (const string& input)
+		bool Config::parse (const char* input)
 		{
 			stringstream buffer;
 			string key;
 
 			this->clear ();
 
-			for (const char* c = input.c_str (); *c != '\0'; )
+			for (const char* c = input; *c != '\0'; )
 			{
 				// Read configuration key
 				buffer.str ("");
 
-				for (; *c != '\0' && *c != '=' && *c != ';'; ++c)
+				for (; *c != '\0' && *c != PARAMETER && *c != VALUE; ++c)
 				{
-					if (*c == '\\' && *(c + 1) != '\0')
+					if (*c == ESCAPE && *(c + 1) != '\0')
 						++c;
 
 					buffer.put (*c);
@@ -63,24 +72,25 @@ namespace Tesca
 
 				key = buffer.str ();
 
-				// Read and store configuration pair
+				// Read configuration value if any
 				buffer.str ("");
 
-				if (*c == '=')
+				if (*c == VALUE)
 				{
-					for (++c; *c != '\0' && *c != ';'; ++c)
+					for (++c; *c != '\0' && *c != PARAMETER; ++c)
 					{
-						if (*c == '\\' && *(c + 1) != '\0')
+						if (*c == ESCAPE && *(c + 1) != '\0')
 							++c;
 
 						buffer.put (*c);
 					}
 				}
 
-				// Skip separator
-				if (*c == ';')
+				// Skip parameter separator
+				if (*c == PARAMETER)
 					++c;
 
+				// Store configuration pair
 				this->values[key] = buffer.str ();
 			}
 

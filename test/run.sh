@@ -31,12 +31,20 @@ assert_json() {
 	assert json csv "$1" "$2"
 }
 
-# Basic CSV reading
+# CSV reading
 assert_csv 'echo A,1' '_0, _1' << EOF
 A,1
 EOF
 
-# Basic JSON reading
+assert csv:headers csv 'echo key,value; echo A,1' 'key, value' << EOF
+A,1
+EOF
+
+assert csv:blanks=b_:quotes=q-:splits=s. csv 'echo bONE_sbqbsTWO._-.THREE' '_0, _1, _2' << EOF
+ONE,bsTWO._,THREE
+EOF
+
+# JSON reading
 assert_json "echo '{\"1\": \"Hello\", \"key\": \"test\", \"complex\": [27, \"World!\", 3]}'" 'row.1, row.key, row.complex.0, row.complex.1, row.complex.2' << EOF
 Hello,test,27,World!,3
 EOF
@@ -49,7 +57,7 @@ B,3,1000
 B,4,1000
 EOF
 
-# Sum values on 1M lines file
-assert_csv 'seq 1000000 | while read i; do echo A,$i; done' '_0, sum(_1)' << EOF
-A,500000500000
+# Sum values on 100K lines file
+assert_csv 'seq 100000 | while read i; do echo A,$i; done' '_0, sum(_1)' << EOF
+A,5000050000
 EOF

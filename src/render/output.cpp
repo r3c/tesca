@@ -6,6 +6,11 @@
 using namespace std;
 using namespace Glay;
 
+namespace
+{
+	static const Int8u SEPARATOR = ':';
+}
+
 namespace Tesca
 {
 	namespace Render
@@ -42,7 +47,7 @@ namespace Tesca
 			const char* begin;
 			string key;
 
-			for (begin = expression; *expression != '\0' && *expression != ':'; )
+			for (begin = expression; *expression != '\0' && *expression != SEPARATOR; )
 				++expression;
 
 			this->format = 0;
@@ -65,7 +70,7 @@ namespace Tesca
 			}
 
 			// Read configuration
-			if (*expression == ':')
+			if (*expression == SEPARATOR)
 				return this->config.parse (++expression);
 
 			return true;

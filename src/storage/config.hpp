@@ -20,7 +20,7 @@ namespace Tesca
 				void clear ();
 				const std::string& get (const std::string&, const std::string&) const;
 				bool get (const std::string&, std::string*) const;
-				bool parse (const std::string&);
+				bool parse (const char*);
 
 			private:
 				std::map<std::string, std::string> values;

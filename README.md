@@ -183,13 +183,13 @@ one used for column definitions (example: ``-f '_0 >= 0 & _0 < 8'``).
 Defines how values are extracted from each line of input file and which name
 should be used to access them in expressions. Formats can be cutomized by
 specifying options after the format name like this:
-``-i 'format:option1=value1;option2=value2'``. Valid values for input stream
+``-i 'format:option1=value1:option2=value2'``. Valid values for input stream
 format are:
 
   * ``-i csv`` (default value): read lines as comma-separated values, default
   field names are ``_0``, ``_1``, ``_2`` and so on in expression unless
   you use the 'headers' option.
-    * use option 'headers' without argument to use first line as header
+    * use option 'headers' without associated value to use first line as header
 	definition: field names will be defined from its value instead of default
 	names (example: ``-i 'csv:headers'``).
     * use option 'headers' with comma-separated arguments to define fixed field
