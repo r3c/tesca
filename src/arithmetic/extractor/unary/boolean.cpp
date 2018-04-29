@@ -1,16 +1,16 @@
 
 #include "boolean.hpp"
 
-using namespace std;
 using namespace Glay;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
 	namespace Arithmetic
 	{
-		BooleanUnaryExtractor::BooleanUnaryExtractor (const Extractor* source, Callback callback) :
-			UnaryExtractor (source),
+		BooleanUnaryExtractor::BooleanUnaryExtractor (const Extractor* operand, const string& prefix, Callback callback) :
+			UnaryExtractor (operand, prefix),
 			callback (callback)
 		{
 		}

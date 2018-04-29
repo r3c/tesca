@@ -4,16 +4,24 @@
 using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
+using namespace std;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		template<typename T>
-		ReduceCompositeExtractor<T>::ReduceCompositeExtractor (Int32u slot, const Extractor* operand) :
+		ReduceCompositeExtractor<T>::ReduceCompositeExtractor (Int32u slot, const Extractor* operand, const string& prefix) :
 			operand (operand),
+			prefix (prefix),
 			slot (slot)
 		{
+		}
+
+		template<typename T>
+		string ReduceCompositeExtractor<T>::createName (Int32u slot) const
+		{
+			return this->prefix + "_" + this->operand->createName (slot);
 		}
 
 		template<typename T>
@@ -23,7 +31,7 @@ namespace	Tesca
 		}
 
 		template<typename T>
-		void	ReduceCompositeExtractor<T>::populate (Aggregator** aggregators) const
+		void ReduceCompositeExtractor<T>::populate (Aggregator** aggregators) const
 		{
 			Extractor::populate (aggregators);
 
@@ -31,13 +39,13 @@ namespace	Tesca
 		}
 
 		template<typename T>
-		void	ReduceCompositeExtractor<T>::recurse (RecurseCallback callback) const
+		void ReduceCompositeExtractor<T>::recurse (RecurseCallback callback) const
 		{
 			callback (this->operand);
 		}
 
 		template<typename T>
-		void	ReduceCompositeExtractor<T>::store (Aggregator** aggregators, const Provision::Row& row) const
+		void ReduceCompositeExtractor<T>::store (Aggregator** aggregators, const Provision::Row& row) const
 		{
 			Extractor::store (aggregators, row);
 

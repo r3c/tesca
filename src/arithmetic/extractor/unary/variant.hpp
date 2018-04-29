@@ -3,6 +3,7 @@
 #define __TESCA_ARITHMETIC_EXTRACTOR_UNARY_VARIANT_HPP
 
 #include <functional>
+#include <string>
 #include "../unary.hpp"
 
 namespace Tesca
@@ -14,7 +15,7 @@ namespace Tesca
 			public:
 				typedef std::function<Storage::Variant (const Storage::Variant&)> Callback;
 
-				VariantUnaryExtractor (const Extractor*, Callback);
+				VariantUnaryExtractor (const Extractor*, const std::string&, Callback);
 
 				virtual Storage::Variant evaluate (const Storage::Variant&) const;
 

@@ -1,14 +1,16 @@
 
 #include "variant.hpp"
 
+using namespace Glay;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
 	namespace Arithmetic
 	{
-		VariantBinaryExtractor::VariantBinaryExtractor (const Extractor* lhs, const Extractor* rhs, Callback callback) :
-			BinaryExtractor (lhs, rhs),
+		VariantBinaryExtractor::VariantBinaryExtractor (const Extractor* lhs, const Extractor* rhs, const string& infix, Callback callback) :
+			BinaryExtractor (lhs, rhs, infix),
 			callback (callback)
 		{
 		}

@@ -13,6 +13,8 @@ namespace Tesca
 			public:
 				ConstantExtractor (const Storage::Variant&);
 
+				virtual std::string createName (Glay::Int32u) const;
+
 				virtual Glay::Int32u getFlags () const;
 
 				virtual Storage::Variant compute (const Aggregator* const*) const;

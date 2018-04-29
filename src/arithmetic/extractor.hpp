@@ -2,6 +2,7 @@
 #ifndef __TESCA_ARITHMETIC_EXTRACTOR_HPP
 #define __TESCA_ARITHMETIC_EXTRACTOR_HPP
 
+#include <string>
 #include "../provision/row.hpp"
 #include "../storage/variant.hpp"
 #include "aggregator.hpp"
@@ -20,6 +21,8 @@ namespace Tesca
 				};
 
 				virtual ~Extractor ();
+
+				virtual std::string createName (Glay::Int32u) const = 0;
 
 				virtual Glay::Int32u getFlags () const;
 

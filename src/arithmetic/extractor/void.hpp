@@ -2,6 +2,7 @@
 #ifndef __TESCA_ARITHMETIC_EXTRACTOR_VOID_HPP
 #define __TESCA_ARITHMETIC_EXTRACTOR_VOID_HPP
 
+#include <string>
 #include "../extractor.hpp"
 
 namespace Tesca
@@ -12,6 +13,8 @@ namespace Tesca
 		{
 			public:
 				static const VoidExtractor instance;
+
+				virtual std::string createName (Glay::Int32u) const;
 
 				virtual Glay::Int32u getFlags () const;
 

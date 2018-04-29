@@ -1,10 +1,11 @@
 
 #include "if.hpp"
-
 #include "void.hpp"
 
+using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
@@ -22,6 +23,11 @@ namespace Tesca
 			onFalse (&VoidExtractor::instance),
 			onTrue (onTrue)
 		{
+		}
+
+		string IfExtractor::createName (Int32u index) const
+		{
+			return "if_" + this->condition->createName (index);
 		}
 
 		Variant IfExtractor::compute (const Aggregator* const* aggregators) const

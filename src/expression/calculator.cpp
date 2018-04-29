@@ -43,26 +43,25 @@ namespace Tesca
 
 		bool Calculator::parse (Lookup& lookup, const char* input)
 		{
-			char buffer[32];
-			Column column;
-			const Extractor* extractor;
-			string key;
 			Lexer lexer (input);
-			bool next;
 
 			this->reset ();
 
-			for (next = false; lexer.getType () != Lexer::END; next = true)
+			for (bool next = false; lexer.getType () != Lexer::END; next = true)
 			{
 				// Skip columns separator after first column
 				if (next && !this->parser.parseType (lexer, Lexer::COMMA, "column separator"))
 					return false;
 
 				// Read column expression
+				const Extractor* extractor;
+
 				if (!this->parser.parseExpression (lexer, lookup, &this->slots, &extractor))
 					return false;
 
 				// Read column key if any
+				string key;
+
 				if (lexer.getType () == Lexer::NAME)
 				{
 					lexer.next ();
@@ -71,7 +70,7 @@ namespace Tesca
 						return false;
 				}
 				else
-					key = string (buffer, Convert::toString (buffer, sizeof (buffer) / sizeof (*buffer), this->columns.size ()));
+					key = extractor->createName (this->columns.size ());
 
 				// Build column and add to list
 				this->columns.push_back (Column (key, extractor));

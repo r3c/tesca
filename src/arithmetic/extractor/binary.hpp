@@ -2,6 +2,7 @@
 #ifndef __TESCA_ARITHMETIC_EXTRACTOR_BINARY_HPP
 #define __TESCA_ARITHMETIC_EXTRACTOR_BINARY_HPP
 
+#include <string>
 #include "../extractor.hpp"
 
 namespace Tesca
@@ -11,7 +12,9 @@ namespace Tesca
 		class BinaryExtractor : public Extractor
 		{
 			public:
-				BinaryExtractor (const Extractor*, const Extractor*);
+				BinaryExtractor (const Extractor*, const Extractor*, const std::string&);
+
+				virtual std::string createName (Glay::Int32u) const;
 
 				virtual Storage::Variant compute (const Aggregator* const*) const;
 				virtual Storage::Variant extract (const Provision::Row&) const;
@@ -21,6 +24,7 @@ namespace Tesca
 				virtual void recurse (RecurseCallback) const;
 
 			private:
+				std::string infix;
 				const Extractor* lhs;
 				const Extractor* rhs;
 		};

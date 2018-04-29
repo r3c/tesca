@@ -1,16 +1,16 @@
 
 #include "string.hpp"
 
-using namespace std;
 using namespace Glay;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
 	namespace Arithmetic
 	{
-		StringUnaryExtractor::StringUnaryExtractor (const Extractor* source, Callback callback) :
-			UnaryExtractor (source),
+		StringUnaryExtractor::StringUnaryExtractor (const Extractor* source, const string& prefix, Callback callback) :
+			UnaryExtractor (source, prefix),
 			callback (callback)
 		{
 		}

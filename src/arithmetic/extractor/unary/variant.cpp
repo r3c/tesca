@@ -1,15 +1,15 @@
 #include "variant.hpp"
 
-using namespace std;
 using namespace Glay;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
 	namespace Arithmetic
 	{
-		VariantUnaryExtractor::VariantUnaryExtractor (const Extractor* source, Callback callback) :
-			UnaryExtractor (source),
+		VariantUnaryExtractor::VariantUnaryExtractor (const Extractor* operand, const string& prefix, Callback callback) :
+			UnaryExtractor (operand, prefix),
 			callback (callback)
 		{
 		}

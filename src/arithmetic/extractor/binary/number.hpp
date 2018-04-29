@@ -3,6 +3,7 @@
 #define __TESCA_ARITHMETIC_EXTRACTOR_BINARY_NUMBER_HPP
 
 #include <functional>
+#include <string>
 #include "../../../../lib/glay/src/glay.hpp"
 #include "../binary.hpp"
 
@@ -15,7 +16,7 @@ namespace Tesca
 			public:
 				typedef std::function<Storage::Variant (Glay::Float64, Glay::Float64)> Callback;
 
-				NumberBinaryExtractor (const Extractor*, const Extractor*, Callback);
+				NumberBinaryExtractor (const Extractor*, const Extractor*, const std::string&, Callback);
 
 				virtual Storage::Variant evaluate (const Storage::Variant&, const Storage::Variant&) const;
 

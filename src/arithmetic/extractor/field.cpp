@@ -1,18 +1,24 @@
 
 #include "field.hpp"
 
-using namespace std;
 using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
 	namespace Arithmetic
 	{
-		FieldExtractor::FieldExtractor (Int32u field) :
-			field (field)
+		FieldExtractor::FieldExtractor (Int32u field, const string& name) :
+			field (field),
+			name (name)
 		{
+		}
+
+		string FieldExtractor::createName (Int32u) const
+		{
+			return this->name;
 		}
 
 		Int32u FieldExtractor::getFlags () const

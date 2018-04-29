@@ -49,6 +49,12 @@ assert_json "echo '{\"1\": \"Hello\", \"key\": \"test\", \"complex\": [27, \"Wor
 Hello,test,27,World!,3
 EOF
 
+# Column naming
+assert csv csv:headers 'echo A,1' 'len(_0), _1 + 2' << EOF
+len__0,_1_plus_2
+1,3
+EOF
+
 # Count lines per tuple on 4000 lines file
 assert_csv 'seq 1000 | while read i; do echo A,1; echo A,2; echo B,3; echo B,4; done' '_0, _1, sum(1)' << EOF
 A,1,1000

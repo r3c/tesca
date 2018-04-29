@@ -1,19 +1,25 @@
 
 #include "lazy.hpp"
 
-using namespace std;
 using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
 	namespace Arithmetic
 	{
-		LazyVectorExtractor::LazyVectorExtractor (const vector<const Extractor*>& extractors, Callback callback) :
+		LazyVectorExtractor::LazyVectorExtractor (const vector<const Extractor*>& extractors, const string& name, Callback callback) :
 			VectorExtractor (extractors),
-			callback (callback)
+			callback (callback),
+			name (name)
 		{
+		}
+
+		string LazyVectorExtractor::createName (Int32u) const
+		{
+			return this->name;
 		}
 
 		Variant LazyVectorExtractor::compute (const Aggregator* const* aggregators) const

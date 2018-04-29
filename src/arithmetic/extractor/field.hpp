@@ -13,7 +13,9 @@ namespace Tesca
 		class FieldExtractor : public Extractor
 		{
 			public:
-				FieldExtractor (Glay::Int32u);
+				FieldExtractor (Glay::Int32u, const std::string&);
+
+				virtual std::string createName (Glay::Int32u) const;
 
 				virtual Glay::Int32u getFlags () const;
 
@@ -22,6 +24,7 @@ namespace Tesca
 
 			private:
 				Glay::Int32u field;
+				std::string name;
 		};
 	}
 }

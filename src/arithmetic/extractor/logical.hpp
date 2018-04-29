@@ -22,7 +22,6 @@ namespace Tesca
 
 				virtual void recurse (RecurseCallback) const;
 
-			private:
 				const Extractor* lhs;
 				const Extractor* rhs;
 		};

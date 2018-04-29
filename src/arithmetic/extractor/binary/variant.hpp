@@ -3,6 +3,7 @@
 #define __TESCA_ARITHMETIC_EXTRACTOR_BINARY_VARIANT_HPP
 
 #include <functional>
+#include <string>
 #include "../binary.hpp"
 
 namespace Tesca
@@ -14,7 +15,7 @@ namespace Tesca
 			public:
 				typedef std::function<Storage::Variant (const Storage::Variant&, const Storage::Variant&)> Callback;
 
-				VariantBinaryExtractor (const Extractor*, const Extractor*, Callback);
+				VariantBinaryExtractor (const Extractor*, const Extractor*, const std::string&, Callback);
 
 				virtual Storage::Variant evaluate (const Storage::Variant&, const Storage::Variant&) const;
 

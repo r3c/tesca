@@ -36,14 +36,14 @@ namespace Tesca
 		{
 			{"abs",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				return new NumberUnaryExtractor (arguments[0], "abs", [] (Float64 value)
 				{
 					return Variant (fabs (value));
 				});
 			}},
 			{"at",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new LazyVectorExtractor (arguments, [] (LazyVectorExtractor::Resolver resolver, Int32u count)
+				return new LazyVectorExtractor (arguments, "at", [] (LazyVectorExtractor::Resolver resolver, Int32u count)
 				{
 					Int32u index;
 					Float64 value;
@@ -61,11 +61,11 @@ namespace Tesca
 			}},
 			{"avg",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceCompositeExtractor<AverageAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<AverageAggregator> ((*slot)++, arguments[0], "avg");
 			}},
 			{"case",	2,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new LazyVectorExtractor (arguments, [] (LazyVectorExtractor::Resolver resolver, Int32u count)
+				return new LazyVectorExtractor (arguments, "case", [] (LazyVectorExtractor::Resolver resolver, Int32u count)
 				{
 					Int32u index;
 					const Variant& search = resolver (0);
@@ -84,25 +84,25 @@ namespace Tesca
 			}},
 			{"ceil",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				return new NumberUnaryExtractor (arguments[0], "ceil", [] (Float64 value)
 				{
 					return Variant (ceil (value));
 				});
 			}},
 			{"cmp",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new VariantBinaryExtractor (arguments[0], arguments[1], [] (const Variant& lhs, const Variant& rhs)
+				return new VariantBinaryExtractor (arguments[0], arguments[1], "cmp", [] (const Variant& lhs, const Variant& rhs)
 				{
 					return Variant ((Int64s)lhs.compare (rhs));
 				});
 			}},
 			{"count",	0,	0,	[] (const vector<const Extractor*>&, Int32u* slot) -> Extractor*
 			{
-				return new ConstantCompositeExtractor<CountAggregator> ((*slot)++, Variant::empty);
+				return new ConstantCompositeExtractor<CountAggregator> ((*slot)++, Variant::empty, "count");
 			}},
 			{"default",	1,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				return new CallbackVectorExtractor (arguments, "default", [] (const Variant* values, Int32u count)
 				{
 					bool test;
 
@@ -114,7 +114,7 @@ namespace Tesca
 			}},
 			{"find",	2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				return new CallbackVectorExtractor (arguments, "find", [] (const Variant* values, Int32u count)
 				{
 					size_t position;
 					string source;
@@ -142,11 +142,11 @@ namespace Tesca
 			}},
 			{"first",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceCompositeExtractor<FirstAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<FirstAggregator> ((*slot)++, arguments[0], "first");
 			}},
 			{"floor",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				return new NumberUnaryExtractor (arguments[0], "floor", [] (Float64 value)
 				{
 					return Variant (floor (value));
 				});
@@ -160,7 +160,7 @@ namespace Tesca
 			}},
 			{"in",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				return new CallbackVectorExtractor (arguments, "in", [] (const Variant* values, Int32u count)
 				{
 					const Variant* search;
 
@@ -177,11 +177,11 @@ namespace Tesca
 			}},
 			{"last",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceCompositeExtractor<LastAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<LastAggregator> ((*slot)++, arguments[0], "last");
 			}},
 			{"lcase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new StringUnaryExtractor (arguments[0], [] (const string& argument)
+				return new StringUnaryExtractor (arguments[0], "lcase", [] (const string& argument)
 				{
 					char* buffer;
 					Variant lower;
@@ -200,14 +200,14 @@ namespace Tesca
 			}},
 			{"len",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new StringUnaryExtractor (arguments[0], [] (const string& argument)
+				return new StringUnaryExtractor (arguments[0], "len", [] (const string& argument)
 				{
 					return Variant ((Int64u)argument.length ());
 				});
 			}},
 			{"log",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				return new NumberUnaryExtractor (arguments[0], "log", [] (Float64 value)
 				{
 					if (value <= 0)
 						return Variant::empty;
@@ -218,9 +218,9 @@ namespace Tesca
 			{"max",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
 				if (arguments.size () == 1)
-					return new ReduceCompositeExtractor<MaxAggregator> ((*slot)++, arguments[0]);
+					return new ReduceCompositeExtractor<MaxAggregator> ((*slot)++, arguments[0], "max");
 
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				return new CallbackVectorExtractor (arguments, "max", [] (const Variant* values, Int32u count)
 				{
 					Float64 current;
 					bool empty;
@@ -244,9 +244,9 @@ namespace Tesca
 			{"min",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
 				if (arguments.size () == 1)
-					return new ReduceCompositeExtractor<MinAggregator> ((*slot)++, arguments[0]);
+					return new ReduceCompositeExtractor<MinAggregator> ((*slot)++, arguments[0], "min");
 
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				return new CallbackVectorExtractor (arguments, "min", [] (const Variant* values, Int32u count)
 				{
 					Float64 current;
 					bool empty;
@@ -269,21 +269,21 @@ namespace Tesca
 			}},
 			{"pow",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberBinaryExtractor (arguments[0], arguments[1], [] (Float64 base, Float64 exponent)
+				return new NumberBinaryExtractor (arguments[0], arguments[1], "pow", [] (Float64 base, Float64 exponent)
 				{
 					return Variant (pow (base, exponent));
 				});
 			}},
 			{"round",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], [] (Float64 value)
+				return new NumberUnaryExtractor (arguments[0], "round", [] (Float64 value)
 				{
 					return Variant (round (value));
 				});
 			}},
 			{"slice",	2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new CallbackVectorExtractor (arguments, [] (const Variant* values, Int32u count)
+				return new CallbackVectorExtractor (arguments, "slice", [] (const Variant* values, Int32u count)
 				{
 					Int32u length;
 					string source;
@@ -313,11 +313,11 @@ namespace Tesca
 			}},
 			{"sum",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceCompositeExtractor<SumAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<SumAggregator> ((*slot)++, arguments[0], "sum");
 			}},
 			{"type",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new VariantUnaryExtractor (arguments[0], [] (const Variant& argument)
+				return new VariantUnaryExtractor (arguments[0], "type", [] (const Variant& argument)
 				{
 					switch (argument.getType ())
 					{
@@ -337,7 +337,7 @@ namespace Tesca
 			}},
 			{"ucase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new StringUnaryExtractor (arguments[0], [] (const string& argument)
+				return new StringUnaryExtractor (arguments[0], "ucase", [] (const string& argument)
 				{
 					char* buffer;
 					Variant upper;
@@ -356,7 +356,7 @@ namespace Tesca
 			}},
 			{"var",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
-				return new ReduceCompositeExtractor<VarianceAggregator> ((*slot)++, arguments[0]);
+				return new ReduceCompositeExtractor<VarianceAggregator> ((*slot)++, arguments[0], "var");
 			}},
 			{0, 0, 0, 0}
 		};

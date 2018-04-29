@@ -4,16 +4,24 @@
 using namespace Glay;
 using namespace Tesca::Provision;
 using namespace Tesca::Storage;
+using namespace std;
 
-namespace	Tesca
+namespace Tesca
 {
-	namespace	Arithmetic
+	namespace Arithmetic
 	{
 		template<typename T>
-		ConstantCompositeExtractor<T>::ConstantCompositeExtractor (Int32u slot, const Variant& value) :
+		ConstantCompositeExtractor<T>::ConstantCompositeExtractor (Int32u slot, const Variant& value, const string& name) :
+			name (name),
 			slot (slot),
 			value (value)
 		{
+		}
+
+		template<typename T>
+		string ConstantCompositeExtractor<T>::createName (Int32u) const
+		{
+			return this->name;
 		}
 
 		template<typename T>
@@ -23,7 +31,7 @@ namespace	Tesca
 		}
 
 		template<typename T>
-		void	ConstantCompositeExtractor<T>::populate (Aggregator** aggregators) const
+		void ConstantCompositeExtractor<T>::populate (Aggregator** aggregators) const
 		{
 			Extractor::populate (aggregators);
 
@@ -31,12 +39,12 @@ namespace	Tesca
 		}
 
 		template<typename T>
-		void	ConstantCompositeExtractor<T>::recurse (RecurseCallback) const
+		void ConstantCompositeExtractor<T>::recurse (RecurseCallback) const
 		{
 		}
 
 		template<typename T>
-		void	ConstantCompositeExtractor<T>::store (Aggregator** aggregators, const Provision::Row& row) const
+		void ConstantCompositeExtractor<T>::store (Aggregator** aggregators, const Provision::Row& row) const
 		{
 			Extractor::store (aggregators, row);
 

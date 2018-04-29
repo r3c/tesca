@@ -3,13 +3,14 @@
 
 using namespace Glay;
 using namespace Tesca::Storage;
+using namespace std;
 
 namespace Tesca
 {
 	namespace Arithmetic
 	{
-		NumberBinaryExtractor::NumberBinaryExtractor (const Extractor* lhs, const Extractor* rhs, Callback callback) :
-			BinaryExtractor (lhs, rhs),
+		NumberBinaryExtractor::NumberBinaryExtractor (const Extractor* lhs, const Extractor* rhs, const string& infix, Callback callback) :
+			BinaryExtractor (lhs, rhs, infix),
 			callback (callback)
 		{
 		}
