@@ -16,11 +16,10 @@
 #include "../arithmetic/extractor/composite/constant.hpp"
 #include "../arithmetic/extractor/composite/reduce.hpp"
 #include "../arithmetic/extractor/if.hpp"
-#include "../arithmetic/extractor/unary/number.hpp"
-#include "../arithmetic/extractor/unary/string.hpp"
-#include "../arithmetic/extractor/unary/variant.hpp"
+#include "../arithmetic/extractor/unary.hpp"
 #include "../arithmetic/extractor/vector/callback.hpp"
 #include "../arithmetic/extractor/vector/lazy.hpp"
+#include "wrapper.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -35,10 +34,10 @@ namespace Tesca
 		{
 			{"abs",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], "abs", [] (Float64 value)
+				return new UnaryExtractor (arguments[0], "abs", numberUnary ([] (Float64 value)
 				{
 					return Variant (fabs (value));
-				});
+				}));
 			}},
 			{"at",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -83,10 +82,10 @@ namespace Tesca
 			}},
 			{"ceil",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], "ceil", [] (Float64 value)
+				return new UnaryExtractor (arguments[0], "ceil", numberUnary ([] (Float64 value)
 				{
 					return Variant (ceil (value));
-				});
+				}));
 			}},
 			{"cmp",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -145,10 +144,10 @@ namespace Tesca
 			}},
 			{"floor",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], "floor", [] (Float64 value)
+				return new UnaryExtractor (arguments[0], "floor", numberUnary ([] (Float64 value)
 				{
 					return Variant (floor (value));
-				});
+				}));
 			}},
 			{"if",		2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -180,7 +179,7 @@ namespace Tesca
 			}},
 			{"lcase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new StringUnaryExtractor (arguments[0], "lcase", [] (const string& argument)
+				return new UnaryExtractor (arguments[0], "lcase", stringUnary ([] (const string& argument)
 				{
 					char* buffer;
 					Variant lower;
@@ -195,24 +194,24 @@ namespace Tesca
 					delete [] buffer;
 
 					return lower;
-				});
+				}));
 			}},
 			{"len",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new StringUnaryExtractor (arguments[0], "len", [] (const string& argument)
+				return new UnaryExtractor (arguments[0], "len", stringUnary ([] (const string& argument)
 				{
 					return Variant ((Int64u)argument.length ());
-				});
+				}));
 			}},
 			{"log",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], "log", [] (Float64 value)
+				return new UnaryExtractor (arguments[0], "log", numberUnary ([] (Float64 value)
 				{
 					if (value <= 0)
 						return Variant::empty;
 
 					return Variant (log (value));
-				});
+				}));
 			}},
 			{"max",		1,	0,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{
@@ -278,10 +277,10 @@ namespace Tesca
 			}},
 			{"round",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new NumberUnaryExtractor (arguments[0], "round", [] (Float64 value)
+				return new UnaryExtractor (arguments[0], "round", numberUnary ([] (Float64 value)
 				{
 					return Variant (round (value));
-				});
+				}));
 			}},
 			{"slice",	2,	3,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
@@ -319,7 +318,7 @@ namespace Tesca
 			}},
 			{"type",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new VariantUnaryExtractor (arguments[0], "type", [] (const Variant& argument)
+				return new UnaryExtractor (arguments[0], "type", [] (const Variant& argument)
 				{
 					switch (argument.getType ())
 					{
@@ -339,7 +338,7 @@ namespace Tesca
 			}},
 			{"ucase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new StringUnaryExtractor (arguments[0], "ucase", [] (const string& argument)
+				return new UnaryExtractor (arguments[0], "ucase", stringUnary ([] (const string& argument)
 				{
 					char* buffer;
 					Variant upper;
@@ -354,7 +353,7 @@ namespace Tesca
 					delete [] buffer;
 
 					return upper;
-				});
+				}));
 			}},
 			{"var",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u* slot) -> Extractor*
 			{

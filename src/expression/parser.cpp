@@ -8,13 +8,13 @@
 #include "../arithmetic/extractor/binary.hpp"
 #include "../arithmetic/extractor/logical/and.hpp"
 #include "../arithmetic/extractor/logical/or.hpp"
-#include "../arithmetic/extractor/unary/boolean.hpp"
-#include "../arithmetic/extractor/unary/number.hpp"
 #include "../arithmetic/extractor/constant.hpp"
 #include "../arithmetic/extractor/field.hpp"
+#include "../arithmetic/extractor/unary.hpp"
 #include "../arithmetic/extractor/void.hpp"
 #include "constant.hpp"
 #include "function.hpp"
+#include "wrapper.hpp"
 
 using namespace std;
 using namespace Glay;
@@ -83,10 +83,10 @@ namespace Tesca
 						if (!this->parseExpression (lexer, lookup, slot, &value))
 							return false;
 
-						value = new NumberUnaryExtractor (value, "minus", [] (Float64 number)
+						value = new UnaryExtractor (value, "minus", numberUnary ([] (Float64 number)
 						{
 							return Variant (-number);
-						});
+						}));
 
 						this->extractors.push_back (value);
 
@@ -98,10 +98,10 @@ namespace Tesca
 						if (!this->parseExpression (lexer, lookup, slot, &value))
 							return false;
 
-						value = new BooleanUnaryExtractor (value, "not", [] (bool value)
+						value = new UnaryExtractor (value, "not", booleanUnary ([] (bool value)
 						{
 							return Variant (!value);
-						});
+						}));
 
 						this->extractors.push_back (value);
 

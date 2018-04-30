@@ -12,7 +12,9 @@ namespace Tesca
 		class UnaryExtractor : public Extractor
 		{
 			public:
-				UnaryExtractor (const Extractor*, const std::string&);
+				typedef std::function<Storage::Variant (const Storage::Variant&)> Callback;
+
+				UnaryExtractor (const Extractor*, const std::string&, Callback);
 
 				virtual std::string createName (Glay::Int32u) const;
 
@@ -20,10 +22,10 @@ namespace Tesca
 				virtual Storage::Variant extract (const Provision::Row&) const;
 
 			protected:
-				virtual Storage::Variant evaluate (const Storage::Variant&) const = 0;
 				virtual void recurse (RecurseCallback) const;
 
 			private:
+				Callback callback;
 				const Extractor* operand;
 				std::string prefix;
 		};

@@ -39,10 +39,6 @@ SOURCE	= \
 	src/arithmetic/extractor/logical/and.cpp \
 	src/arithmetic/extractor/logical/or.cpp \
 	src/arithmetic/extractor/logical.cpp \
-	src/arithmetic/extractor/unary/boolean.cpp \
-	src/arithmetic/extractor/unary/number.cpp \
-	src/arithmetic/extractor/unary/string.cpp \
-	src/arithmetic/extractor/unary/variant.cpp \
 	src/arithmetic/extractor/unary.cpp \
 	src/arithmetic/extractor/vector/callback.cpp \
 	src/arithmetic/extractor/vector/lazy.cpp \
@@ -56,6 +52,7 @@ SOURCE	= \
 	src/expression/function.cpp \
 	src/expression/lexer.cpp \
 	src/expression/parser.cpp \
+	src/expression/wrapper.cpp \
 	src/provision/format.cpp \
 	src/provision/input.cpp \
 	src/provision/lookup.cpp \

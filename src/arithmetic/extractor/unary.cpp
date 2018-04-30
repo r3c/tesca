@@ -10,7 +10,8 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		UnaryExtractor::UnaryExtractor (const Extractor* operand, const string& prefix) :
+		UnaryExtractor::UnaryExtractor (const Extractor* operand, const string& prefix, Callback callback) :
+			callback (callback),
 			operand (operand),
 			prefix (prefix)
 		{
@@ -23,12 +24,12 @@ namespace Tesca
 
 		Variant UnaryExtractor::compute (const Aggregator* const* aggregators) const
 		{
-			return this->evaluate (this->operand->compute (aggregators));
+			return this->callback (this->operand->compute (aggregators));
 		}
 
 		Variant UnaryExtractor::extract (const Row& row) const
 		{
-			return this->evaluate (this->operand->extract (row));
+			return this->callback (this->operand->extract (row));
 		}
 
 		void UnaryExtractor::recurse (RecurseCallback callback) const
