@@ -92,7 +92,7 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 						error.write ("\n");
 
 					error
-						.write ("warning: reader error(")
+						.write ("warning: reader error (")
 						.write (message)
 						.write (")\n");
 				});
@@ -183,15 +183,18 @@ int main (int argc, char* argv[])
 	{
 		cxxopts::Options options ("Tesca", "Text Stream Calculator");
 
-		options.add_options ()
+		options.add_options ("hidden")
 			("expression", "Calculator expression", cxxopts::value<string> ())
-			("sources", "Input file names (read from stdin if none specified)", cxxopts::value<vector<string>> ())
-			("f,filter", "Filter rows with predicate, e.g. 'len(_0) >= 3'", cxxopts::value<string> ()->default_value ("true"))
-			("h,help", "Display help and exit")
-			("i,input", "Set input format and options, e.g. 'json'", cxxopts::value<string> ()->default_value ("csv"))
-			("o,output", "Set output format and options, e.g. 'csv'", cxxopts::value<string> ()->default_value ("pretty"))
-			("p,progress", "Display progress bar (when reading from files)", cxxopts::value<bool> ()->default_value ("false"));
+			("sources", "Input file names (read from stdin if none specified)", cxxopts::value<vector<string>> ());
 
+		options.add_options ()
+			("f,filter", "Filter rows with predicate, e.g. len(_0) >= 3", cxxopts::value<string> ()->default_value ("true"), "EXPR")
+			("h,help", "Display help and exit")
+			("i,input", "Set input format and options, e.g. json:root=o", cxxopts::value<string> ()->default_value ("csv"), "FORMAT")
+			("o,output", "Set output format and options, e.g. csv:headers", cxxopts::value<string> ()->default_value ("pretty"), "FORMAT")
+			("p,progress", "Display progress bar (when reading from files only)", cxxopts::value<bool> ()->default_value ("false"));
+
+		options.positional_help ("expression [file1 [file2...]]");
 		options.parse_positional ({"expression", "sources"});
 
 		auto result = options.parse (argc, argv);
