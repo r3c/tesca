@@ -83,7 +83,7 @@ namespace Tesca
 						if (!this->parseExpression (lexer, lookup, slot, &value))
 							return false;
 
-						value = new UnaryExtractor (value, "minus", numberUnary ([] (Float64 number)
+						value = new UnaryExtractor (value, "minus", wrapNumber ([] (Float64 number)
 						{
 							return Variant (-number);
 						}));
@@ -98,7 +98,7 @@ namespace Tesca
 						if (!this->parseExpression (lexer, lookup, slot, &value))
 							return false;
 
-						value = new UnaryExtractor (value, "not", booleanUnary ([] (bool value)
+						value = new UnaryExtractor (value, "not", wrapBoolean ([] (bool value)
 						{
 							return Variant (!value);
 						}));
@@ -149,13 +149,10 @@ namespace Tesca
 					case Lexer::DIVIDE:
 						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "div", [] (Variant lhs, Variant rhs)
+							return new BinaryExtractor (lhs, rhs, "div", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
-								Float64 lhsValue;
-								Float64 rhsValue;
-
-								return lhs.toNumber (&lhsValue) && rhs.toNumber (&rhsValue) && rhsValue != 0 ? Variant (lhsValue / rhsValue) : Variant::empty;
-							});
+								return rhs != 0 ? Variant (lhs / rhs) : Variant::empty;
+							}));
 						});
 
 						break;
@@ -218,13 +215,10 @@ namespace Tesca
 					case Lexer::MINUS:
 						binaryOp = make_pair (3, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "minus", [] (Variant lhs, Variant rhs)
+							return new BinaryExtractor (lhs, rhs, "minus", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
-								Float64 lhsValue;
-								Float64 rhsValue;
-
-								return lhs.toNumber (&lhsValue) && rhs.toNumber (&rhsValue) ? Variant (lhsValue - rhsValue) : Variant::empty;
-							});
+								return Variant (lhs - rhs);
+							}));
 						});
 
 						break;
@@ -232,13 +226,10 @@ namespace Tesca
 					case Lexer::MODULO:
 						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "mod", [] (Variant lhs, Variant rhs)
+							return new BinaryExtractor (lhs, rhs, "mod", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
-								Float64 lhsValue;
-								Float64 rhsValue;
-
-								return lhs.toNumber (&lhsValue) && rhs.toNumber (&rhsValue) && rhsValue != 0 ? Variant (fmod (lhsValue, rhsValue)) : Variant::empty;
-							});
+								return rhs != 0 ? Variant (fmod (lhs, rhs)) : Variant::empty;
+							}));
 						});
 
 						break;
@@ -246,13 +237,10 @@ namespace Tesca
 					case Lexer::MULTIPLY:
 						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "mul", [] (Variant lhs, Variant rhs)
+							return new BinaryExtractor (lhs, rhs, "mul", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
-								Float64 lhsValue;
-								Float64 rhsValue;
-
-								return lhs.toNumber (&lhsValue) && rhs.toNumber (&rhsValue) ? Variant (lhsValue * rhsValue) : Variant::empty;
-							});
+								return Variant (lhs * rhs);
+							}));
 						});
 
 						break;
@@ -268,13 +256,10 @@ namespace Tesca
 					case Lexer::PLUS:
 						binaryOp = make_pair (3, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "plus", [] (Variant lhs, Variant rhs)
+							return new BinaryExtractor (lhs, rhs, "plus", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
-								Float64 lhsValue;
-								Float64 rhsValue;
-
-								return lhs.toNumber (&lhsValue) && rhs.toNumber (&rhsValue) ? Variant (lhsValue + rhsValue) : Variant::empty;
-							});
+								return Variant (lhs + rhs);
+							}));
 						});
 
 						break;

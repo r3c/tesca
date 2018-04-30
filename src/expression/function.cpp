@@ -34,7 +34,7 @@ namespace Tesca
 		{
 			{"abs",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "abs", numberUnary ([] (Float64 value)
+				return new UnaryExtractor (arguments[0], "abs", wrapNumber ([] (Float64 value)
 				{
 					return Variant (fabs (value));
 				}));
@@ -82,7 +82,7 @@ namespace Tesca
 			}},
 			{"ceil",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "ceil", numberUnary ([] (Float64 value)
+				return new UnaryExtractor (arguments[0], "ceil", wrapNumber ([] (Float64 value)
 				{
 					return Variant (ceil (value));
 				}));
@@ -144,7 +144,7 @@ namespace Tesca
 			}},
 			{"floor",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "floor", numberUnary ([] (Float64 value)
+				return new UnaryExtractor (arguments[0], "floor", wrapNumber ([] (Float64 value)
 				{
 					return Variant (floor (value));
 				}));
@@ -179,7 +179,7 @@ namespace Tesca
 			}},
 			{"lcase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "lcase", stringUnary ([] (const string& argument)
+				return new UnaryExtractor (arguments[0], "lcase", wrapString ([] (const string& argument)
 				{
 					char* buffer;
 					Variant lower;
@@ -198,14 +198,14 @@ namespace Tesca
 			}},
 			{"len",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "len", stringUnary ([] (const string& argument)
+				return new UnaryExtractor (arguments[0], "len", wrapString ([] (const string& argument)
 				{
 					return Variant ((Int64u)argument.length ());
 				}));
 			}},
 			{"log",		1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "log", numberUnary ([] (Float64 value)
+				return new UnaryExtractor (arguments[0], "log", wrapNumber ([] (Float64 value)
 				{
 					if (value <= 0)
 						return Variant::empty;
@@ -267,17 +267,14 @@ namespace Tesca
 			}},
 			{"pow",		2,	2,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new BinaryExtractor (arguments[0], arguments[1], "pow", [] (Variant base, Variant exponent)
+				return new BinaryExtractor (arguments[0], arguments[1], "pow", wrapNumber ([] (Float64 base, Float64 exponent)
 				{
-					Float64 baseValue;
-					Float64 exponentValue;
-
-					return base.toNumber (&baseValue) && exponent.toNumber (&exponentValue) ? Variant (pow (baseValue, exponentValue)) : Variant::empty;
-				});
+					return Variant (pow (base, exponent));
+				}));
 			}},
 			{"round",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "round", numberUnary ([] (Float64 value)
+				return new UnaryExtractor (arguments[0], "round", wrapNumber ([] (Float64 value)
 				{
 					return Variant (round (value));
 				}));
@@ -338,7 +335,7 @@ namespace Tesca
 			}},
 			{"ucase",	1,	1,	[] (const vector<const Extractor*>& arguments, Int32u*) -> Extractor*
 			{
-				return new UnaryExtractor (arguments[0], "ucase", stringUnary ([] (const string& argument)
+				return new UnaryExtractor (arguments[0], "ucase", wrapString ([] (const string& argument)
 				{
 					char* buffer;
 					Variant upper;
