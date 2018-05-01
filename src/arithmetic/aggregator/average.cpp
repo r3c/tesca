@@ -8,9 +8,10 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		AverageAggregator::AverageAggregator ()
+		AverageAggregator::AverageAggregator () :
+			count (0),
+			sum (0)
 		{
-			this->reset ();
 		}
 
 		Variant AverageAggregator::collect () const
@@ -19,12 +20,6 @@ namespace Tesca
 				return Variant (this->sum / this->count);
 
 			return Variant::empty;
-		}
-
-		void AverageAggregator::reset ()
-		{
-			this->count = 0;
-			this->sum = 0;
 		}
 
 		bool AverageAggregator::update (Variant const& value)

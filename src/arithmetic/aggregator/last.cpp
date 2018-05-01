@@ -18,15 +18,14 @@ namespace Tesca
 			return this->last;
 		}
 
-		void LastAggregator::reset ()
-		{
-			this->last = Variant::empty;
-		}
-
 		bool LastAggregator::update (Variant const& value)
 		{
-			this->last = value;
-			this->last.keep ();
+			// Minor optimization: save "keep" call when value didn't change
+			if (this->last != value)
+			{
+				this->last = value;
+				this->last.keep ();
+			}
 
 			return true;
 		}

@@ -8,19 +8,14 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		SumAggregator::SumAggregator ()
+		SumAggregator::SumAggregator () :
+			sum (0)
 		{
-			this->reset ();
 		}
 
 		Variant SumAggregator::collect () const
 		{
 			return Variant (this->sum);
-		}
-
-		void SumAggregator::reset ()
-		{
-			this->sum = 0;
 		}
 
 		bool SumAggregator::update (Variant const& value)

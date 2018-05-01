@@ -8,19 +8,14 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		CountAggregator::CountAggregator ()
+		CountAggregator::CountAggregator () :
+			count (0)
 		{
-			this->reset ();
 		}
 
 		Variant CountAggregator::collect () const
 		{
 			return Variant (this->count);
-		}
-
-		void CountAggregator::reset ()
-		{
-			this->count = 0;
 		}
 
 		bool CountAggregator::update (Variant const&)

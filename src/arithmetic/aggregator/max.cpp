@@ -22,12 +22,6 @@ namespace Tesca
 			return Variant (this->max);
 		}
 
-		void MaxAggregator::reset ()
-		{
-			this->empty = true;
-			this->max = 0;
-		}
-
 		bool MaxAggregator::update (Variant const& value)
 		{
 			Float64 current;

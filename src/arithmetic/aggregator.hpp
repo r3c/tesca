@@ -18,7 +18,6 @@ namespace Tesca
 				Aggregator& operator = (Aggregator const&);
 
 				virtual Storage::Variant collect () const = 0;
-				virtual void reset () = 0;
 				virtual bool update (Storage::Variant const&) = 0;
 		};
 	}

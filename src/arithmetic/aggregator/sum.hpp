@@ -15,7 +15,6 @@ namespace Tesca
 				SumAggregator ();
 
 				virtual Storage::Variant collect () const;
-				virtual void reset ();
 				virtual bool update (Storage::Variant const&);
 
 			private:

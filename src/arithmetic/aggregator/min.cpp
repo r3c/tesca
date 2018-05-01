@@ -22,12 +22,6 @@ namespace Tesca
 			return Variant (this->min);
 		}
 
-		void MinAggregator::reset ()
-		{
-			this->empty = true;
-			this->min = 0;
-		}
-
 		bool MinAggregator::update (Variant const& value)
 		{
 			Float64 current;

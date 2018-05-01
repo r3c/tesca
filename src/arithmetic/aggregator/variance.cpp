@@ -8,9 +8,11 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		VarianceAggregator::VarianceAggregator ()
+		VarianceAggregator::VarianceAggregator () :
+			count (0),
+			mean (0),
+			sum (0)
 		{
-			this->reset ();
 		}
 
 		Variant VarianceAggregator::collect () const
@@ -21,26 +23,18 @@ namespace Tesca
 			return Variant::empty;
 		}
 
-		void VarianceAggregator::reset ()
-		{
-			this->count = 0;
-			this->mean = 0;
-			this->sum = 0;
-		}
-
 		/*
 		** From:
 		** http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Online_algorithm
 		*/
 		bool VarianceAggregator::update (Variant const& value)
 		{
-			Float64 delta;
 			Float64 number;
 
 			if (!value.toNumber (&number))
 				return false;
 
-			delta = number - this->mean;
+			Float64 delta = number - this->mean;
 
 			++this->count;
 

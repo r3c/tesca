@@ -19,12 +19,6 @@ namespace Tesca
 			return this->first;
 		}
 
-		void FirstAggregator::reset ()
-		{
-			this->empty = true;
-			this->first = Variant::empty;
-		}
-
 		bool FirstAggregator::update (Variant const& value)
 		{
 			if (this->empty)
