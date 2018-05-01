@@ -22,15 +22,14 @@ You can get the total score and average time by player using this command:
 
 Output looks like this:
 
-	[0]     [1]     [2]
-	Dendrob 30000   26.3
-	Physali 90000   27.25
-	Zephyra 220000  43
+	[_0]    [sum__1] [avg__2]
+	Dendrob 30000    26.3
+	Physali 90000    27.25
+	Zephyra 220000   43
 
 Input text files should contain structured data, one row per line, and use a
-supported format (currently only CSV and JSON, and as soon as MinGW/GCC has a
-decent support for new C++11 &lt;regex&gt; header anything that can be matched
-through regular expressions). Then you have to define four things:
+supported format (currently only CSV and JSON). Then you have to define four
+things:
 
   * What is the data format in input file (default is CSV) ;
   * What rows should be filtered from input data (no filtering by default) ;
@@ -42,12 +41,9 @@ See the "Usage" section below for more information about these steps.
 Installation
 ------------
 
-Grab a C++ compiler compatible with basic C++11 features (mainly lambda
-expressions) such as GCC, update the Makefile.conf if needed and run make.
-
-Build has been only tested on Windows using MinGW. It should work on any system
-with a C++11-compliant GCC though, just remove the "-lwinmm" parameter from
-LDFLAGS variable in Makefile.conf.
+Use a C++ compiler compatible with C++17 features such as Clang or GCC and
+run `make`. You may have to tweak a few options in `Makefile.conf` if you're
+using a different setup than the one I used (Cygwin & GCC).
 
 Usage
 -----
@@ -161,10 +157,10 @@ Available row functions are:
     "number", "string" or "none".
   * ``ucase(str)``: returns uppercase conversion of string ``str``.
 
-Column definitions can also declare a name (otherwise their automatic names are
-``_0``, ``_1`` and so on) by using the naming operator ``:`` after your
-definition, followed by a variable used as column name (example: ``sum(_0):
-scores_sum``).
+Column definitions can also declare a name by using the naming operator ``:``
+after your definition, followed by a variable used as column name (example:
+``sum(_0): total_score``). Columns that don't define a name will be assigned
+one automatically.
 
 Note that their are two ``max`` and two ``min`` functions: an aggregation
 function and a row function for each. They differ by the number of arguments
