@@ -37,7 +37,7 @@ namespace Tesca
 			this->reset ();
 		}
 
-		const Parser::Error& Parser::onError () const
+		Parser::Error const& Parser::onError () const
 		{
 			return this->error;
 		}
@@ -47,7 +47,7 @@ namespace Tesca
 			return this->error;
 		}
 
-		bool Parser::fail (const Lexer& lexer, const string& error)
+		bool Parser::fail (Lexer const& lexer, const string& error)
 		{
 			stringstream stream;
 
@@ -58,12 +58,12 @@ namespace Tesca
 			return false;
 		}
 
-		bool Parser::parseExpression (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
+		bool Parser::parseExpression (Lexer& lexer, Lookup& lookup, Int32u* slot, Extractor const** output)
 		{
 			BinaryOp binaryOp;
 			stack<BinaryOp> binaryOps;
-			stack<const Extractor*> operands;
-			const Extractor* value;
+			stack<Extractor const*> operands;
+			Extractor const* value;
 
 			while (true)
 			{
@@ -128,7 +128,7 @@ namespace Tesca
 				switch (lexer.getType ())
 				{
 					case Lexer::AMPERSAND:
-						binaryOp = make_pair (1, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (1, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
 							return new AndLogicalExtractor (lhs, rhs);
 						});
@@ -136,9 +136,9 @@ namespace Tesca
 						break;
 
 					case Lexer::DIFFERENT:
-						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (2, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "ne", [] (const Variant& a, const Variant& b)
+							return new BinaryExtractor (lhs, rhs, "ne", [] (Variant const& a, Variant const& b)
 							{
 								return Variant (a != b);
 							});
@@ -147,7 +147,7 @@ namespace Tesca
 						break;
 
 					case Lexer::DIVIDE:
-						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (4, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
 							return new BinaryExtractor (lhs, rhs, "div", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
@@ -158,9 +158,9 @@ namespace Tesca
 						break;
 
 					case Lexer::EQUAL:
-						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (2, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "eq", [] (const Variant& a, const Variant& b)
+							return new BinaryExtractor (lhs, rhs, "eq", [] (Variant const& a, Variant const& b)
 							{
 								return Variant (a == b);
 							});
@@ -169,9 +169,9 @@ namespace Tesca
 						break;
 
 					case Lexer::GREATER_EQUAL:
-						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (2, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "ge", [] (const Variant& a, const Variant& b)
+							return new BinaryExtractor (lhs, rhs, "ge", [] (Variant const& a, Variant const& b)
 							{
 								return Variant (a >= b);
 							});
@@ -180,9 +180,9 @@ namespace Tesca
 						break;
 
 					case Lexer::GREATER_THAN:
-						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (2, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "gt", [] (const Variant& a, const Variant& b)
+							return new BinaryExtractor (lhs, rhs, "gt", [] (Variant const& a, Variant const& b)
 							{
 								return Variant (a > b);
 							});
@@ -191,9 +191,9 @@ namespace Tesca
 						break;
 
 					case Lexer::LOWER_EQUAL:
-						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (2, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "le", [] (const Variant& a, const Variant& b)
+							return new BinaryExtractor (lhs, rhs, "le", [] (Variant const& a, Variant const& b)
 							{
 								return Variant (a <= b);
 							});
@@ -202,9 +202,9 @@ namespace Tesca
 						break;
 
 					case Lexer::LOWER_THAN:
-						binaryOp = make_pair (2, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (2, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
-							return new BinaryExtractor (lhs, rhs, "lt", [] (const Variant& a, const Variant& b)
+							return new BinaryExtractor (lhs, rhs, "lt", [] (Variant const& a, Variant const& b)
 							{
 								return Variant (a < b);
 							});
@@ -213,7 +213,7 @@ namespace Tesca
 						break;
 
 					case Lexer::MINUS:
-						binaryOp = make_pair (3, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (3, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
 							return new BinaryExtractor (lhs, rhs, "minus", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
@@ -224,7 +224,7 @@ namespace Tesca
 						break;
 
 					case Lexer::MODULO:
-						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (4, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
 							return new BinaryExtractor (lhs, rhs, "mod", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
@@ -235,7 +235,7 @@ namespace Tesca
 						break;
 
 					case Lexer::MULTIPLY:
-						binaryOp = make_pair (4, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (4, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
 							return new BinaryExtractor (lhs, rhs, "mul", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
@@ -246,7 +246,7 @@ namespace Tesca
 						break;
 
 					case Lexer::PIPE:
-						binaryOp = make_pair (1, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (1, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
 							return new OrLogicalExtractor (lhs, rhs);
 						});
@@ -254,7 +254,7 @@ namespace Tesca
 						break;
 
 					case Lexer::PLUS:
-						binaryOp = make_pair (3, [] (const Extractor* lhs, const Extractor* rhs) -> Extractor*
+						binaryOp = make_pair (3, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
 						{
 							return new BinaryExtractor (lhs, rhs, "plus", wrapNumber ([] (Float64 lhs, Float64 rhs)
 							{
@@ -329,12 +329,12 @@ namespace Tesca
 			return true;
 		}
 
-		bool Parser::parseValue (Lexer& lexer, Lookup& lookup, Int32u* slot, const Extractor** output)
+		bool Parser::parseValue (Lexer& lexer, Lookup& lookup, Int32u* slot, Extractor const** output)
 		{
-			const Extractor* argument;
+			Extractor const* argument;
 			Extractors arguments;
-			const Constant* constant;
-			const Function* function;
+			Constant const* constant;
+			Function const* function;
 			string name;
 			Float64 number;
 

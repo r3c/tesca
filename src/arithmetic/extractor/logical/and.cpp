@@ -10,7 +10,7 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		AndLogicalExtractor::AndLogicalExtractor (const Extractor* lhs, const Extractor* rhs) :
+		AndLogicalExtractor::AndLogicalExtractor (Extractor const* lhs, Extractor const* rhs) :
 			LogicalExtractor (lhs, rhs)
 		{
 		}
@@ -20,12 +20,12 @@ namespace Tesca
 			return this->lhs->createName (slot) + "_and_" + this->rhs->createName (slot);
 		}
 
-		Variant AndLogicalExtractor::collect (Aggregator const* const* const aggregators) const
+		Variant AndLogicalExtractor::collect (Aggregator const* const* aggregators) const
 		{
 			return Variant (this->collectLHS (aggregators) && this->collectRHS (aggregators));
 		}
 
-		Variant AndLogicalExtractor::extract (const Row& row) const
+		Variant AndLogicalExtractor::extract (Row const& row) const
 		{
 			return Variant (this->extractLHS (row) && this->extractRHS (row));
 		}

@@ -13,16 +13,16 @@ namespace Tesca
 {
 	namespace Render
 	{
-		CSVPrinter::CSVPrinter (const Config& config) :
+		CSVPrinter::CSVPrinter (Config const& config) :
 			headers (config.get ("headers", 0)),
 			quote (config.get ("quote", "\"")),
 			split (config.get ("split", ","))
 		{
 		}
 
-		void CSVPrinter::print (OStream& stream, const Table& table) const
+		void CSVPrinter::print (OStream& stream, Table const& table) const
 		{
-			const Table::Columns& columns (table.getColumns ());
+			Table::Columns const& columns (table.getColumns ());
 			string output;
 			Variant* value;
 			Int32u width (table.getWidth ());

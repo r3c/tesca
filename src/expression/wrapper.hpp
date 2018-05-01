@@ -10,10 +10,10 @@ namespace Tesca
 {
 	namespace Expression
 	{
-		std::function<Storage::Variant (const Storage::Variant&)> wrapBoolean (std::function<Storage::Variant (bool)>);
-		std::function<Storage::Variant (const Storage::Variant&, const Storage::Variant&)> wrapNumber (std::function<Storage::Variant (Glay::Float64, Glay::Float64)>);
-		std::function<Storage::Variant (const Storage::Variant&)> wrapNumber (std::function<Storage::Variant (Glay::Float64)>);
-		std::function<Storage::Variant (const Storage::Variant&)> wrapString (std::function<Storage::Variant (const std::string&)>);
+		std::function<Storage::Variant (Storage::Variant const&)> wrapBoolean (std::function<Storage::Variant (bool)>);
+		std::function<Storage::Variant (Storage::Variant const&, Storage::Variant const&)> wrapNumber (std::function<Storage::Variant (Glay::Float64, Glay::Float64)>);
+		std::function<Storage::Variant (Storage::Variant const&)> wrapNumber (std::function<Storage::Variant (Glay::Float64)>);
+		std::function<Storage::Variant (Storage::Variant const&)> wrapString (std::function<Storage::Variant (const std::string&)>);
 	}
 }
 

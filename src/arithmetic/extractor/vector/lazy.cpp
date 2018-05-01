@@ -10,7 +10,7 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		LazyVectorExtractor::LazyVectorExtractor (const vector<const Extractor*>& extractors, const string& name, Callback callback) :
+		LazyVectorExtractor::LazyVectorExtractor (const vector<Extractor const*>& extractors, const string& name, Callback callback) :
 			VectorExtractor (extractors),
 			callback (callback),
 			name (name)
@@ -22,7 +22,7 @@ namespace Tesca
 			return this->name;
 		}
 
-		Variant LazyVectorExtractor::collect (Aggregator const* const* const aggregators) const
+		Variant LazyVectorExtractor::collect (Aggregator const* const* aggregators) const
 		{
 			return this->callback ([&] (Int32u i)
 			{
@@ -33,7 +33,7 @@ namespace Tesca
 			}, this->length);
 		}
 
-		Variant LazyVectorExtractor::extract (const Row& row) const
+		Variant LazyVectorExtractor::extract (Row const& row) const
 		{
 			return this->callback ([&] (Int32u i)
 			{

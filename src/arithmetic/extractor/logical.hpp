@@ -11,19 +11,19 @@ namespace Tesca
 		class LogicalExtractor : public Extractor
 		{
 			public:
-				LogicalExtractor (const Extractor*, const Extractor*);
+				LogicalExtractor (Extractor const*, Extractor const*);
 
 			protected:
-				bool collectLHS (Aggregator const* const* const) const;
-				bool collectRHS (Aggregator const* const* const) const;
+				bool collectLHS (Aggregator const* const*) const;
+				bool collectRHS (Aggregator const* const*) const;
 
-				bool extractLHS (const Provision::Row&) const;
-				bool extractRHS (const Provision::Row&) const;
+				bool extractLHS (Provision::Row const&) const;
+				bool extractRHS (Provision::Row const&) const;
 
 				virtual void recurse (RecurseCallback) const;
 
-				const Extractor* lhs;
-				const Extractor* rhs;
+				Extractor const* lhs;
+				Extractor const* rhs;
 		};
 	}
 }

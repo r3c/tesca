@@ -25,9 +25,9 @@ namespace Tesca
 {
 	namespace Storage
 	{
-		const Variant Variant::empty = Variant ();
+		Variant const Variant::empty = Variant ();
 
-		Variant::Variant (const Variant& other) :
+		Variant::Variant (Variant const& other) :
 			type (Variant::NONE)
 		{
 			*this = other;
@@ -83,7 +83,7 @@ namespace Tesca
 			this->reset ();
 		}
 
-		Variant& Variant::operator = (const Variant& other)
+		Variant& Variant::operator = (Variant const& other)
 		{
 			if (this != &other)
 			{
@@ -120,7 +120,7 @@ namespace Tesca
 			return *this;
 		}
 
-		Int32s Variant::compare (const Variant& other) const
+		Int32s Variant::compare (Variant const& other) const
 		{
 			bool boolean1;
 			bool boolean2;
@@ -335,32 +335,32 @@ namespace Tesca
 			}
 		}
 
-		bool operator == (const Variant& lhs, const Variant& rhs)
+		bool operator == (Variant const& lhs, Variant const& rhs)
 		{
 			return lhs.compare (rhs) == 0;
 		}
 
-		bool operator != (const Variant& lhs, const Variant& rhs)
+		bool operator != (Variant const& lhs, Variant const& rhs)
 		{
 			return lhs.compare (rhs) != 0;
 		}
 
-		bool operator <= (const Variant& lhs, const Variant& rhs)
+		bool operator <= (Variant const& lhs, Variant const& rhs)
 		{
 			return lhs.compare (rhs) <= 0;
 		}
 
-		bool operator < (const Variant& lhs, const Variant& rhs)
+		bool operator < (Variant const& lhs, Variant const& rhs)
 		{
 			return lhs.compare (rhs) < 0;
 		}
 
-		bool operator >= (const Variant& lhs, const Variant& rhs)
+		bool operator >= (Variant const& lhs, Variant const& rhs)
 		{
 			return lhs.compare (rhs) >= 0;
 		}
 		
-		bool operator > (const Variant& lhs, const Variant& rhs)
+		bool operator > (Variant const& lhs, Variant const& rhs)
 		{
 			return lhs.compare (rhs) > 0;
 		}

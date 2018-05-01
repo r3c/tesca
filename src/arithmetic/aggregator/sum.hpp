@@ -16,7 +16,7 @@ namespace Tesca
 
 				virtual Storage::Variant collect () const;
 				virtual void reset ();
-				virtual bool update (const Storage::Variant&);
+				virtual bool update (Storage::Variant const&);
 
 			private:
 				Glay::Float64 sum;

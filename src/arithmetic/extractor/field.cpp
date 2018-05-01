@@ -26,12 +26,12 @@ namespace Tesca
 			return SCALAR;
 		}
 
-		Variant FieldExtractor::collect (Aggregator const* const* const) const
+		Variant FieldExtractor::collect (Aggregator const* const*) const
 		{
 			return Variant::empty;
 		}
 
-		Variant FieldExtractor::extract (const Row& row) const
+		Variant FieldExtractor::extract (Row const& row) const
 		{
 			return row[this->field];
 		}

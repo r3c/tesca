@@ -10,7 +10,7 @@ namespace Tesca
 	{
 		struct Constant
 		{
-			static const Constant constants[];
+			static Constant const constants[];
 
 			const char* name;
 			Storage::Variant value;

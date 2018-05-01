@@ -12,21 +12,21 @@ namespace Tesca
 		class IfExtractor : public Extractor
 		{
 			public:
-				IfExtractor (const Extractor*, const Extractor*, const Extractor*);
-				IfExtractor (const Extractor*, const Extractor*);
+				IfExtractor (Extractor const*, Extractor const*, Extractor const*);
+				IfExtractor (Extractor const*, Extractor const*);
 
 				virtual std::string createName (Glay::Int32u) const;
 
-				virtual Storage::Variant collect (Aggregator const* const* const) const;
-				virtual Storage::Variant extract (const Provision::Row&) const;
+				virtual Storage::Variant collect (Aggregator const* const*) const;
+				virtual Storage::Variant extract (Provision::Row const&) const;
 
 			protected:
 				virtual void recurse (RecurseCallback) const;
 
 			private:
-				const Extractor* condition;
-				const Extractor* onFalse;
-				const Extractor* onTrue;
+				Extractor const* condition;
+				Extractor const* onFalse;
+				Extractor const* onTrue;
 		};
 	}
 }

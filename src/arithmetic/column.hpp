@@ -14,17 +14,17 @@ namespace Tesca
 		class Column
 		{
 			public:
-				Column (const Column&);
-				Column (const std::string&, const Extractor*);
+				Column (Column const&);
+				Column (const std::string&, Extractor const*);
 				Column ();
 
-				Column& operator = (const Column&);
+				Column& operator = (Column const&);
 
-				const Extractor* getExtractor () const;
+				Extractor const* getExtractor () const;
 				const std::string& getKey () const;
 
 			private:
-				const Extractor* extractor;
+				Extractor const* extractor;
 				std::string key;
 		};
 	}

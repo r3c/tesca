@@ -11,9 +11,9 @@ namespace Tesca
 {
 	namespace Expression
 	{
-		function<Variant (const Variant&)> wrapBoolean (function<Variant (bool)> booleanCallback)
+		function<Variant (Variant const&)> wrapBoolean (function<Variant (bool)> booleanCallback)
 		{
-			return [=] (const Variant& argument) -> Variant
+			return [=] (Variant const& argument) -> Variant
 			{
 				bool value;
 
@@ -23,9 +23,9 @@ namespace Tesca
 			};
 		}
 
-		function<Variant (const Variant&, const Variant&)> wrapNumber (function<Variant (Float64, Float64)> numberCallback)
+		function<Variant (Variant const&, Variant const&)> wrapNumber (function<Variant (Float64, Float64)> numberCallback)
 		{
-			return [=] (const Variant& lhs, const Variant& rhs) -> Variant
+			return [=] (Variant const& lhs, Variant const& rhs) -> Variant
 			{
 				Float64 lhsNumber;
 				Float64 rhsNumber;
@@ -34,9 +34,9 @@ namespace Tesca
 			};
 		}
 
-		function<Variant (const Variant&)> wrapNumber (function<Variant (Float64)> numberCallback)
+		function<Variant (Variant const&)> wrapNumber (function<Variant (Float64)> numberCallback)
 		{
-			return [=] (const Variant& argument) -> Variant
+			return [=] (Variant const& argument) -> Variant
 			{
 				Float64 value;
 
@@ -46,9 +46,9 @@ namespace Tesca
 			};
 		}
 
-		function<Variant (const Variant&)> wrapString (function<Variant (const string&)> stringCallback)
+		function<Variant (Variant const&)> wrapString (function<Variant (const string&)> stringCallback)
 		{
-			return [=] (const Variant& argument) -> Variant
+			return [=] (Variant const& argument) -> Variant
 			{
 				string value;
 

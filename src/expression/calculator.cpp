@@ -21,7 +21,7 @@ namespace Tesca
 			this->reset ();
 		}
 
-		const Calculator::Columns& Calculator::getColumns () const
+		Calculator::Columns const& Calculator::getColumns () const
 		{
 			return this->columns;
 		}
@@ -31,7 +31,7 @@ namespace Tesca
 			return this->slots;
 		}
 
-		const Calculator::Error& Calculator::onError () const
+		Calculator::Error const& Calculator::onError () const
 		{
 			return this->parser.onError ();
 		}
@@ -54,7 +54,7 @@ namespace Tesca
 					return false;
 
 				// Read column expression
-				const Extractor* extractor;
+				Extractor const* extractor;
 
 				if (!this->parser.parseExpression (lexer, lookup, &this->slots, &extractor))
 					return false;

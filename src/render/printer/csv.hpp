@@ -14,12 +14,12 @@ namespace Tesca
 		class CSVPrinter : public Printer
 		{
 			public:
-				CSVPrinter (const CSVPrinter&);
-				CSVPrinter (const Storage::Config&);
+				CSVPrinter (CSVPrinter const&);
+				CSVPrinter (Storage::Config const&);
 
-				CSVPrinter& operator = (const CSVPrinter&);
+				CSVPrinter& operator = (CSVPrinter const&);
 
-				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
+				virtual void print (Glay::Pipe::OStream&, Arithmetic::Table const&) const;
 
 			private:
 				void write (Glay::Pipe::FormatWriter&, const std::string&) const;

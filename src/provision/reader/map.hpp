@@ -17,21 +17,21 @@ namespace Tesca
 			public:
 				typedef std::map<std::string, Glay::Int32u> Fields;
 
-				MapReader (const MapReader&);
-				MapReader (const Fields*);
+				MapReader (MapReader const&);
+				MapReader (Fields const*);
 				virtual ~MapReader ();
 
-				MapReader& operator = (const MapReader&);
+				MapReader& operator = (MapReader const&);
 
-				bool assign (const std::string&, const Storage::Variant&);
-				virtual const Row& current () const;
+				bool assign (const std::string&, Storage::Variant const&);
+				virtual Row const& current () const;
 				virtual bool next ();
 				void push ();
 
 			private:
 				typedef std::list<Storage::Variant*> Lines;
 
-				const Fields* fields;
+				Fields const* fields;
 				Lines lines;
 				ArrayRow row;
 		};

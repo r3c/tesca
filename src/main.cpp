@@ -14,15 +14,15 @@ using namespace Glay::Pipe;
 using namespace Tesca;
 using namespace std;
 
-void initialize (Arithmetic::Table& table, const Expression::Filter& filter, Expression::Calculator& calculator)
+void initialize (Arithmetic::Table& table, Expression::Filter const& filter, Expression::Calculator& calculator)
 {
 	table.reset (filter.getCondition (), calculator.getColumns (), calculator.getSlots ());
 }
 
-void loading (FormatWriter& error, const char* caption, const Provision::Reader::Progress& progress)
+void loading (FormatWriter& error, const char* caption, Provision::Reader::Progress const& progress)
 {
-	static const Int32u captionWidth = 30;
-	static const Int32u meterWidth = 25;
+	static Int32u const captionWidth = 30;
+	static Int32u const meterWidth = 25;
 
 	Int32u i;
 	Int32u u;
@@ -53,7 +53,7 @@ void loading (FormatWriter& error, const char* caption, const Provision::Reader:
 		.flush ();
 }
 
-void process (Arithmetic::Table& table, const Provision::Input& input, const Provision::Lookup& lookup, bool progress, const vector<string>& sources)
+void process (Arithmetic::Table& table, Provision::Input const& input, Provision::Lookup const& lookup, bool progress, const vector<string>& sources)
 {
 	const char* caption;
 	Provision::Reader* reader;
@@ -97,7 +97,7 @@ void process (Arithmetic::Table& table, const Provision::Input& input, const Pro
 						.write (")\n");
 				});
 
-				reader->onRead ().bind ([&] (const Provision::Reader::Progress& progress)
+				reader->onRead ().bind ([&] (Provision::Reader::Progress const& progress)
 				{
 					if (status > 0 && progress.size > 0)
 					{

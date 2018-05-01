@@ -18,7 +18,7 @@ namespace Tesca
 {
 	namespace Provision
 	{
-		CSVLineReader::CSVLineReader (SeekIStream* input, const Lookup& lookup, const Config& config) :
+		CSVLineReader::CSVLineReader (SeekIStream* input, Lookup const& lookup, Config const& config) :
 			LineReader (input, 1024 * 10),
 			row (lookup.count ())
 		{
@@ -95,7 +95,7 @@ namespace Tesca
 			}
 		}
 
-		const Row& CSVLineReader::current () const
+		Row const& CSVLineReader::current () const
 		{
 			return this->row;
 		}

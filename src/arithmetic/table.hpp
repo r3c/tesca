@@ -26,7 +26,7 @@ namespace Tesca
 				{
 					public:
 						iterator (const iterator&);
-						iterator (const Columns&, const Groups&, Groups::const_iterator);
+						iterator (Columns const&, Groups const&, Groups::const_iterator);
 						~iterator ();
 
 						iterator& operator = (const iterator&);
@@ -39,35 +39,35 @@ namespace Tesca
 					private:
 						void update ();
 
-						const Columns& columns;
-						const Groups& groups;
+						Columns const& columns;
+						Groups const& groups;
 						Groups::const_iterator inner;
 						Storage::Variant* values;
 				};
 
-				Table (const Table&);
+				Table (Table const&);
 				Table ();
 				~Table ();
 
-				Table& operator = (const Table&);
+				Table& operator = (Table const&);
 
-				const Columns& getColumns () const;
+				Columns const& getColumns () const;
 				Glay::Int32u getWidth () const;
 
 				iterator begin () const;
 				iterator end () const;
 
 				void clear ();
-				void push (const Provision::Row&);
-				void reset (const Extractor*, const Columns&, Glay::Int32u);
+				void push (Provision::Row const&);
+				void reset (Extractor const*, Columns const&, Glay::Int32u);
 
 			private:
-				typedef std::vector<const Extractor*> Extractors;
+				typedef std::vector<Extractor const*> Extractors;
 				typedef std::vector<Glay::Int32u> Indices;
 
 				Columns columns;
 				Extractors composites;
-				const Extractor* condition;
+				Extractor const* condition;
 				Indices indices;
 				Extractors keys;
 				Groups groups;

@@ -16,16 +16,16 @@ namespace Tesca
 				typedef std::vector<Arithmetic::Column> Columns;
 				typedef Parser::Error Error;
 
-				Calculator (const Calculator&);
+				Calculator (Calculator const&);
 				Calculator ();
 				~Calculator ();
 
-				Calculator& operator = (const Calculator&);
+				Calculator& operator = (Calculator const&);
 
-				const Columns& getColumns () const;
+				Columns const& getColumns () const;
 				Glay::Int32u getSlots () const;
 
-				const Error& onError () const;
+				Error const& onError () const;
 				Error& onError ();
 
 				bool parse (Provision::Lookup&, const char*);

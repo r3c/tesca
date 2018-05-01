@@ -28,7 +28,7 @@ namespace Tesca
 			this->min = 0;
 		}
 
-		bool MinAggregator::update (const Variant& value)
+		bool MinAggregator::update (Variant const& value)
 		{
 			Float64 current;
 

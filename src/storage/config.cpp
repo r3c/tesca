@@ -9,9 +9,9 @@ using namespace Glay;
 
 namespace
 {
-	static const Int8u ESCAPE = '\\';
-	static const Int8u PARAMETER = ':';
-	static const Int8u VALUE = '=';
+	static Int8u const ESCAPE = '\\';
+	static Int8u const PARAMETER = ':';
+	static Int8u const VALUE = '=';
 }
 
 namespace Tesca

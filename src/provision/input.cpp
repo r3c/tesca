@@ -9,7 +9,7 @@ using namespace Glay::Pipe;
 
 namespace
 {
-	static const Int8u SEPARATOR = ':';
+	static Int8u const SEPARATOR = ':';
 }
 
 namespace Tesca
@@ -25,7 +25,7 @@ namespace Tesca
 		{
 		}
 
-		const Input::Error& Input::onError () const
+		Input::Error const& Input::onError () const
 		{
 			return this->error;
 		}
@@ -35,7 +35,7 @@ namespace Tesca
 			return this->error;
 		}
 
-		Reader* Input::create (SeekIStream* stream, const Lookup& lookup) const
+		Reader* Input::create (SeekIStream* stream, Lookup const& lookup) const
 		{
 			if (this->format != 0)
 				return this->format->builder (stream, lookup, this->config);

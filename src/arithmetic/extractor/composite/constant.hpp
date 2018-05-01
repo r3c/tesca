@@ -13,13 +13,13 @@ namespace Tesca
 		class ConstantCompositeExtractor : public CompositeExtractor
 		{
 			public:
-				ConstantCompositeExtractor (Glay::Int32u, const Storage::Variant&, const std::string&);
+				ConstantCompositeExtractor (Glay::Int32u, Storage::Variant const&, const std::string&);
 
 				virtual std::string createName (Glay::Int32u) const;
 
-				virtual Storage::Variant collect (Aggregator const* const* const) const;
-				virtual void prepare (Aggregator** const) const;
-				virtual void update (Aggregator** const, const Provision::Row&) const;
+				virtual Storage::Variant collect (Aggregator const* const*) const;
+				virtual void prepare (Aggregator**) const;
+				virtual void update (Aggregator* const*, Provision::Row const&) const;
 
 			protected:
 				virtual void recurse (RecurseCallback) const;

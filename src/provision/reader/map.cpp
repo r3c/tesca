@@ -9,7 +9,7 @@ namespace Tesca
 {
 	namespace Provision
 	{
-		MapReader::MapReader (const Fields* fields) :
+		MapReader::MapReader (Fields const* fields) :
 			fields (fields),
 			row (fields->size ())
 		{
@@ -21,7 +21,7 @@ namespace Tesca
 				delete [] *i;
 		}
 
-		bool MapReader::assign (const string& identifier, const Variant& value)
+		bool MapReader::assign (const string& identifier, Variant const& value)
 		{
 			Variant copy;
 			Variant* line;
@@ -40,7 +40,7 @@ namespace Tesca
 			return true;
 		}
 
-		const Row& MapReader::current () const
+		Row const& MapReader::current () const
 		{
 			return this->row;
 		}

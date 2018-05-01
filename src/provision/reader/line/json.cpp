@@ -31,7 +31,7 @@ namespace Tesca
 {
 	namespace Provision
 	{
-		JSONLineReader::JSONLineReader (SeekIStream* input, const Lookup& lookup, const Config& config) :
+		JSONLineReader::JSONLineReader (SeekIStream* input, Lookup const& lookup, Config const& config) :
 			LineReader (input, 1024 * 10),
 			lookup (lookup),
 			row (lookup.count ())
@@ -45,7 +45,7 @@ namespace Tesca
 			this->member = member.length () > 0 ? member[0] : '.';
 		}
 
-		const Row& JSONLineReader::current () const
+		Row const& JSONLineReader::current () const
 		{
 			return this->row;
 		}

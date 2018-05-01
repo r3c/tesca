@@ -28,7 +28,7 @@ namespace Tesca
 			this->max = 0;
 		}
 
-		bool MaxAggregator::update (const Variant& value)
+		bool MaxAggregator::update (Variant const& value)
 		{
 			Float64 current;
 

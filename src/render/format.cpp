@@ -12,17 +12,17 @@ namespace Tesca
 {
 	namespace Render
 	{
-		const Format Format::formats[] =
+		Format const Format::formats[] =
 		{
-			{"csv",		[] (const Config& config) -> Printer*
+			{"csv",		[] (Config const& config) -> Printer*
 			{
 				return new CSVPrinter (config);
 			}},
-			{"name",	[] (const Config& config) -> Printer*
+			{"name",	[] (Config const& config) -> Printer*
 			{
 				return new NamePrinter (config);
 			}},
-			{"pretty",	[] (const Config& config) -> Printer*
+			{"pretty",	[] (Config const& config) -> Printer*
 			{
 				return new PrettyPrinter (config);
 			}},

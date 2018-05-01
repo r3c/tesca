@@ -12,13 +12,13 @@ namespace Tesca
 		class Printer
 		{
 			public:
-						Printer (const Printer&);
+						Printer (Printer const&);
 						Printer ();
 				virtual ~Printer ();
 
-				Printer& operator = (const Printer&);
+				Printer& operator = (Printer const&);
 
-				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const = 0;
+				virtual void print (Glay::Pipe::OStream&, Arithmetic::Table const&) const = 0;
 		};
 	}
 }

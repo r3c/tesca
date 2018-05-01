@@ -7,7 +7,7 @@ namespace Tesca
 {
 	namespace Expression
 	{
-		const Constant Constant::constants[] =
+		Constant const Constant::constants[] =
 		{
 			{"false",	Variant (false)},
 			{"true",	Variant (true)},

@@ -17,12 +17,12 @@ namespace Tesca
 		class CSVLineReader : public LineReader
 		{
 			public:
-				CSVLineReader (const CSVLineReader&);
-				CSVLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
+				CSVLineReader (CSVLineReader const&);
+				CSVLineReader (Glay::Pipe::SeekIStream*, Lookup const&, Storage::Config const&);
 
-				CSVLineReader& operator = (const CSVLineReader&);
+				CSVLineReader& operator = (CSVLineReader const&);
 
-				virtual const Row& current () const;
+				virtual Row const& current () const;
 
 			protected:
 				virtual bool parse (const char*, Glay::Size);

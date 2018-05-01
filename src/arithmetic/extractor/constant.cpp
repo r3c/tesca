@@ -11,7 +11,7 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		ConstantExtractor::ConstantExtractor (const Variant& value) :
+		ConstantExtractor::ConstantExtractor (Variant const& value) :
 			value (value)
 		{
 			this->value.keep ();
@@ -34,12 +34,12 @@ namespace Tesca
 			return COMPOSITE | SCALAR;
 		}
 
-		Variant ConstantExtractor::collect (Aggregator const* const* const) const
+		Variant ConstantExtractor::collect (Aggregator const* const*) const
 		{
 			return this->value;
 		}
 
-		Variant ConstantExtractor::extract (const Row&) const
+		Variant ConstantExtractor::extract (Row const&) const
 		{
 			return this->value;
 		}

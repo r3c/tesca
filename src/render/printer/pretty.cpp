@@ -14,7 +14,7 @@ namespace Tesca
 {
 	namespace Render
 	{
-		PrettyPrinter::PrettyPrinter (const Config& config)
+		PrettyPrinter::PrettyPrinter (Config const& config)
 		{
 			string align (config.get ("align", ""));
 			string pad (config.get ("pad", ""));
@@ -26,9 +26,9 @@ namespace Tesca
 				this->pad = 1;
 		}
 
-		void PrettyPrinter::print (OStream& stream, const Table& table) const
+		void PrettyPrinter::print (OStream& stream, Table const& table) const
 		{
-			const Table::Columns& columns (table.getColumns ());
+			Table::Columns const& columns (table.getColumns ());
 			size_t* length;
 			size_t lengths[table.getWidth ()];
 			string output;

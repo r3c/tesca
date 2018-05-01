@@ -23,7 +23,7 @@ namespace Tesca
 			this->sum = 0;
 		}
 
-		bool SumAggregator::update (const Variant& value)
+		bool SumAggregator::update (Variant const& value)
 		{
 			Float64 number;
 

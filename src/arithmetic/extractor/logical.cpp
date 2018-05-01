@@ -8,34 +8,34 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		LogicalExtractor::LogicalExtractor (const Extractor* lhs, const Extractor* rhs) :
+		LogicalExtractor::LogicalExtractor (Extractor const* lhs, Extractor const* rhs) :
 			lhs (lhs),
 			rhs (rhs)
 		{
 		}
 
-		bool LogicalExtractor::collectLHS (Aggregator const* const* const aggregators) const
+		bool LogicalExtractor::collectLHS (Aggregator const* const* aggregators) const
 		{
 			bool test;
 
 			return this->lhs->collect (aggregators).toBoolean (&test) && test;
 		}
 
-		bool LogicalExtractor::collectRHS (Aggregator const* const* const aggregators) const
+		bool LogicalExtractor::collectRHS (Aggregator const* const* aggregators) const
 		{
 			bool test;
 
 			return this->lhs->collect (aggregators).toBoolean (&test) && test;
 		}
 
-		bool LogicalExtractor::extractLHS (const Row& row) const
+		bool LogicalExtractor::extractLHS (Row const& row) const
 		{
 			bool test;
 
 			return this->lhs->extract (row).toBoolean (&test) && test;
 		}
 
-		bool LogicalExtractor::extractRHS (const Row& row) const
+		bool LogicalExtractor::extractRHS (Row const& row) const
 		{
 			bool test;
 

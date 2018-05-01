@@ -10,7 +10,7 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		const VoidExtractor VoidExtractor::instance = VoidExtractor ();
+		VoidExtractor const VoidExtractor::instance = VoidExtractor ();
 
 		string VoidExtractor::createName (Int32u) const
 		{
@@ -22,12 +22,12 @@ namespace Tesca
 			return COMPOSITE | SCALAR;
 		}
 
-		Variant VoidExtractor::collect (Aggregator const* const* const) const
+		Variant VoidExtractor::collect (Aggregator const* const*) const
 		{
 			return Variant::empty;
 		}
 
-		Variant VoidExtractor::extract (const Row&) const
+		Variant VoidExtractor::extract (Row const&) const
 		{
 			return Variant::empty;
 		}

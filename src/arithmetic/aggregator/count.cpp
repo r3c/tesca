@@ -23,7 +23,7 @@ namespace Tesca
 			this->count = 0;
 		}
 
-		bool CountAggregator::update (const Variant&)
+		bool CountAggregator::update (Variant const&)
 		{
 			++this->count;
 

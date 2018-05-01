@@ -27,15 +27,15 @@ namespace Tesca
 				virtual Glay::Int32u getFlags () const;
 
 				// Row methods
-				virtual Storage::Variant extract (const Provision::Row&) const = 0;
+				virtual Storage::Variant extract (Provision::Row const&) const = 0;
 
 				// Aggregation methods
-				virtual Storage::Variant collect (Aggregator const* const* const) const = 0;
-				virtual void prepare (Aggregator** const) const;
-				virtual void update (Aggregator** const, const Provision::Row&) const;
+				virtual Storage::Variant collect (Aggregator const* const*) const = 0;
+				virtual void prepare (Aggregator**) const;
+				virtual void update (Aggregator* const*, Provision::Row const&) const;
 
 			protected:
-				typedef std::function<void (const Extractor*)> RecurseCallback;
+				typedef std::function<void (Extractor const*)> RecurseCallback;
 
 				virtual void recurse (RecurseCallback) const;
 		};

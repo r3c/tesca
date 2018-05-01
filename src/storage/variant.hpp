@@ -12,7 +12,7 @@ namespace Tesca
 		class Variant
 		{
 			public:
-				static const Variant empty;
+				static Variant const empty;
 
 				struct String
 				{
@@ -28,7 +28,7 @@ namespace Tesca
 					STRING
 				};
 
-				Variant (const Variant&);
+				Variant (Variant const&);
 				Variant (bool);
 				Variant (Glay::Float64);
 				Variant (Glay::Int64s);
@@ -38,11 +38,11 @@ namespace Tesca
 				Variant ();
 				~Variant ();
 
-				Variant& operator = (const Variant&);
+				Variant& operator = (Variant const&);
 
 				Type getType () const;
 
-				Glay::Int32s compare (const Variant&) const;
+				Glay::Int32s compare (Variant const&) const;
 				Variant& keep ();
 				void reset ();
 
@@ -63,12 +63,12 @@ namespace Tesca
 				Type type;
 		};
 
-		bool operator == (const Variant&, const Variant&);
-		bool operator != (const Variant&, const Variant&);
-		bool operator <= (const Variant&, const Variant&);
-		bool operator < (const Variant&, const Variant&);
-		bool operator >= (const Variant&, const Variant&);
-		bool operator > (const Variant&, const Variant&);
+		bool operator == (Variant const&, Variant const&);
+		bool operator != (Variant const&, Variant const&);
+		bool operator <= (Variant const&, Variant const&);
+		bool operator < (Variant const&, Variant const&);
+		bool operator >= (Variant const&, Variant const&);
+		bool operator > (Variant const&, Variant const&);
 	}
 }
 

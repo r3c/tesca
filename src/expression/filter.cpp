@@ -20,12 +20,12 @@ namespace Tesca
 			this->reset ();
 		}
 
-		const Extractor* Filter::getCondition () const
+		Extractor const* Filter::getCondition () const
 		{
 			return this->condition;
 		}
 
-		const Filter::Error& Filter::onError () const
+		Filter::Error const& Filter::onError () const
 		{
 			return this->parser.onError ();
 		}

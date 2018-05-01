@@ -11,14 +11,14 @@ namespace Tesca
 		class ConstantExtractor : public Extractor
 		{
 			public:
-				ConstantExtractor (const Storage::Variant&);
+				ConstantExtractor (Storage::Variant const&);
 
 				virtual std::string createName (Glay::Int32u) const;
 
 				virtual Glay::Int32u getFlags () const;
 
-				virtual Storage::Variant collect (Aggregator const* const* const) const;
-				virtual Storage::Variant extract (const Provision::Row&) const;
+				virtual Storage::Variant collect (Aggregator const* const*) const;
+				virtual Storage::Variant extract (Provision::Row const&) const;
 
 			private:
 				Storage::Variant value;

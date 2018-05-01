@@ -12,12 +12,12 @@ namespace Tesca
 		class Row
 		{
 			public:
-				Row (const Row&);
+				Row (Row const&);
 				Row ();
 				virtual ~Row ();
 
-				Row& operator = (const Row&);
-				virtual const Storage::Variant& operator [] (Glay::Int32u) const = 0;
+				Row& operator = (Row const&);
+				virtual Storage::Variant const& operator [] (Glay::Int32u) const = 0;
 
 				virtual Glay::Int32u getLength () const = 0;
 		};

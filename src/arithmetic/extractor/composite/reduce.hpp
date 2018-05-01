@@ -13,19 +13,19 @@ namespace Tesca
 		class ReduceCompositeExtractor : public CompositeExtractor
 		{
 			public:
-				ReduceCompositeExtractor (Glay::Int32u, const Extractor*, const std::string&);
+				ReduceCompositeExtractor (Glay::Int32u, Extractor const*, const std::string&);
 
 				virtual std::string createName (Glay::Int32u) const;
 
-				virtual Storage::Variant collect (Aggregator const* const* const) const;
-				virtual void prepare (Aggregator** const) const;
-				virtual void update (Aggregator** const, const Provision::Row&) const;
+				virtual Storage::Variant collect (Aggregator const* const*) const;
+				virtual void prepare (Aggregator**) const;
+				virtual void update (Aggregator* const*, Provision::Row const&) const;
 
 			protected:
 				virtual void recurse (RecurseCallback) const;
 
 			private:
-				const Extractor* operand;
+				Extractor const* operand;
 				const std::string prefix;
 				Glay::Int32u slot;
 		};

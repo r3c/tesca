@@ -22,28 +22,28 @@ namespace Tesca
 			public:
 				typedef Glay::Design::Event<const std::string&> Error;
 
-				Parser (const Parser&);
+				Parser (Parser const&);
 				Parser ();
 				~Parser ();
 
-				Parser& operator = (const Parser&);
+				Parser& operator = (Parser const&);
 
-				const Error& onError () const;
+				Error const& onError () const;
 				Error& onError ();
 
-				bool parseExpression (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
+				bool parseExpression (Lexer&, Provision::Lookup&, Glay::Int32u*, Arithmetic::Extractor const**);
 				bool parseIdentifier (Lexer&, std::string*);
 				bool parseType (Lexer&, Lexer::Lexem, const char*);
-				bool parseValue (Lexer&, Provision::Lookup&, Glay::Int32u*, const Arithmetic::Extractor**);
+				bool parseValue (Lexer&, Provision::Lookup&, Glay::Int32u*, Arithmetic::Extractor const**);
 
 				void reset ();
 
 			private:
-				typedef std::vector<const Arithmetic::Extractor*> Extractors;
-				typedef std::function<Arithmetic::Extractor* (const Arithmetic::Extractor*, const Arithmetic::Extractor*)> Generator;
+				typedef std::vector<Arithmetic::Extractor const*> Extractors;
+				typedef std::function<Arithmetic::Extractor* (Arithmetic::Extractor const*, Arithmetic::Extractor const*)> Generator;
 				typedef std::pair<Glay::Int32u, Generator> BinaryOp;
 
-				bool fail (const Lexer&, const std::string&);
+				bool fail (Lexer const&, const std::string&);
 
 				Extractors extractors;
 				Error error;

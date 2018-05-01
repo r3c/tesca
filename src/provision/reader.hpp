@@ -21,20 +21,20 @@ namespace Tesca
 				};
 
 				typedef Glay::Design::Event<const std::string&> Error;
-				typedef Glay::Design::Event<const Progress&> Read;
+				typedef Glay::Design::Event<Progress const&> Read;
 
-				Reader (const Reader&);
+				Reader (Reader const&);
 				Reader ();
 				virtual ~Reader ();
 
-				Reader& operator = (const Reader&);
+				Reader& operator = (Reader const&);
 
-				const Error& onError () const;
+				Error const& onError () const;
 				Error& onError ();
-				const Read& onRead () const;
+				Read const& onRead () const;
 				Read& onRead ();
 
-				virtual const Row& current () const = 0;
+				virtual Row const& current () const = 0;
 				virtual bool next () = 0;
 
 			protected:

@@ -11,7 +11,7 @@ namespace Tesca
 {
 	namespace Provision
 	{
-		RegexLineReader::RegexLineReader (SeekIStream* input, const Lookup& lookup, const Config&) :
+		RegexLineReader::RegexLineReader (SeekIStream* input, Lookup const& lookup, Config const&) :
 			LineReader (input),
 			regex ("FIXME"),
 			row (lookup.count ())
@@ -29,7 +29,7 @@ namespace Tesca
 			}
 		}
 
-		const Row& RegexLineReader::current () const
+		Row const& RegexLineReader::current () const
 		{
 			return this->row;
 		}

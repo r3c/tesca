@@ -18,22 +18,22 @@ namespace Tesca
 			public:
 				typedef Glay::Design::Event<const std::string&> Error;
 
-				Input (const Input&);
+				Input (Input const&);
 				Input ();
 				virtual ~Input ();
 
-				Input& operator = (const Input&);
+				Input& operator = (Input const&);
 
-				const Error& onError () const;
+				Error const& onError () const;
 				Error& onError ();
 
-				Reader* create (Glay::Pipe::SeekIStream*, const Lookup&) const;
+				Reader* create (Glay::Pipe::SeekIStream*, Lookup const&) const;
 				bool parse (const char*);
 
 			private:
 				Storage::Config config;
 				Error error;
-				const Format* format;
+				Format const* format;
 		};
 	}
 }

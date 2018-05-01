@@ -16,12 +16,12 @@ namespace Tesca
 		class RegexLineReader : public LineReader
 		{
 			public:
-				RegexLineReader (const RegexLineReader&);
-				RegexLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
+				RegexLineReader (RegexLineReader const&);
+				RegexLineReader (Glay::Pipe::SeekIStream*, Lookup const&, Storage::Config const&);
 
-				RegexLineReader& operator = (const RegexLineReader&);
+				RegexLineReader& operator = (RegexLineReader const&);
 
-				virtual const Row& current () const;
+				virtual Row const& current () const;
 
 			protected:
 				virtual bool parse (const std::string&);

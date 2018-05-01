@@ -32,7 +32,7 @@ namespace Tesca
 		** From:
 		** http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Online_algorithm
 		*/
-		bool VarianceAggregator::update (const Variant& value)
+		bool VarianceAggregator::update (Variant const& value)
 		{
 			Float64 delta;
 			Float64 number;

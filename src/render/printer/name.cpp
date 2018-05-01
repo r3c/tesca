@@ -13,13 +13,13 @@ namespace Tesca
 {
 	namespace Render
 	{
-		NamePrinter::NamePrinter (const Config&)
+		NamePrinter::NamePrinter (Config const&)
 		{
 		}
 
-		void NamePrinter::print (OStream& stream, const Table& table) const
+		void NamePrinter::print (OStream& stream, Table const& table) const
 		{
-			const Table::Columns& columns (table.getColumns ());
+			Table::Columns const& columns (table.getColumns ());
 			string output;
 			Variant* value;
 			Int32u width (table.getWidth ());

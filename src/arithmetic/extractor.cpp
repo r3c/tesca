@@ -15,7 +15,7 @@ namespace Tesca
 		{
 			Int32u flags = ~0;
 
-			this->recurse ([&] (const Extractor* accessor)
+			this->recurse ([&] (Extractor const* accessor)
 			{
 				flags &= accessor->getFlags ();
 			});
@@ -23,9 +23,9 @@ namespace Tesca
 			return flags;
 		}
 
-		void Extractor::prepare (Aggregator** const aggregators) const
+		void Extractor::prepare (Aggregator** aggregators) const
 		{
-			this->recurse ([aggregators] (const Extractor* child)
+			this->recurse ([aggregators] (Extractor const* child)
 			{
 				child->prepare (aggregators);
 			});
@@ -35,9 +35,9 @@ namespace Tesca
 		{
 		}
 
-		void Extractor::update (Aggregator** const aggregators, const Provision::Row& row) const
+		void Extractor::update (Aggregator* const* aggregators, Provision::Row const& row) const
 		{
-			this->recurse ([aggregators, &row] (const Extractor* child)
+			this->recurse ([aggregators, &row] (Extractor const* child)
 			{
 				child->update (aggregators, row);
 			});

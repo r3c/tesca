@@ -19,7 +19,7 @@ namespace Tesca
 			delete [] this->values;
 		}
 
-		const Variant& ArrayRow::operator [] (Int32u key) const
+		Variant const& ArrayRow::operator [] (Int32u key) const
 		{
 			if (key < this->length)
 				return this->values[key];
@@ -38,7 +38,7 @@ namespace Tesca
 				this->values[i] = Variant::empty;
 		}
 
-		bool ArrayRow::set (Int32u key, const Variant& value)
+		bool ArrayRow::set (Int32u key, Variant const& value)
 		{
 			if (key >= this->length)
 				return false;

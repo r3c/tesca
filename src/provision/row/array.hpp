@@ -12,17 +12,17 @@ namespace Tesca
 		class ArrayRow : public Row
 		{
 			public:
-				ArrayRow (const ArrayRow&);
+				ArrayRow (ArrayRow const&);
 				ArrayRow (Glay::Int32u);
 				virtual ~ArrayRow ();
 
-				ArrayRow& operator = (const ArrayRow&);
-				virtual const Storage::Variant& operator [] (Glay::Int32u) const;
+				ArrayRow& operator = (ArrayRow const&);
+				virtual Storage::Variant const& operator [] (Glay::Int32u) const;
 
 				virtual Glay::Int32u getLength () const;
 
 				void clear ();
-				bool set (Glay::Int32u, const Storage::Variant&);
+				bool set (Glay::Int32u, Storage::Variant const&);
 
 			private:
 				Glay::Int32u length;

@@ -13,9 +13,9 @@ namespace Tesca
 	{
 		struct Format
 		{
-			typedef std::function<Printer* (const Storage::Config&)> Builder;
+			typedef std::function<Printer* (Storage::Config const&)> Builder;
 
-			static const Format formats[];
+			static Format const formats[];
 
 			const char* name;
 			Builder builder;

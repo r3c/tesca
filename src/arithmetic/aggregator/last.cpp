@@ -23,7 +23,7 @@ namespace Tesca
 			this->last = Variant::empty;
 		}
 
-		bool LastAggregator::update (const Variant& value)
+		bool LastAggregator::update (Variant const& value)
 		{
 			this->last = value;
 			this->last.keep ();

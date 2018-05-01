@@ -13,9 +13,9 @@ namespace Tesca
 	{
 		struct Function
 		{
-			typedef std::function<Arithmetic::Extractor* (const std::vector<const Arithmetic::Extractor*>&, Glay::Int32u*)> Builder;
+			typedef std::function<Arithmetic::Extractor* (const std::vector<Arithmetic::Extractor const*>&, Glay::Int32u*)> Builder;
 
-			static const Function functions[];
+			static Function const functions[];
 
 			const char* name;
 			Glay::Int32u min;

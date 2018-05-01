@@ -18,12 +18,12 @@ namespace Tesca
 		class JSONLineReader : public LineReader
 		{
 			public:
-				JSONLineReader (const JSONLineReader&);
-				JSONLineReader (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&);
+				JSONLineReader (JSONLineReader const&);
+				JSONLineReader (Glay::Pipe::SeekIStream*, Lookup const&, Storage::Config const&);
 
-				JSONLineReader& operator = (const JSONLineReader&);
+				JSONLineReader& operator = (JSONLineReader const&);
 
-				virtual const Row& current () const;
+				virtual Row const& current () const;
 
 			protected:
 				virtual bool parse (const char*, Glay::Size);

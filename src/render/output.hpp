@@ -17,13 +17,13 @@ namespace Tesca
 			public:
 				typedef Glay::Design::Event<const std::string&> Error;
 
-						Output (const Output&);
+						Output (Output const&);
 						Output ();
 				virtual ~Output ();
 
-				Output& operator = (const Output&);
+				Output& operator = (Output const&);
 
-				const Error& onError () const;
+				Error const& onError () const;
 				Error& onError ();
 
 				Printer* create () const;
@@ -32,7 +32,7 @@ namespace Tesca
 			private:
 				Storage::Config config;
 				Error error;
-				const Format* format;
+				Format const* format;
 		};
 	}
 }

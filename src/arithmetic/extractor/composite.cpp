@@ -14,7 +14,7 @@ namespace Tesca
 			return COMPOSITE;
 		}
 
-		Variant CompositeExtractor::extract (const Row&) const
+		Variant CompositeExtractor::extract (Row const&) const
 		{
 			return Variant::empty;
 		}

@@ -22,7 +22,7 @@ namespace Tesca
 		{
 		}
 
-		const Reader::Error& Reader::onError () const
+		Reader::Error const& Reader::onError () const
 		{
 			return this->error;
 		}
@@ -32,7 +32,7 @@ namespace Tesca
 			return this->error;
 		}
 
-		const Reader::Read& Reader::onRead () const
+		Reader::Read const& Reader::onRead () const
 		{
 			return this->read;
 		}

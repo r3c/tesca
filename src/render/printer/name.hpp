@@ -13,12 +13,12 @@ namespace Tesca
 		class NamePrinter : public Printer
 		{
 			public:
-				NamePrinter (const NamePrinter&);
-				NamePrinter (const Storage::Config&);
+				NamePrinter (NamePrinter const&);
+				NamePrinter (Storage::Config const&);
 
-				NamePrinter& operator = (const NamePrinter&);
+				NamePrinter& operator = (NamePrinter const&);
 
-				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
+				virtual void print (Glay::Pipe::OStream&, Arithmetic::Table const&) const;
 		};
 	}
 }

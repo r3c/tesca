@@ -27,7 +27,7 @@ namespace Tesca
 			this->sum = 0;
 		}
 
-		bool AverageAggregator::update (const Variant& value)
+		bool AverageAggregator::update (Variant const& value)
 		{
 			Float64 number;
 

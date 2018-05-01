@@ -14,12 +14,12 @@ namespace Tesca
 		class PrettyPrinter : public Printer
 		{
 			public:
-				PrettyPrinter (const PrettyPrinter&);
-				PrettyPrinter (const Storage::Config&);
+				PrettyPrinter (PrettyPrinter const&);
+				PrettyPrinter (Storage::Config const&);
 
-				PrettyPrinter& operator = (const PrettyPrinter&);
+				PrettyPrinter& operator = (PrettyPrinter const&);
 
-				virtual void print (Glay::Pipe::OStream&, const Arithmetic::Table&) const;
+				virtual void print (Glay::Pipe::OStream&, Arithmetic::Table const&) const;
 
 			private:
 				Glay::Int32u align;

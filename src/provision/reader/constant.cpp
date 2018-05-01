@@ -9,14 +9,14 @@ namespace Tesca
 {
 	namespace Provision
 	{
-		ConstantReader::ConstantReader (const Lookup& lookup, Int32u count) :
+		ConstantReader::ConstantReader (Lookup const& lookup, Int32u count) :
 			count (count),
 			lookup (lookup),
 			row (lookup.count ())
 		{
 		}
 
-		bool ConstantReader::assign (const string& identifier, const Variant& value)
+		bool ConstantReader::assign (const string& identifier, Variant const& value)
 		{
 			Int32u field;
 
@@ -28,7 +28,7 @@ namespace Tesca
 			return true;
 		}
 
-		const Row& ConstantReader::current () const
+		Row const& ConstantReader::current () const
 		{
 			return this->row;
 		}

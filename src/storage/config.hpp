@@ -12,10 +12,10 @@ namespace Tesca
 		class Config
 		{
 			public:
-				Config (const Config&);
+				Config (Config const&);
 				Config ();
 
-				Config& operator = (const Config&);
+				Config& operator = (Config const&);
 
 				void clear ();
 				const std::string& get (const std::string&, const std::string&) const;

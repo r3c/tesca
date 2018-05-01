@@ -12,11 +12,11 @@ namespace Tesca
 		class LineReader : public Reader
 		{
 			public:
-				LineReader (const LineReader&);
+				LineReader (LineReader const&);
 				LineReader (Glay::Pipe::SeekIStream*, Glay::Size);
 				virtual ~LineReader ();
 
-				LineReader& operator = (const LineReader&);
+				LineReader& operator = (LineReader const&);
 
 				virtual bool next ();
 

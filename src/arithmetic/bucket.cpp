@@ -8,7 +8,7 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		Bucket::Bucket (const Bucket& other) :
+		Bucket::Bucket (Bucket const& other) :
 			length (other.length)
 		{
 			Variant* buffer;
@@ -32,7 +32,7 @@ namespace Tesca
 			delete [] this->buffer;
 		}
 
-		const Variant& Bucket::operator [] (Int32u index) const
+		Variant const& Bucket::operator [] (Int32u index) const
 		{
 			return this->buffer[index];
 		}
@@ -42,7 +42,7 @@ namespace Tesca
 			return this->length;
 		}
 
-		Int16s Bucket::compare (const Bucket& other) const
+		Int16s Bucket::compare (Bucket const& other) const
 		{
 			if (this->length < other.length)
 				return -1;
@@ -51,8 +51,8 @@ namespace Tesca
 
 			for (Int32u index = 0; index < this->length; ++index)
 			{
-				const Variant& lhs = this->buffer[index];
-				const Variant& rhs = other.buffer[index];
+				Variant const& lhs = this->buffer[index];
+				Variant const& rhs = other.buffer[index];
 
 				if (lhs < rhs)
 					return -1;
@@ -71,12 +71,12 @@ namespace Tesca
 			return *this;
 		}
 
-		void Bucket::set (Int32u index, const Variant& value)
+		void Bucket::set (Int32u index, Variant const& value)
 		{
 			this->buffer[index] = value;
 		}
 
-		bool operator < (const Bucket& lhs, const Bucket& rhs)
+		bool operator < (Bucket const& lhs, Bucket const& rhs)
 		{
 			return lhs.compare (rhs) < 0;
 		}

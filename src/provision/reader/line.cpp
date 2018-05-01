@@ -9,7 +9,7 @@ using namespace Glay;
 
 namespace
 {
-	static const Size READ_UPDATE = 1024 * 1024;
+	static Size const READ_UPDATE = 1024 * 1024;
 }
 
 namespace Tesca

@@ -25,7 +25,7 @@ namespace Tesca
 			this->first = Variant::empty;
 		}
 
-		bool FirstAggregator::update (const Variant& value)
+		bool FirstAggregator::update (Variant const& value)
 		{
 			if (this->empty)
 			{

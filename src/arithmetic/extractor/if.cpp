@@ -11,14 +11,14 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		IfExtractor::IfExtractor (const Extractor* condition, const Extractor* onTrue, const Extractor* onFalse) :
+		IfExtractor::IfExtractor (Extractor const* condition, Extractor const* onTrue, Extractor const* onFalse) :
 			condition (condition),
 			onFalse (onFalse),
 			onTrue (onTrue)
 		{
 		}
 
-		IfExtractor::IfExtractor (const Extractor* condition, const Extractor* onTrue) :
+		IfExtractor::IfExtractor (Extractor const* condition, Extractor const* onTrue) :
 			condition (condition),
 			onFalse (&VoidExtractor::instance),
 			onTrue (onTrue)
@@ -30,7 +30,7 @@ namespace Tesca
 			return "if_" + this->condition->createName (index);
 		}
 
-		Variant IfExtractor::collect (Aggregator const* const* const aggregators) const
+		Variant IfExtractor::collect (Aggregator const* const* aggregators) const
 		{
 			bool test;
 
@@ -40,7 +40,7 @@ namespace Tesca
 				return this->onFalse->collect (aggregators);
 		}
 
-		Variant IfExtractor::extract (const Row& row) const
+		Variant IfExtractor::extract (Row const& row) const
 		{
 			bool test;
 

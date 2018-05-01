@@ -11,7 +11,7 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		Table::iterator::iterator (const Columns& columns, const Groups& groups, Groups::const_iterator inner) :
+		Table::iterator::iterator (Columns const& columns, Groups const& groups, Groups::const_iterator inner) :
 			columns (columns),
 			groups (groups),
 			inner (inner),
@@ -52,7 +52,7 @@ namespace Tesca
 		void Table::iterator::update ()
 		{
 			Aggregator const* const* const aggregators = this->inner->second;
-			const Bucket& bucket = this->inner->first;
+			Bucket const& bucket = this->inner->first;
 			Int32u from = 0;
 			Int32u to = 0;
 
@@ -80,7 +80,7 @@ namespace Tesca
 			this->clear ();
 		}
 
-		const Table::Columns& Table::getColumns () const
+		Table::Columns const& Table::getColumns () const
 		{
 			return this->columns;
 		}
@@ -121,7 +121,7 @@ namespace Tesca
 			this->keys.clear ();
 		}
 
-		void Table::push (const Row& row)
+		void Table::push (Row const& row)
 		{
 			// Select row or exit if it should be discarded
 			bool filter;
@@ -156,13 +156,13 @@ namespace Tesca
 				this->composites[i]->update (aggregators, row);
 		}
 
-		void Table::reset (const Extractor* condition, const Columns& columns, Int32u slots)
+		void Table::reset (Extractor const* condition, Columns const& columns, Int32u slots)
 		{
 			this->clear ();
 
 			for (auto i = columns.begin (); i != columns.end (); ++i)
 			{
-				const Extractor* extractor = i->getExtractor ();
+				Extractor const* extractor = i->getExtractor ();
 
 				if (extractor->getFlags () & Extractor::COMPOSITE)
 					this->composites.push_back (extractor);

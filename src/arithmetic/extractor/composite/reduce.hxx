@@ -11,7 +11,7 @@ namespace Tesca
 	namespace Arithmetic
 	{
 		template<typename T>
-		ReduceCompositeExtractor<T>::ReduceCompositeExtractor (Int32u slot, const Extractor* operand, const string& prefix) :
+		ReduceCompositeExtractor<T>::ReduceCompositeExtractor (Int32u slot, Extractor const* operand, const string& prefix) :
 			operand (operand),
 			prefix (prefix),
 			slot (slot)
@@ -25,13 +25,13 @@ namespace Tesca
 		}
 
 		template<typename T>
-		Variant	ReduceCompositeExtractor<T>::collect (Aggregator const* const* const aggregators) const
+		Variant	ReduceCompositeExtractor<T>::collect (Aggregator const* const* aggregators) const
 		{
 			return aggregators[this->slot]->collect ();
 		}
 
 		template<typename T>
-		void ReduceCompositeExtractor<T>::prepare (Aggregator** const aggregators) const
+		void ReduceCompositeExtractor<T>::prepare (Aggregator** aggregators) const
 		{
 			Extractor::prepare (aggregators);
 
@@ -45,7 +45,7 @@ namespace Tesca
 		}
 
 		template<typename T>
-		void ReduceCompositeExtractor<T>::update (Aggregator** const aggregators, const Provision::Row& row) const
+		void ReduceCompositeExtractor<T>::update (Aggregator* const* aggregators, Provision::Row const& row) const
 		{
 			Extractor::update (aggregators, row);
 

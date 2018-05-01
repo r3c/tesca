@@ -18,10 +18,10 @@ namespace Tesca
 				typedef std::vector<std::string> Keys;
 				typedef Keys::const_iterator const_iterator;
 
-				Lookup (const Lookup&);
+				Lookup (Lookup const&);
 				Lookup ();
 
-				Lookup& operator = (const Lookup&);
+				Lookup& operator = (Lookup const&);
 
 				const_iterator begin () const;
 				const_iterator end () const;
@@ -41,7 +41,7 @@ namespace Tesca
 						State ();
 
 						bool fetch (Glay::Int32u*) const;
-						bool next (char, const State**) const;
+						bool next (char, State const**) const;
 						void set (const std::string&, Glay::Int32u, Glay::Int32u);
 
 					private:
@@ -50,10 +50,10 @@ namespace Tesca
 						Glay::Int32u value;
 				};
 
-				const State* current;
+				State const* current;
 				State initial;
 				Keys keys;
-				std::stack<const State*> states;
+				std::stack<State const*> states;
 		};
 	}
 }

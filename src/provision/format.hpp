@@ -14,9 +14,9 @@ namespace Tesca
 	{
 		struct Format
 		{
-			typedef std::function<Reader* (Glay::Pipe::SeekIStream*, const Lookup&, const Storage::Config&)> Builder;
+			typedef std::function<Reader* (Glay::Pipe::SeekIStream*, Lookup const&, Storage::Config const&)> Builder;
 
-			static const Format formats[];
+			static Format const formats[];
 
 			const char* name;
 			Builder builder;

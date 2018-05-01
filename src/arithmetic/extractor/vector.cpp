@@ -7,8 +7,8 @@ namespace Tesca
 {
 	namespace Arithmetic
 	{
-		VectorExtractor::VectorExtractor (const vector<const Extractor*>& extractors) :
-			extractors (new const Extractor*[extractors.size ()]),
+		VectorExtractor::VectorExtractor (const vector<Extractor const*>& extractors) :
+			extractors (new Extractor const*[extractors.size ()]),
 			length (extractors.size ())
 		{
 			for (auto i = extractors.size (); i-- > 0; )

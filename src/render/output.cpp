@@ -8,7 +8,7 @@ using namespace Glay;
 
 namespace
 {
-	static const Int8u SEPARATOR = ':';
+	static Int8u const SEPARATOR = ':';
 }
 
 namespace Tesca
@@ -24,7 +24,7 @@ namespace Tesca
 		{
 		}
 
-		const Output::Error& Output::onError () const
+		Output::Error const& Output::onError () const
 		{
 			return this->error;
 		}

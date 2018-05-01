@@ -14,22 +14,22 @@ namespace Tesca
 			public:
 				typedef Parser::Error Error;
 
-				Filter (const Filter&);
+				Filter (Filter const&);
 				Filter ();
 				~Filter ();
 
-				Filter& operator = (const Filter&);
+				Filter& operator = (Filter const&);
 
-				const Arithmetic::Extractor* getCondition () const;
+				Arithmetic::Extractor const* getCondition () const;
 
-				const Error& onError () const;
+				Error const& onError () const;
 				Error& onError ();
 
 				bool parse (Provision::Lookup&, const char*);
 				void reset ();
 
 			private:
-				const Arithmetic::Extractor* condition;
+				Arithmetic::Extractor const* condition;
 				Parser parser;
 
 		};

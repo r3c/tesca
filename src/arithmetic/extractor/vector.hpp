@@ -13,13 +13,13 @@ namespace Tesca
 		class VectorExtractor : public Extractor
 		{
 			public:
-				VectorExtractor (const std::vector<const Extractor*>&);
+				VectorExtractor (const std::vector<Extractor const*>&);
 				virtual ~VectorExtractor ();
 
 			protected:
 				virtual void recurse (RecurseCallback) const;
 
-				const Extractor** extractors;
+				Extractor const** extractors;
 				Glay::Int32u length;
 		};
 	}

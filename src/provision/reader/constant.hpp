@@ -14,13 +14,13 @@ namespace Tesca
 		class ConstantReader : public Reader
 		{
 			public:
-				ConstantReader (const ConstantReader&);
-				ConstantReader (const Lookup&, Glay::Int32u);
+				ConstantReader (ConstantReader const&);
+				ConstantReader (Lookup const&, Glay::Int32u);
 
-				ConstantReader& operator = (const ConstantReader&);
+				ConstantReader& operator = (ConstantReader const&);
 
-				bool assign (const std::string&, const Storage::Variant&);
-				virtual const Row& current () const;
+				bool assign (const std::string&, Storage::Variant const&);
+				virtual Row const& current () const;
 				virtual bool next ();
 
 			private:

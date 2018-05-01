@@ -21,7 +21,7 @@ namespace Tesca
 			return this->defined;
 		}
 
-		bool Lookup::State::next (char character, const Lookup::State** out) const
+		bool Lookup::State::next (char character, Lookup::State const** out) const
 		{
 			auto i = this->branches.find (character);
 
@@ -46,7 +46,7 @@ namespace Tesca
 			this->branches[key[index]].set (key, index + 1, value);
 		}
 
-		Lookup::Lookup (const Lookup& other) :
+		Lookup::Lookup (Lookup const& other) :
 			initial (other.initial),
 			keys (other.keys),
 			states (other.states)
@@ -82,7 +82,7 @@ namespace Tesca
 		bool Lookup::find (const string& key, Int32u* field) const
 		{
 			const char* character;
-			const State* current;
+			State const* current;
 			Int32u length;
 
 			character = key.data ();

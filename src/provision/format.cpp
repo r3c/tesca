@@ -12,13 +12,13 @@ namespace Tesca
 {
 	namespace Provision
 	{
-		const Format Format::formats[] =
+		Format const Format::formats[] =
 		{
-			{"csv",		[] (SeekIStream* stream, const Lookup& lookup, const Config& config) -> Reader*
+			{"csv",		[] (SeekIStream* stream, Lookup const& lookup, Config const& config) -> Reader*
 			{
 				return new CSVLineReader (stream, lookup, config);
 			}},
-			{"json",	[] (SeekIStream* stream, const Lookup& lookup, const Config& config) -> Reader*
+			{"json",	[] (SeekIStream* stream, Lookup const& lookup, Config const& config) -> Reader*
 			{
 				return new JSONLineReader (stream, lookup, config);
 			}},
