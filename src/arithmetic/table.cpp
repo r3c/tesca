@@ -56,9 +56,9 @@ namespace Tesca
 			Int32u from = 0;
 			Int32u to = 0;
 
-			for (auto i = this->columns.begin (); i != this->columns.end (); ++i)
+			for (auto& column: this->columns)
 			{
-				auto extractor = i->getExtractor ();
+				auto extractor = column.getExtractor ();
 
 				if (extractor->getFlags () & Extractor::COMPOSITE)
 					this->values[to] = extractor->collect (aggregators);
@@ -102,9 +102,9 @@ namespace Tesca
 
 		void Table::clear ()
 		{
-			for (auto i = this->groups.begin (); i != this->groups.end (); ++i)
+			for (auto& group: this->groups)
 			{
-				auto aggregators = i->second;
+				auto aggregators = group.second;
 
 				for (auto j = this->slots; j-- > 0; )
 					delete aggregators[j];
@@ -160,9 +160,9 @@ namespace Tesca
 		{
 			this->clear ();
 
-			for (auto i = columns.begin (); i != columns.end (); ++i)
+			for (auto& column: columns)
 			{
-				Extractor const* extractor = i->getExtractor ();
+				Extractor const* extractor = column.getExtractor ();
 
 				if (extractor->getFlags () & Extractor::COMPOSITE)
 					this->composites.push_back (extractor);

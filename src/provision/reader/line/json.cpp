@@ -39,8 +39,8 @@ namespace Tesca
 			string member (config.get ("member", ""));
 			string root (config.get ("root", "row"));
 
-			for (auto i = root.begin (); i != root.end (); ++i)
-				this->lookup.next (*i);
+			for (auto& character: root)
+				this->lookup.next (character);
 
 			this->member = member.length () > 0 ? member[0] : '.';
 		}

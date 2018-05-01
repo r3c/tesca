@@ -62,9 +62,7 @@ namespace Tesca
 
 		void CSVPrinter::write (FormatWriter& writer, const string& value) const
 		{
-			bool escape;
-
-			escape = value.find (this->quote) != string::npos || value.find (this->split) != string::npos;
+			bool escape = value.find (this->quote) != string::npos || value.find (this->split) != string::npos;
 
 			if (escape)
 				writer.write (this->quote);

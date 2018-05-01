@@ -34,18 +34,18 @@ namespace Tesca
 
 			characters = config.get ("blanks", "\n\r\t ");
 
-			for (auto i = characters.begin (); i != characters.end (); ++i)
-				this->types[(Int32s)*i] = TYPE_BLANK;
+			for (auto& character: characters)
+				this->types[(Int8u)character] = TYPE_BLANK;
 
 			characters = config.get ("quotes", "\"");
 
-			for (auto i = characters.begin (); i != characters.end (); ++i)
-				this->types[(Int32s)*i] = TYPE_QUOTE;
+			for (auto& character: characters)
+				this->types[(Int8u)character] = TYPE_QUOTE;
 
 			characters = config.get ("splits", ",");
 
-			for (auto i = characters.begin (); i != characters.end (); ++i)
-				this->types[(Int32s)*i] = TYPE_SPLIT;
+			for (auto& character: characters)
+				this->types[(Int8u)character] = TYPE_SPLIT;
 
 			// Read headers from configuration or use default
 			if (config.get ("headers", &headers))
@@ -78,10 +78,8 @@ namespace Tesca
 			{
 				value = 0;
 
-				for (auto i = lookup.begin (); i != lookup.end (); ++i)
+				for (auto& key: lookup)
 				{
-					const string& key = *i;
-
 					if (key.length () > 0 && key[0] == '_' && Convert::toInteger (&index, key.data () + 1, key.length () - 1))
 					{
 						if (index >= this->mapping.size ())

@@ -331,12 +331,8 @@ namespace Tesca
 
 		bool Parser::parseValue (Lexer& lexer, Lookup& lookup, Int32u* slot, Extractor const** output)
 		{
-			Extractor const* argument;
 			Extractors arguments;
-			Constant const* constant;
-			Function const* function;
 			string name;
-			Float64 number;
 
 			switch (lexer.getLexemType ())
 			{
@@ -347,7 +343,7 @@ namespace Tesca
 
 					if (lexer.getLexemType () == Lexer::PARENTHESIS_BEGIN)
 					{
-						function = 0;
+						Function const* function = nullptr;
 
 						for (Int32u i = 0; Function::functions[i].name; ++i)
 						{
@@ -359,7 +355,7 @@ namespace Tesca
 							}
 						}
 
-						if (!function)
+						if (function == nullptr)
 							return this->fail (lexer, string ("unknown function name '") + lexer.getLexemText () + "'");
 
 						lexer.next ();
@@ -368,6 +364,8 @@ namespace Tesca
 						{
 							if (arguments.size () > 0 && !this->parseLexemType (lexer, Lexer::COMMA, "argument separator"))
 								return false;
+
+							Extractor const* argument;
 
 							if (!this->parseExpression (lexer, lookup, slot, &argument))
 								return false;
@@ -384,7 +382,7 @@ namespace Tesca
 					}
 					else
 					{
-						constant = 0;
+						Constant const* constant = nullptr;
 
 						for (Int32u i = 0; Constant::constants[i].name; ++i)
 						{
@@ -396,7 +394,7 @@ namespace Tesca
 							}
 						}
 
-						if (constant)
+						if (constant != nullptr)
 							*output = new ConstantExtractor (constant->value);
 						else
 							*output = new FieldExtractor (lookup.store (name), name);
@@ -405,6 +403,8 @@ namespace Tesca
 					break;
 
 				case Lexer::NUMBER:
+					Float64 number;
+
 					if (!Convert::toFloat (&number, lexer.getLexemText ().data (), lexer.getLexemText ().length ()))
 						return this->fail (lexer, "invalid number");
 
@@ -434,8 +434,8 @@ namespace Tesca
 
 		void Parser::reset ()
 		{
-			for (auto i = this->extractors.begin (); i != this->extractors.end (); ++i)
-				delete *i;
+			for (auto& extractor: this->extractors)
+				delete extractor;
 
 			this->extractors.clear ();
 		}

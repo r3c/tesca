@@ -18,10 +18,8 @@ namespace Tesca
 		{
 			Int32u group;
 
-			for (auto i = lookup.begin (); i != lookup.end (); ++i)
+			for (auto& key: lookup)
 			{
-				const string& key = *i;
-
 				if (key.length () > 0 && key[0] == '_' && Convert::toInt32u (&index, key.data () + 1, key.length () - 1))
 					this->lookup[group] = i->second;
 
@@ -43,10 +41,10 @@ namespace Tesca
 			if (!regex_match (line, match, this->regex))
 				return false;
 
-			for (auto i = this->lookup.begin (); i != this->lookup.end (); ++i)
+			for (auto& pair: this->lookup)
 			{
-				if (i->first < match.size ())
-					this->row.set (i->second, Variant (match[i->first]));
+				if (pair.first < match.size ())
+					this->row.set (pair.second, Variant (match[pair.first]));
 			}
 
 			return true;

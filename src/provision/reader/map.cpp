@@ -17,8 +17,8 @@ namespace Tesca
 
 		MapReader::~MapReader ()
 		{
-			for (auto i = this->lines.begin (); i != this->lines.end (); ++i)
-				delete [] *i;
+			for (auto& line: this->lines)
+				delete [] line;
 		}
 
 		bool MapReader::assign (const string& identifier, Variant const& value)
