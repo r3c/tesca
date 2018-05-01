@@ -17,7 +17,7 @@ namespace Tesca
 
 				virtual Glay::Int32u getFlags () const;
 
-				virtual Storage::Variant compute (const Aggregator* const*) const;
+				virtual Storage::Variant collect (Aggregator const* const* const) const;
 				virtual Storage::Variant extract (const Provision::Row&) const;
 
 			private:

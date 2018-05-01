@@ -14,18 +14,18 @@ namespace Tesca
 		{
 		}
 
-		bool LogicalExtractor::computeLHS (const Aggregator* const* aggregators) const
+		bool LogicalExtractor::collectLHS (Aggregator const* const* const aggregators) const
 		{
 			bool test;
 
-			return this->lhs->compute (aggregators).toBoolean (&test) && test;
+			return this->lhs->collect (aggregators).toBoolean (&test) && test;
 		}
 
-		bool LogicalExtractor::computeRHS (const Aggregator* const* aggregators) const
+		bool LogicalExtractor::collectRHS (Aggregator const* const* const aggregators) const
 		{
 			bool test;
 
-			return this->lhs->compute (aggregators).toBoolean (&test) && test;
+			return this->lhs->collect (aggregators).toBoolean (&test) && test;
 		}
 
 		bool LogicalExtractor::extractLHS (const Row& row) const

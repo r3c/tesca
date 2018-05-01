@@ -23,9 +23,9 @@ namespace Tesca
 			return this->lhs->createName (slot) + "_" + this->infix + "_" + this->rhs->createName (slot);
 		}
 
-		Variant BinaryExtractor::compute (const Aggregator* const* aggregators) const
+		Variant BinaryExtractor::collect (Aggregator const* const* const aggregators) const
 		{
-			return this->callback (this->lhs->compute (aggregators), this->rhs->compute (aggregators));
+			return this->callback (this->lhs->collect (aggregators), this->rhs->collect (aggregators));
 		}
 
 		Variant BinaryExtractor::extract (const Row& row) const

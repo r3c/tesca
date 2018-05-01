@@ -13,22 +13,22 @@ namespace Tesca
 		{
 		}
 
-		Variant LastAggregator::compute () const
+		Variant LastAggregator::collect () const
 		{
 			return this->last;
-		}
-
-		bool LastAggregator::push (const Variant& value)
-		{
-			this->last = value;
-			this->last.keep ();
-
-			return true;
 		}
 
 		void LastAggregator::reset ()
 		{
 			this->last = Variant::empty;
+		}
+
+		bool LastAggregator::update (const Variant& value)
+		{
+			this->last = value;
+			this->last.keep ();
+
+			return true;
 		}
 	}
 }

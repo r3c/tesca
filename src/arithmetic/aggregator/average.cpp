@@ -13,7 +13,7 @@ namespace Tesca
 			this->reset ();
 		}
 
-		Variant AverageAggregator::compute () const
+		Variant AverageAggregator::collect () const
 		{
 			if (this->count > 0)
 				return Variant (this->sum / this->count);
@@ -21,7 +21,13 @@ namespace Tesca
 			return Variant::empty;
 		}
 
-		bool AverageAggregator::push (const Variant& value)
+		void AverageAggregator::reset ()
+		{
+			this->count = 0;
+			this->sum = 0;
+		}
+
+		bool AverageAggregator::update (const Variant& value)
 		{
 			Float64 number;
 
@@ -33,12 +39,6 @@ namespace Tesca
 			++this->count;
 
 			return true;
-		}
-
-		void AverageAggregator::reset ()
-		{
-			this->count = 0;
-			this->sum = 0;
 		}
 	}
 }

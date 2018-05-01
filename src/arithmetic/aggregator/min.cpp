@@ -14,7 +14,7 @@ namespace Tesca
 		{
 		}
 
-		Variant MinAggregator::compute () const
+		Variant MinAggregator::collect () const
 		{
 			if (this->empty)
 				return Variant::empty;
@@ -22,7 +22,13 @@ namespace Tesca
 			return Variant (this->min);
 		}
 
-		bool MinAggregator::push (const Variant& value)
+		void MinAggregator::reset ()
+		{
+			this->empty = true;
+			this->min = 0;
+		}
+
+		bool MinAggregator::update (const Variant& value)
 		{
 			Float64 current;
 
@@ -36,12 +42,6 @@ namespace Tesca
 			}
 
 			return true;
-		}
-
-		void MinAggregator::reset ()
-		{
-			this->empty = true;
-			this->min = 0;
 		}
 	}
 }

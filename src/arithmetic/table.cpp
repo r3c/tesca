@@ -51,7 +51,7 @@ namespace Tesca
 
 		void Table::iterator::update ()
 		{
-			const Aggregator* const* aggregators = this->inner->second;
+			Aggregator const* const* const aggregators = this->inner->second;
 			const Bucket& bucket = this->inner->first;
 			Int32u from = 0;
 			Int32u to = 0;
@@ -61,7 +61,7 @@ namespace Tesca
 				auto extractor = i->getExtractor ();
 
 				if (extractor->getFlags () & Extractor::COMPOSITE)
-					this->values[to] = extractor->compute (aggregators);
+					this->values[to] = extractor->collect (aggregators);
 				else
 					this->values[to] = bucket[from++];
 
@@ -123,36 +123,37 @@ namespace Tesca
 
 		void Table::push (const Row& row)
 		{
-			Aggregator** aggregators;		
-			Bucket bucket (this->keys.size ());
+			// Select row or exit if it should be discarded
 			bool filter;
 
-			// Select row or exit if it should be discarded
 			if (!this->condition->extract (row).toBoolean (&filter) || !filter)
 				return;
 
 			// Build bucket from extractors of "key" columns
+			Bucket bucket (this->keys.size ());
+
 			for (auto i = this->keys.size (); i-- > 0; )
 				bucket.set (i, this->keys[i]->extract (row));
 
 			// Retrieve group from bucket or create it
-			auto found = this->groups.find (bucket);
+			Aggregator** aggregators;
+			auto group = this->groups.find (bucket);
 
-			if (found == this->groups.end ())
+			if (group == this->groups.end ())
 			{
 				aggregators = new Aggregator*[this->slots];
 
 				for (auto i = this->composites.size (); i-- > 0; )
-					this->composites[i]->populate (aggregators);
+					this->composites[i]->prepare (aggregators);
 
 				this->groups[bucket.keep ()] = aggregators;
 			}
 			else
-				aggregators = found->second;
+				aggregators = group->second;
 
 			// Update aggregators for this column group
 			for (auto i = this->composites.size (); i-- > 0; )
-				this->composites[i]->store (aggregators, row);
+				this->composites[i]->update (aggregators, row);
 		}
 
 		void Table::reset (const Extractor* condition, const Columns& columns, Int32u slots)

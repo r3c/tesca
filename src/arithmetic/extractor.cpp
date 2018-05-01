@@ -23,23 +23,23 @@ namespace Tesca
 			return flags;
 		}
 
+		void Extractor::prepare (Aggregator** const aggregators) const
+		{
+			this->recurse ([aggregators] (const Extractor* child)
+			{
+				child->prepare (aggregators);
+			});
+		}
+
 		void Extractor::recurse (RecurseCallback) const
 		{
 		}
 
-		void Extractor::populate (Aggregator** aggregators) const
-		{
-			this->recurse ([aggregators] (const Extractor* child)
-			{
-				child->populate (aggregators);
-			});
-		}
-
-		void Extractor::store (Aggregator** aggregators, const Provision::Row& row) const
+		void Extractor::update (Aggregator** const aggregators, const Provision::Row& row) const
 		{
 			this->recurse ([aggregators, &row] (const Extractor* child)
 			{
-				child->store (aggregators, row);
+				child->update (aggregators, row);
 			});
 		}
 	}

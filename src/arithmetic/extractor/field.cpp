@@ -26,7 +26,7 @@ namespace Tesca
 			return SCALAR;
 		}
 
-		Variant FieldExtractor::compute (const Aggregator* const*) const
+		Variant FieldExtractor::collect (Aggregator const* const* const) const
 		{
 			return Variant::empty;
 		}

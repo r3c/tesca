@@ -14,9 +14,9 @@ namespace Tesca
 			public:
 				VarianceAggregator ();
 
-				virtual Storage::Variant compute () const;
-				virtual bool push (const Storage::Variant&);
+				virtual Storage::Variant collect () const;
 				virtual void reset ();
+				virtual bool update (const Storage::Variant&);
 
 			private:
 				Glay::Int64u count;

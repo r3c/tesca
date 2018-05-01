@@ -14,7 +14,7 @@ namespace Tesca
 		{
 		}
 
-		Variant MaxAggregator::compute () const
+		Variant MaxAggregator::collect () const
 		{
 			if (this->empty)
 				return Variant::empty;
@@ -22,7 +22,13 @@ namespace Tesca
 			return Variant (this->max);
 		}
 
-		bool MaxAggregator::push (const Variant& value)
+		void MaxAggregator::reset ()
+		{
+			this->empty = true;
+			this->max = 0;
+		}
+
+		bool MaxAggregator::update (const Variant& value)
 		{
 			Float64 current;
 
@@ -36,12 +42,6 @@ namespace Tesca
 			}
 
 			return true;
-		}
-
-		void MaxAggregator::reset ()
-		{
-			this->empty = true;
-			this->max = 0;
 		}
 	}
 }

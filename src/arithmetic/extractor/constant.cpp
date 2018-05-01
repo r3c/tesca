@@ -34,7 +34,7 @@ namespace Tesca
 			return COMPOSITE | SCALAR;
 		}
 
-		Variant ConstantExtractor::compute (const Aggregator* const*) const
+		Variant ConstantExtractor::collect (Aggregator const* const* const) const
 		{
 			return this->value;
 		}

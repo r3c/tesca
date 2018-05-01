@@ -14,9 +14,9 @@ namespace Tesca
 			public:
 				FirstAggregator ();
 
-				virtual Storage::Variant compute () const;
-				virtual bool push (const Storage::Variant&);
+				virtual Storage::Variant collect () const;
 				virtual void reset ();
+				virtual bool update (const Storage::Variant&);
 
 			private:
 				bool empty;

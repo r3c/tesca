@@ -22,14 +22,14 @@ namespace Tesca
 			return this->name;
 		}
 
-		Variant LazyVectorExtractor::compute (const Aggregator* const* aggregators) const
+		Variant LazyVectorExtractor::collect (Aggregator const* const* const aggregators) const
 		{
 			return this->callback ([&] (Int32u i)
 			{
 				if (i >= this->length)
 					return Variant::empty;
 
-				return this->extractors[i]->compute (aggregators);
+				return this->extractors[i]->collect (aggregators);
 			}, this->length);
 		}
 

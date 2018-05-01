@@ -13,21 +13,21 @@ namespace Tesca
 			this->reset ();
 		}
 
-		Variant CountAggregator::compute () const
+		Variant CountAggregator::collect () const
 		{
 			return Variant (this->count);
-		}
-
-		bool CountAggregator::push (const Variant&)
-		{
-			++this->count;
-
-			return true;
 		}
 
 		void CountAggregator::reset ()
 		{
 			this->count = 0;
+		}
+
+		bool CountAggregator::update (const Variant&)
+		{
+			++this->count;
+
+			return true;
 		}
 	}
 }

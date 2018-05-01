@@ -30,14 +30,14 @@ namespace Tesca
 			return "if_" + this->condition->createName (index);
 		}
 
-		Variant IfExtractor::compute (const Aggregator* const* aggregators) const
+		Variant IfExtractor::collect (Aggregator const* const* const aggregators) const
 		{
 			bool test;
 
-			if (this->condition->compute (aggregators).toBoolean (&test) && test)
-				return this->onTrue->compute (aggregators);
+			if (this->condition->collect (aggregators).toBoolean (&test) && test)
+				return this->onTrue->collect (aggregators);
 			else
-				return this->onFalse->compute (aggregators);
+				return this->onFalse->collect (aggregators);
 		}
 
 		Variant IfExtractor::extract (const Row& row) const

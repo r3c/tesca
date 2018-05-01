@@ -20,9 +20,9 @@ namespace Tesca
 			return this->lhs->createName (slot) + "_and_" + this->rhs->createName (slot);
 		}
 
-		Variant AndLogicalExtractor::compute (const Aggregator* const* aggregators) const
+		Variant AndLogicalExtractor::collect (Aggregator const* const* const aggregators) const
 		{
-			return Variant (this->computeLHS (aggregators) && this->computeRHS (aggregators));
+			return Variant (this->collectLHS (aggregators) && this->collectRHS (aggregators));
 		}
 
 		Variant AndLogicalExtractor::extract (const Row& row) const

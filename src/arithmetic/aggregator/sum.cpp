@@ -13,12 +13,17 @@ namespace Tesca
 			this->reset ();
 		}
 
-		Variant SumAggregator::compute () const
+		Variant SumAggregator::collect () const
 		{
 			return Variant (this->sum);
 		}
 
-		bool SumAggregator::push (const Variant& value)
+		void SumAggregator::reset ()
+		{
+			this->sum = 0;
+		}
+
+		bool SumAggregator::update (const Variant& value)
 		{
 			Float64 number;
 
@@ -28,11 +33,6 @@ namespace Tesca
 			this->sum += number;
 
 			return true;
-		}
-
-		void SumAggregator::reset ()
-		{
-			this->sum = 0;
 		}
 	}
 }

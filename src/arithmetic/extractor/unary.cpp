@@ -22,9 +22,9 @@ namespace Tesca
 			return this->prefix + "_" + this->operand->createName (slot);
 		}
 
-		Variant UnaryExtractor::compute (const Aggregator* const* aggregators) const
+		Variant UnaryExtractor::collect (Aggregator const* const* const aggregators) const
 		{
-			return this->callback (this->operand->compute (aggregators));
+			return this->callback (this->operand->collect (aggregators));
 		}
 
 		Variant UnaryExtractor::extract (const Row& row) const

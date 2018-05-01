@@ -25,15 +25,15 @@ namespace Tesca
 		}
 
 		template<typename T>
-		Variant	ConstantCompositeExtractor<T>::compute (const Aggregator* const* aggregators) const
+		Variant	ConstantCompositeExtractor<T>::collect (Aggregator const* const* const aggregators) const
 		{
-			return aggregators[this->slot]->compute ();
+			return aggregators[this->slot]->collect ();
 		}
 
 		template<typename T>
-		void ConstantCompositeExtractor<T>::populate (Aggregator** aggregators) const
+		void ConstantCompositeExtractor<T>::prepare (Aggregator** const aggregators) const
 		{
-			Extractor::populate (aggregators);
+			Extractor::prepare (aggregators);
 
 			aggregators[this->slot] = new T ();
 		}
@@ -44,11 +44,11 @@ namespace Tesca
 		}
 
 		template<typename T>
-		void ConstantCompositeExtractor<T>::store (Aggregator** aggregators, const Provision::Row& row) const
+		void ConstantCompositeExtractor<T>::update (Aggregator** const aggregators, const Provision::Row& row) const
 		{
-			Extractor::store (aggregators, row);
+			Extractor::update (aggregators, row);
 
-			aggregators[this->slot]->push (this->value);
+			aggregators[this->slot]->update (this->value);
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Tesca
 			return COMPOSITE | SCALAR;
 		}
 
-		Variant VoidExtractor::compute (const Aggregator* const*) const
+		Variant VoidExtractor::collect (Aggregator const* const* const) const
 		{
 			return Variant::empty;
 		}

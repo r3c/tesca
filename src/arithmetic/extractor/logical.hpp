@@ -14,8 +14,8 @@ namespace Tesca
 				LogicalExtractor (const Extractor*, const Extractor*);
 
 			protected:
-				bool computeLHS (const Aggregator* const*) const;
-				bool computeRHS (const Aggregator* const*) const;
+				bool collectLHS (Aggregator const* const* const) const;
+				bool collectRHS (Aggregator const* const* const) const;
 
 				bool extractLHS (const Provision::Row&) const;
 				bool extractRHS (const Provision::Row&) const;

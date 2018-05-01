@@ -22,12 +22,12 @@ namespace Tesca
 			return this->name;
 		}
 
-		Variant CallbackVectorExtractor::compute (const Aggregator* const* aggregators) const
+		Variant CallbackVectorExtractor::collect (Aggregator const* const* const aggregators) const
 		{
 			Variant values[this->length];
 
 			for (auto i = this->length; i-- > 0; )
-				values[i] = this->extractors[i]->compute (aggregators);
+				values[i] = this->extractors[i]->collect (aggregators);
 
 			return this->callback (values, this->length);
 		}

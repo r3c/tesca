@@ -14,12 +14,18 @@ namespace Tesca
 		{
 		}
 
-		Variant FirstAggregator::compute () const
+		Variant FirstAggregator::collect () const
 		{
 			return this->first;
 		}
 
-		bool FirstAggregator::push (const Variant& value)
+		void FirstAggregator::reset ()
+		{
+			this->empty = true;
+			this->first = Variant::empty;
+		}
+
+		bool FirstAggregator::update (const Variant& value)
 		{
 			if (this->empty)
 			{
@@ -29,12 +35,6 @@ namespace Tesca
 			}
 
 			return true;
-		}
-
-		void FirstAggregator::reset ()
-		{
-			this->empty = true;
-			this->first = Variant::empty;
 		}
 	}
 }
