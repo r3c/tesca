@@ -13,17 +13,12 @@ namespace Tesca
 		Lexer::Lexer (const char* input) :
 			eof (false),
 			index (0),
+			lexemType (UNKNOWN),
 			reader (stream),
-			stream (input, strlen (input)),
-			type (UNKNOWN)
+			stream (input, strlen (input))
 		{
 			this->read ();
 			this->next ();
-		}
-
-		const string& Lexer::getCurrent () const
-		{
-			return this->current;
 		}
 
 		Size Lexer::getIndex () const
@@ -31,9 +26,14 @@ namespace Tesca
 			return this->index;
 		}
 
-		Lexer::Lexem Lexer::getType () const
+		const string& Lexer::getLexemText () const
 		{
-			return this->type;
+			return this->lexemText;
+		}
+
+		Lexer::LexemType Lexer::getLexemType () const
+		{
+			return this->lexemType;
 		}
 
 		bool Lexer::next ()
@@ -42,7 +42,7 @@ namespace Tesca
 
 			if (this->eof)
 			{
-				this->type = END;
+				this->lexemType = END;
 
 				return false;
 			}
@@ -51,7 +51,7 @@ namespace Tesca
 			{
 				if (!this->read ())
 				{
-					this->type = END;
+					this->lexemType = END;
 
 					return false;
 				}
@@ -81,8 +81,8 @@ namespace Tesca
 				}
 				while (this->read ());
 
-				this->current = buffer.str ();
-				this->type = IDENTIFIER;
+				this->lexemText = buffer.str ();
+				this->lexemType = IDENTIFIER;
 
 				return true;
 			}
@@ -98,8 +98,8 @@ namespace Tesca
 				        (this->character == '.')))
 					buffer.put (this->character);
 
-				this->current = buffer.str ();
-				this->type = NUMBER;
+				this->lexemText = buffer.str ();
+				this->lexemType = NUMBER;
 
 				return true;
 			}
@@ -123,8 +123,8 @@ namespace Tesca
 
 				this->read ();
 
-				this->current = buffer.str ();
-				this->type = STRING;
+				this->lexemText = buffer.str ();
+				this->lexemType = STRING;
 
 				return true;
 			}
@@ -134,13 +134,13 @@ namespace Tesca
 			{
 				case '&':
 					this->read ();
-					this->type = AMPERSAND;
+					this->lexemType = AMPERSAND;
 
 					break;
 
 				case ',':
 					this->read ();
-					this->type = COMMA;
+					this->lexemType = COMMA;
 
 					break;
 
@@ -148,22 +148,22 @@ namespace Tesca
 					if (this->read () && this->character == '=')
 					{
 						this->read ();
-						this->type = DIFFERENT;
+						this->lexemType = DIFFERENT;
 					}
 					else
-						this->type = NOT;
+						this->lexemType = NOT;
 
 					break;
 
 				case '/':
 					this->read ();
-					this->type = DIVIDE;
+					this->lexemType = DIVIDE;
 
 					break;
 
 				case '=':
 					this->read ();
-					this->type = EQUAL;
+					this->lexemType = EQUAL;
 
 					break;
 
@@ -171,10 +171,10 @@ namespace Tesca
 					if (this->read () && this->character == '=')
 					{
 						this->read ();
-						this->type = GREATER_EQUAL;
+						this->lexemType = GREATER_EQUAL;
 					}
 					else
-						this->type = GREATER_THAN;
+						this->lexemType = GREATER_THAN;
 
 					break;
 
@@ -182,63 +182,63 @@ namespace Tesca
 					if (this->read () && this->character == '=')
 					{
 						this->read ();
-						this->type = LOWER_EQUAL;
+						this->lexemType = LOWER_EQUAL;
 					}
 					else
-						this->type = LOWER_THAN;
+						this->lexemType = LOWER_THAN;
 
 					break;
 
 				case '-':
 					this->read ();
-					this->type = MINUS;
+					this->lexemType = MINUS;
 
 					break;
 
 				case '%':
 					this->read ();
-					this->type = MODULO;
+					this->lexemType = MODULO;
 
 					break;
 
 				case '*':
 					this->read ();
-					this->type = MULTIPLY;
+					this->lexemType = MULTIPLY;
 
 					break;
 
 				case ':':
 					this->read ();
-					this->type = NAME;
+					this->lexemType = NAME;
 
 					break;
 
 				case '(':
 					this->read ();
-					this->type = PARENTHESIS_BEGIN;
+					this->lexemType = PARENTHESIS_BEGIN;
 
 					break;
 
 				case ')':
 					this->read ();
-					this->type = PARENTHESIS_END;
+					this->lexemType = PARENTHESIS_END;
 
 					break;
 
 				case '|':
 					this->read ();
-					this->type = PIPE;
+					this->lexemType = PIPE;
 
 					break;
 
 				case '+':
 					this->read ();
-					this->type = PLUS;
+					this->lexemType = PLUS;
 
 					break;
 
 				default:
-					this->type = UNKNOWN;
+					this->lexemType = UNKNOWN;
 
 					return false;
 			}

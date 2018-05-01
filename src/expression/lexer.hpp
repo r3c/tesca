@@ -13,7 +13,7 @@ namespace Tesca
 		class Lexer
 		{
 			public:
-				enum Lexem
+				enum LexemType
 				{
 					AMPERSAND,
 					COMMA,
@@ -42,9 +42,9 @@ namespace Tesca
 
 				Lexer (const char*);
 
-				const std::string& getCurrent () const;
 				Glay::Size getIndex () const;
-				Lexem getType () const;
+				const std::string& getLexemText () const;
+				LexemType getLexemType () const;
 
 				bool next ();
 
@@ -52,12 +52,12 @@ namespace Tesca
 				bool read ();
 
 				char character;
-				std::string current;
 				bool eof;
 				Glay::Size index;
+				std::string lexemText;
+				LexemType lexemType;
 				Glay::Pipe::BinaryReader reader;
 				Glay::Pipe::MemoryIStream stream;
-				Lexem type;
 		};
 	}
 }

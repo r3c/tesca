@@ -33,7 +33,7 @@ namespace Tesca
 
 				bool parseExpression (Lexer&, Provision::Lookup&, Glay::Int32u*, Arithmetic::Extractor const**);
 				bool parseIdentifier (Lexer&, std::string*);
-				bool parseType (Lexer&, Lexer::Lexem, const char*);
+				bool parseLexemType (Lexer&, Lexer::LexemType, const char*);
 				bool parseValue (Lexer&, Provision::Lookup&, Glay::Int32u*, Arithmetic::Extractor const**);
 
 				void reset ();

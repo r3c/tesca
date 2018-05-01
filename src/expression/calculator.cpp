@@ -47,10 +47,10 @@ namespace Tesca
 
 			this->reset ();
 
-			for (bool next = false; lexer.getType () != Lexer::END; next = true)
+			for (bool next = false; lexer.getLexemType () != Lexer::END; next = true)
 			{
 				// Skip columns separator after first column
-				if (next && !this->parser.parseType (lexer, Lexer::COMMA, "column separator"))
+				if (next && !this->parser.parseLexemType (lexer, Lexer::COMMA, "column separator"))
 					return false;
 
 				// Read column expression
@@ -62,7 +62,7 @@ namespace Tesca
 				// Read column key if any
 				string key;
 
-				if (lexer.getType () == Lexer::NAME)
+				if (lexer.getLexemType () == Lexer::NAME)
 				{
 					lexer.next ();
 

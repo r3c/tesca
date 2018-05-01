@@ -67,7 +67,7 @@ namespace Tesca
 
 			while (true)
 			{
-				switch (lexer.getType ())
+				switch (lexer.getLexemType ())
 				{
 					case Lexer::PLUS:
 						lexer.next ();
@@ -111,7 +111,7 @@ namespace Tesca
 						lexer.next ();
 
 						if (!this->parseExpression (lexer, lookup, slot, &value) ||
-						    !this->parseType (lexer, Lexer::PARENTHESIS_END, "closing parenthesis"))
+						    !this->parseLexemType (lexer, Lexer::PARENTHESIS_END, "closing parenthesis"))
 							return false;
 
 						break;
@@ -125,7 +125,7 @@ namespace Tesca
 
 				operands.push (value);
 
-				switch (lexer.getType ())
+				switch (lexer.getLexemType ())
 				{
 					case Lexer::AMPERSAND:
 						binaryOp = make_pair (1, [] (Extractor const* lhs, Extractor const* rhs) -> Extractor*
@@ -309,20 +309,20 @@ namespace Tesca
 
 		bool Parser::parseIdentifier (Lexer& lexer, string* output)
 		{
-			if (lexer.getType () != Lexer::IDENTIFIER)
+			if (lexer.getLexemType () != Lexer::IDENTIFIER)
 				return this->fail (lexer, "expected column identifier");
 
-			*output = lexer.getCurrent ();
+			*output = lexer.getLexemText ();
 
 			lexer.next ();
 
 			return true;
 		}
 
-		bool Parser::parseType (Lexer& lexer, Lexer::Lexem type, const char* expected)
+		bool Parser::parseLexemType (Lexer& lexer, Lexer::LexemType expected, const char* verbose)
 		{
-			if (lexer.getType () != type)
-				return this->fail (lexer, string ("expected ") + expected);
+			if (lexer.getLexemType () != expected)
+				return this->fail (lexer, string ("expected ") + verbose);
 
 			lexer.next ();
 
@@ -338,14 +338,14 @@ namespace Tesca
 			string name;
 			Float64 number;
 
-			switch (lexer.getType ())
+			switch (lexer.getLexemType ())
 			{
 				case Lexer::IDENTIFIER:
-					name = lexer.getCurrent ();
+					name = lexer.getLexemText ();
 
 					lexer.next ();
 
-					if (lexer.getType () == Lexer::PARENTHESIS_BEGIN)
+					if (lexer.getLexemType () == Lexer::PARENTHESIS_BEGIN)
 					{
 						function = 0;
 
@@ -360,13 +360,13 @@ namespace Tesca
 						}
 
 						if (!function)
-							return this->fail (lexer, string ("unknown function name '") + lexer.getCurrent () + "'");
+							return this->fail (lexer, string ("unknown function name '") + lexer.getLexemText () + "'");
 
 						lexer.next ();
 
-						while (lexer.getType () != Lexer::PARENTHESIS_END)
+						while (lexer.getLexemType () != Lexer::PARENTHESIS_END)
 						{
-							if (arguments.size () > 0 && !this->parseType (lexer, Lexer::COMMA, "argument separator"))
+							if (arguments.size () > 0 && !this->parseLexemType (lexer, Lexer::COMMA, "argument separator"))
 								return false;
 
 							if (!this->parseExpression (lexer, lookup, slot, &argument))
@@ -405,7 +405,7 @@ namespace Tesca
 					break;
 
 				case Lexer::NUMBER:
-					if (!Convert::toFloat (&number, lexer.getCurrent ().data (), lexer.getCurrent ().length ()))
+					if (!Convert::toFloat (&number, lexer.getLexemText ().data (), lexer.getLexemText ().length ()))
 						return this->fail (lexer, "invalid number");
 
 					*output = new ConstantExtractor (Variant (number));
@@ -415,7 +415,7 @@ namespace Tesca
 					break;
 
 				case Lexer::STRING:
-					*output = new ConstantExtractor (Variant (lexer.getCurrent ()));
+					*output = new ConstantExtractor (Variant (lexer.getLexemText ()));
 
 					lexer.next ();
 
