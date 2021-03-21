@@ -1,4 +1,4 @@
-name: Test Push Stuff on PR
+name: Detect forced pushes in PRs
 
 on:
   pull_request
@@ -6,25 +6,42 @@ on:
 jobs:
   detect_force_push_pr:
     runs-on: ubuntu-latest
-    name: Detect Force Push on PR
+    name: Search for common ancestor on PR synchronize
     if: github.event.action == 'synchronize'
     steps:
-      - uses: hmarr/debug-action@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - uses: actions/checkout@v2
-
-      - name: Check ancestor
+      - name: Check if previous hash is an ancestor
+        if: |
+          !github.event.pull_request.draft && !contains(github.event.pull_request.labels, 'WIP')
         id: git-merge-base
         run: |
-          git fetch --all
           echo -n "::set-output name=ancestor::"
           git merge-base --is-ancestor "${{github.event.before}}" "${{github.event.after}}" && echo 'yes' || echo 'no'
 
-      - name: Comment PR
+      - name: Post message
         if: steps.git-merge-base.outputs.ancestor == 'no'
         uses: actions/github-script@0.3.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: 'Hello world ! 👋' });
+            const { issue: { number: issue_number }, repo: { owner, repo }, payload: { sender } } = context;
+            const compareUrl = '${{github.event.pull_request.base.repo.html_url}}/compare/${{github.event.before}}..${{github.event.after}}';
+            github.issues.createComment({
+              issue_number,
+              owner,
+              repo,
+              body: [
+                'Hey @' + sender.login + '!',
+                '',
+                'It seems you just pushed a commit to a non-draft/non-WIP PR with the `--force` option. ' +
+                'This prevents people who already read your change from seeing the diff and may also wipe their comments, so it\'s best to avoid forced pushes when possible. ' +
+                'Here are a few tips for next time:',
+                '',
+                '* Create your unfinished PRs as drafts or add a "WIP" label. This will tell everyone they\'re not ready for review yet, so they know they can ignore them.',
+                '* Simply add commits on top of your PR but don\'t amend them. Don\'t worry about sending many small commits: they\'ll be squashed away when merging.',
+                '',
+                'Reviewers: [click here](' + compareUrl + ') to see the force push diff.'
+              ].join('\n')
+            });
