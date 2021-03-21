@@ -1,0 +1,30 @@
+name: Test Push Stuff on PR
+
+on:
+  pull_request
+
+jobs:
+  detect_force_push_pr:
+    runs-on: ubuntu-latest
+    name: Detect Force Push on PR
+    if: github.event.action == 'synchronize'
+    steps:
+      - uses: hmarr/debug-action@v2
+
+      - uses: actions/checkout@v2
+
+      - name: Check ancestor
+        id: git-merge-base
+        run: |
+          git fetch --all
+          echo -n "::set-output name=ancestor::"
+          git merge-base --is-ancestor "${{github.event.before}}" "${{github.event.after}}" && echo 'yes' || echo 'no'
+
+      - name: Comment PR
+        if: steps.git-merge-base.outputs.ancestor == 'no'
+        uses: actions/github-script@0.3.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+            github.issues.createComment({ issue_number, owner, repo, body: 'Hello world ! 👋' });
